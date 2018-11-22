@@ -1,10 +1,10 @@
 .center {
   padding-top: 280px;
-  background-color: #1474a4;
-  background: radial-gradient(#389bc5, #1a506b);
-  background: -webkit-radial-gradient(#389bc5, #1a506b);
-  background: -moz-radial-gradient(#389bc5, #1a506b);
-  background: -o-radial-gradient(#389bc5, #1a506b);
+  background-color: #1474a4;  
+  background-image: linear-gradient(to bottom right, #09508d, #1488c0);
+  background-image: -webkit-linear-gradient(to bottom right, #09508d, #1488c0);
+  background-image: -moz-linear-gradient(to bottom right, #09508d, #1488c0);
+  background-image: -o-linear-gradient(to bottom right, #09508d, #1488c0);
   height: 100% !important;
   position: absolute;
   width: 100%;
