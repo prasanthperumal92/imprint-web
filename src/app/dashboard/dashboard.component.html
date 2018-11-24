@@ -1,3 +1,23 @@
-<p>
-  dashboard works!
-</p>
+<div class="background">
+  <navbar></navbar>
+  <div class="center">
+    <h4>Performance <strong>Bridge</strong> </h4>
+    <br><br>
+    <div class="container">
+      <!-- <div class="card-group row">
+        <div class="card col-sm-2 app" *ngFor="let app of apps; let i = index">
+          <div class="card-block">
+            <img class="icon" src={{app.image}} alt="app.id" srcset="" />
+            <p>{{app.name}}</p>
+          </div>
+        </div>
+      </div> -->
+      <ul>
+        <li *ngFor="let app of apps; let i = index">
+          <img class="icon" src={{app.image}} alt="app.id" srcset="" />
+          <p class="title">{{app.name}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

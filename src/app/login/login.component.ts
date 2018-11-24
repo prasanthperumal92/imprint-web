@@ -33,8 +33,7 @@ export class LoginComponent implements OnInit {
     }
     
     this.http.POST(LOGIN, this.model)
-    .subscribe((res) => {
-      console.log(res);
+    .subscribe((res) => {      
       if(res.status) {
         this.store.set('isLoggedIn', res.status);
         this.store.set('token', res.accessToken);

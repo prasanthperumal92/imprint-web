@@ -21,3 +21,12 @@
 .alignLeft {
   text-align: left;
 }
+
+.LoginFooter {
+  color: #ffffff;
+  position: absolute;
+  bottom: 0 !important;
+  text-align: center;  
+  width: 100%;
+  font-size: 12px;
+}

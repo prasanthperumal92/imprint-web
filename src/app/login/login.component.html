@@ -7,14 +7,23 @@
     <br>
     <form name="loginForm" (ngSubmit)="onSubmit()" #loginForm="ngForm">
       <div class="form-group">
-        <input type="text" class="form-control form-control-sm" name="exampleInputEmail1" [(ngModel)]="model.phone" placeholder="Phone Number" required>
+        <input type="text" class="form-control form-control-sm" name="exampleInputEmail1" [(ngModel)]="model.phone"
+          placeholder="Phone Number" required>
       </div>
       <div class="form-group">
-        <input type="password" class="form-control form-control-sm" name="exampleInputPassword1" [(ngModel)]="model.password" placeholder="Password" required>
+        <input type="password" class="form-control form-control-sm" name="exampleInputPassword1" [(ngModel)]="model.password"
+          placeholder="Password" required>
       </div>
-      <div class="alignLeft">        
+      <div class="alignLeft">
         <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!loginForm.form.valid">Log In</button>
       </div>
     </form>
+  </div>
+  <div class="LoginFooter">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;
+    <p style="display:inline"> Copyright and all other proprietary rights in any software made available to you rest
+      exclusively with AxialeCorp Inc. <br>
+      Use of this software is subject to the end user license considtions as are available on request.</p>
+    <br><br>
   </div>
 </div>
