@@ -1,7 +1,9 @@
+import { StoreService } from './../store/store.service';
 import { Httpservice } from './../services/httpservice.service';
 import { AlertService } from './../services/alert.service';
 import { Component, OnInit } from '@angular/core';
 import { LOGIN } from '../../constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +13,11 @@ import { LOGIN } from '../../constants';
 export class LoginComponent implements OnInit {
 
   public model: any = {};
-  constructor(private alert: AlertService, private http: Httpservice) { }
+  constructor(private alert: AlertService, private http: Httpservice, private router: Router, private store: StoreService) {    
+    if (this.store.get('isLoggedIn')) {      
+      this.router.navigate(['dashboard']);
+    } 
+  }
 
   ngOnInit() {
   }
@@ -29,9 +35,14 @@ export class LoginComponent implements OnInit {
     this.http.POST(LOGIN, this.model)
     .subscribe((res) => {
       console.log(res);
-      if(res.status){
+      if(res.status) {
+        this.store.set('isLoggedIn', res.status);
+        this.store.set('token', res.accessToken);
+        this.store.set('config', res.config);
+        this.router.navigate(['dashboard']);
         this.alert.showAlert("Success", "success");
       } else {
+        this.store.clear();        
         this.alert.showAlert("Authentication Failed! Invalid Credentials", "error");
       }
     });        

@@ -10,12 +10,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AlertsComponent } from './helpers/alerts/alerts.component';
 import { FormsModule } from '@angular/forms';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    AlertsComponent    
+    AlertsComponent,
+    DashboardComponent    
   ],
   imports: [
     BrowserModule,

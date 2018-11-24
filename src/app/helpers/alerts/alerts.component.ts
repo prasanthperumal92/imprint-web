@@ -12,8 +12,7 @@ export class AlertsComponent implements OnInit {
 
   constructor(private alert: AlertService) { }
 
-  ngOnInit() {
-    console.log(this.type, this.message);
+  ngOnInit() {    
   }
 
   close() {
