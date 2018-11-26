@@ -1,3 +1,4 @@
+import { DsrComponent } from './dsr/dsr.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -9,8 +10,12 @@ const routes: Routes = [
   },
   {
     path: 'login', component: LoginComponent  
-  }, {
+  }, 
+  {
     path: 'dashboard', component: DashboardComponent
+  },
+  {
+    path: 'dashboard/dsr', component: DsrComponent
   }
 ];
 

@@ -17,12 +17,13 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['login']);
     }   
     
-    this.apps = _.orderBy(this.store.get('config').appList, ['id'], ['asc']);
-
-       
+    this.apps = _.orderBy(this.store.get('config').appList, ['id'], ['asc']);       
   }
 
   ngOnInit() {
   }
 
+  goto(path: string) {
+    this.router.navigate(['dashboard/'+path]);
+  }
 }

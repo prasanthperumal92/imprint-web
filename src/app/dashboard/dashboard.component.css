@@ -4,15 +4,29 @@
   background-image: linear-gradient(to bottom right, #09508d, #1488c0);
   background-image: -webkit-linear-gradient(to bottom right, #09508d, #1488c0);
   background-image: -moz-linear-gradient(to bottom right, #09508d, #1488c0);
-  background-image: -o-linear-gradient(to bottom right, #09508d, #1488c0);
-  height: 100% !important;
+  background-image: -o-linear-gradient(to bottom right, #09508d, #1488c0);  
   position: absolute;
   width: 100%;
+  min-height: 100% !important;
 }
 
 .center {
   margin-top: 420px;
   text-align: center;  
+}
+
+@media (max-width: 1024px) {
+  .center {
+    margin-top: 200px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .center {
+    margin-top: 0px;
+    text-align: center;
+  }
 }
 
 h4 {

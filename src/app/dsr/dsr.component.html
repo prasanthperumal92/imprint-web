@@ -1,0 +1,21 @@
+<div>
+  <header title="Performance Bridge"></header>
+  <div class="container filterHeader">
+    <h2>Daily Sale Report</h2>
+    <br>
+    <!-- Filter Box -->
+    <p>Applied Date Filter: {{ fromDate | date: 'mediumDate' }} - {{toDate | date: 'mediumDate' }}</p>
+    <div class="filterBox">
+      <div *ngFor="let item of filters; let i = index">
+        <button class="btn btn-secondary btn-sm float-left filerItem" [class.active]="item.selected" (click)="selected(item.label)"
+          title={{item.label}}>{{item.label}}</button>
+        <div *ngIf="item.name === 'Custom' && show" #datepicker id="datepicker" style="color: #000000">
+          <datepicker (change)="calendarData($event)"></datepicker>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+
+  </div>
+</div>

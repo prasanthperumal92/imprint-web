@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { config } from '../config/resources';
 import * as CryptoJS from 'crypto-js';
 import 'rxjs/add/operator/share';
+import { ResourcesService } from '../config/resources.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +16,9 @@ export class StoreService {
   private publicKey: string;
   private enabled: boolean;
 
-  constructor() {
-    this.privateKey = config.crypto.privateKey;
-    this.publicKey = config.crypto.publicKey;
-    this.enabled = config.crypto.enabled;
+  constructor(private resources: ResourcesService) {
+    this.privateKey = this.resources.crypto.privateKey;    
+    this.enabled = this.resources.crypto.enabled;
   }
 
   set(type: string, value: any) {      

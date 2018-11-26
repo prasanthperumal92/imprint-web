@@ -1,3 +1,4 @@
+import { StoreService } from './../store/store.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -10,10 +11,11 @@ import 'rxjs/add/observable/throw';
   providedIn: 'root'
 })
 export class Httpservice {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private store: StoreService) { }
+  MASTER_URL = environment.masterURL; 
   BASE_URL = environment.baseUrl;      
 
-  public GET(API_URL, data = ''): Observable<any> {      
+  public GET(API_URL): Observable<any> {      
     //httpOptions.set('Authorization', );
     return this.http
       .get(`${this.BASE_URL}${API_URL}`, { headers: this.getHeaders() })      
@@ -24,10 +26,20 @@ export class Httpservice {
   };
 
 
-  public POST(API_URL, data = ''): Observable<any> {
+  public POST(API_URL, data = {}): Observable<any> {
     //httpOptions.set('Authorization', );
     return this.http
       .post(`${this.BASE_URL}${API_URL}`, data, { headers: this.getHeaders() })
+      .map(response => {
+        return response;
+      })
+      .catch(this.handleError);
+  };
+
+  public LOGIN(API_URL, data = {}): Observable<any> {
+    //httpOptions.set('Authorization', );
+    return this.http
+      .post(`${this.MASTER_URL}${API_URL}`, data, { headers: this.getHeaders() })
       .map(response => {
         return response;
       })
@@ -40,8 +52,9 @@ export class Httpservice {
   }
 
   private getHeaders() {    
-    let httpOptions = new HttpHeaders();
-    httpOptions.append('Content-Type', 'application/json'); 
-    return httpOptions;   
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+    this.store.get('token') ? headers = headers.append('Authorization', this.store.get('token')) : '';
+    return headers;   
   }
 }

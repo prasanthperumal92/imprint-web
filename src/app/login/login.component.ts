@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(private alert: AlertService, private http: Httpservice, private router: Router, private store: StoreService) {    
     if (this.store.get('isLoggedIn')) {      
       this.router.navigate(['dashboard']);
+    } else {
+      this.store.clear();
     } 
   }
 
@@ -32,7 +34,7 @@ export class LoginComponent implements OnInit {
       return false;
     }
     
-    this.http.POST(LOGIN, this.model)
+    this.http.LOGIN(LOGIN, this.model)
     .subscribe((res) => {      
       if(res.status) {
         this.store.set('isLoggedIn', res.status);

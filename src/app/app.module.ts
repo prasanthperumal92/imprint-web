@@ -12,6 +12,9 @@ import { AlertsComponent } from './helpers/alerts/alerts.component';
 import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './helpers/navbar/navbar.component';
+import { DsrComponent } from './dsr/dsr.component';
+import { HeaderComponent } from './helpers/header/header.component';
+import { DatepickerComponent } from './helpers/datepicker/datepicker.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { NavbarComponent } from './helpers/navbar/navbar.component';
     LoginComponent,
     AlertsComponent,
     DashboardComponent,
-    NavbarComponent    
+    NavbarComponent,
+    DsrComponent,
+    HeaderComponent,    
+    DatepickerComponent    
   ],
   imports: [
     BrowserModule,

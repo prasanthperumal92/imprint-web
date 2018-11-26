@@ -1,0 +1,11 @@
+.custom,
+.custom a {
+  color: #ffffff !important;
+  background-color: #1474a4 !important;
+}
+
+.header {
+    padding: 0px 20px;
+    z-index: 1000;
+    position: relative;
+}

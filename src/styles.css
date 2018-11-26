@@ -4,7 +4,7 @@ body {
     height: 100%;
 }
 
-.btn {
+form .btn {
     background-color: #1c2d66 !important;
     border-color: #1c2d66 !important;
 }

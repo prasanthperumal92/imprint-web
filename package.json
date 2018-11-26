@@ -27,6 +27,7 @@
     "font-awesome": "4.7.0",
     "install": "0.12.2",
     "lodash": "4.17.11",
+    "moment": "2.22.2",
     "rxjs": "~6.3.3",
     "rxjs-compat": "6.3.3",
     "zone.js": "~0.8.26"
