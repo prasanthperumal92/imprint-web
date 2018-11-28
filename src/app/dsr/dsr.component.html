@@ -4,8 +4,8 @@
     <h2>Daily Sale Report</h2>
     <br>
     <!-- Filter Box -->
-    <p>Applied Date Filter: {{ fromDate | date: 'mediumDate' }} - {{toDate | date: 'mediumDate' }}</p>
     <div class="filterBox">
+      <p>{{ fromDate | date: 'mediumDate' }} - {{toDate | date: 'mediumDate' }}</p>
       <div *ngFor="let item of filters; let i = index">
         <button class="btn btn-secondary btn-sm float-left filerItem" [class.active]="item.selected" (click)="selected(item.label)"
           title={{item.label}}>{{item.label}}</button>
@@ -14,8 +14,74 @@
         </div>
       </div>
     </div>
+    <br>
+    <div>
+      <div style="float: left">
+        <p class="sameRow">Total - {{dsrList.length}}</p>
+        <p class="sameLine">Sort: </p>
+        <div ngbDropdown class="d-inline-block sameLine">
+          <button class="customBtn" id="dropdownBasic1" ngbDropdownToggle>Created</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item">Created</button>
+            <button class="dropdown-item">Employee</button>
+            <button class="dropdown-item">Status</button>
+            <button class="dropdown-item">Visited</button>
+          </div>
+        </div>
+        <div ngbDropdown class="d-inline-block sameLine">
+          <button class="customBtn" id="dropdownBasic1" ngbDropdownToggle>Status</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item">Introduction</button>
+            <button class="dropdown-item">Employee</button>
+            <button class="dropdown-item">Status</button>
+            <button class="dropdown-item">Visited</button>
+          </div>
+        </div>
+      </div>      
+      <div style="float: right">
+        <p class="sameLine">Filters: </p>
+        <div ngbDropdown class="d-inline-block sameLine">
+          <button class="customBtn" id="dropdownBasic1" ngbDropdownToggle>Employee</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item">Employee 1</button>
+            <button class="dropdown-item">Employee 2</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="container">
-
+    <table id="dsr" class="table" cellpadding="10">
+      <thead>
+        <tr>
+          <th scope="col">CLIENT</th>
+          <th scope="col">STATUS</th>
+          <th scope="col">FOLLOWUP</th>
+          <th scope="col">VISITED</th>
+          <th scope="col">EMPLOYEE</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="whiteBox" *ngFor="let item of dsrList; let i = index">
+          <td>{{item.effort.client}}</td>
+          <td>{{item.effort.sales}}</td>
+          <td>{{item.effort.followup | date: 'mediumDate'}}</td>
+          <td>{{item.created | date: 'mediumDate'}}</td>
+          <td>{{item.name}}</td>
+          <td>
+            <div ngbDropdown class="d-inline-block sameRow">
+              <button class="roundBtn" id="actions" ngbDropdownToggle>Actions</button>
+              <div ngbDropdownMenu aria-labelledby="actions">
+                <button class="dropdown-item">Delete</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="float: right">
+      <ngb-pagination [collectionSize]="70" [(page)]="page" [boundaryLinks]="true"></ngb-pagination>
+    </div>
   </div>
 </div>

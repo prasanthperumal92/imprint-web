@@ -18,6 +18,11 @@ export class DsrComponent implements OnInit {
   private filters = this.resources.filter;
   private fromDate;
   private toDate;
+  private sort = 'created';
+  private skip = 0;
+  private limit = 20;
+  private dsrList: any = [];
+  private page: Number = 1;
 
   toggle() {
     this.show = !this.show;
@@ -35,17 +40,23 @@ export class DsrComponent implements OnInit {
 
   constructor(private http: Httpservice, private calendar: NgbCalendar, private resources: ResourcesService, private store: StoreService) {
     let choosen = this.store.get('dateFilter');
+    this.sort = this.store.get('sort') || 'created';
+    this.skip = this.store.get('skip') || 0;
+    this.limit = this.store.get('limit') || 20;
     if (choosen) {
-      this.selectButton(choosen.label);
+      this.selected(choosen.label);
       this.fromDate = choosen.from;
       this.toDate = choosen.to;
     } else {
       this.selected('Today'); // By default choose Today
-    }
-    this.http.GET(DSR).subscribe(res => {
-      console.log(res);
-    });
+    }    
+  }
 
+  getJobs(query){
+    this.http.POST(DSR, query).subscribe(res => {
+      console.log(res);
+      this.dsrList = res;
+    });
   }
 
   selected(filter: string) {
@@ -57,6 +68,17 @@ export class DsrComponent implements OnInit {
       this.fromDate = choosen.from;
       this.toDate = choosen.to;
       this.store.set('dateFilter', choosen);
+      this.store.set('skip', this.skip);
+      this.store.set('sort', this.sort);
+      this.store.set('limit', this.limit);
+      let query = {
+        startDate: this.fromDate,
+        endDate: this.toDate,
+        skip: this.skip,
+        limit: this.limit,
+        sort: this.sort
+      }
+      this.getJobs(query);
     }
   }
 

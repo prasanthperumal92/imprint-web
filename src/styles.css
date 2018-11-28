@@ -2,6 +2,7 @@
 
 body {
     height: 100%;
+    background-color: #edf0f5 !important;
 }
 
 form .btn {
@@ -11,4 +12,27 @@ form .btn {
 
 .btn:focus {
     box-shadow: none !important;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  border-radius: 1px;
+  box-sizing: border-box;
+  position: relative;
+  box-sizing: content-box;
+  width: 30px;
+  height: 30px;
+  border-width: 0;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #1474a4;
+}
+
+input[type="checkbox"]:focus {
+  outline: 0 none;
+  box-shadow: none;
 }
