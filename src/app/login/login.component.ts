@@ -33,10 +33,13 @@ export class LoginComponent implements OnInit {
       this.alert.showAlert("Password doesn't match the requirement", "warning");
       return false;
     }
+
+    this.alert.showLoader(true);
     
     this.http.LOGIN(LOGIN, this.model)
     .subscribe((res) => {      
       if(res.status) {
+        this.alert.showLoader(false);
         this.store.set('isLoggedIn', res.status);
         this.store.set('token', res.accessToken);
         this.store.set('config', res.config);

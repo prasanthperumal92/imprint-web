@@ -152,7 +152,7 @@ tr td:last-child {
 }
 
 .dropdown-item {
-  cursor: pointer;  
+  cursor: pointer;
   font-size: 14px;
 }
 
@@ -164,4 +164,9 @@ datepicker /deep/ ngb-datepicker {
   background-color: #f8f9fa;
   z-index: 1000;
   position: relative;
+}
+
+.selectedFilter {
+  background-color: #1474a4;
+  color: #ffffff
 }

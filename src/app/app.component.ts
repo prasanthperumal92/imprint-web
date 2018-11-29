@@ -12,6 +12,7 @@ export class AppComponent {
   title = 'imprint';
   message: string;
   type: string;
+  loader: boolean = false;
 
   constructor(private alert: AlertService, private router: Router, private store: StoreService) {    
     router.events.subscribe((event: any) => {
@@ -31,7 +32,11 @@ export class AppComponent {
       setTimeout(() => {
         this.alert.clearAlert();
       }, 3000);      
-    });    
+    });         
+
+    this.alert.getLoader().subscribe(loader => {
+      this.loader = loader;
+    });
   }
 
 

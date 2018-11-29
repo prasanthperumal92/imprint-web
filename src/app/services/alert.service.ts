@@ -5,6 +5,7 @@ import { Observable, Subject } from 'rxjs';
 export class AlertService {
 
   private alert = new Subject<any>();
+  private loader = new Subject<any>();
   
   showAlert(message: string, type: string) {
     this.alert.next({
@@ -19,6 +20,18 @@ export class AlertService {
 
   clearAlert() {
     this.alert.next();
+  }
+
+  showLoader(message: boolean) {
+    this.loader.next(message);
+  }
+
+  hideLoader(){
+    this.loader.next();
+  }
+
+  getLoader(){
+    return this.loader.asObservable();
   }
  
 }
