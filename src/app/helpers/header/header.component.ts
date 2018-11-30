@@ -1,3 +1,5 @@
+import { AlertService } from './../../services/alert.service';
+import { StoreService } from './../../store/store.service';
 import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 
@@ -9,12 +11,20 @@ import { Component, OnInit, Input } from '@angular/core';
 export class HeaderComponent implements OnInit {
 
   @Input() title: string;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private store: StoreService, private alert: AlertService) { }
 
   ngOnInit() {
   }
 
   goto(path: string) {
     this.router.navigate([path]);
+  }
+
+  logout() {
+    this.store.clear('isLoggedIn');
+    setTimeout(() => {
+      this.goto('login');
+      this.alert.showAlert('Logged Out Successfully', 'success');
+    }, 1000);
   }
 }

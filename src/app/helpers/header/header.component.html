@@ -4,5 +4,17 @@
       <i class="fa fa-th fa-1x" style="cursor: pointer" (click)="goto('dashboard')" aria-hidden="true"></i>
       <p style="display: inline"> &nbsp;{{title}}</p>
     </a>
+    <form class="form-inline my-2 my-lg-0">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <div ngbDropdown class="d-inline-block sameRow">
+            <button class="customBtn" id="actions" ngbDropdownToggle>Paul Allen</button>
+            <div ngbDropdownMenu aria-labelledby="actions">
+              <button class="dropdown-item" (click)="logout()">Sign Out</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </form>
   </div>
 </nav>

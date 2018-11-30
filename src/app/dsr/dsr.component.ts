@@ -3,7 +3,7 @@ import { StoreService } from './../store/store.service';
 import { ResourcesService } from './../config/resources.service';
 import { Httpservice } from './../services/httpservice.service';
 import { Component, OnInit } from '@angular/core';
-import { DSR } from '../../constants';
+import { DSR, DSR_FILTER } from '../../constants';
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -30,7 +30,7 @@ export class DsrComponent implements OnInit {
   private page: Number = 1;
   private sortBy: any = [{ key: 'Visited', value: 'created' }, { key: 'Client', value: 'effort.client' }, { key: 'Status', value: 'effort.sales' }, { key: 'Followup', value: 'effort.followup' }, { key: 'Employee', value: 'name' }];
   private filterBy: any = {
-    employees: [],
+    employee: [],
     status: [],
     client: []
   };
@@ -48,24 +48,37 @@ export class DsrComponent implements OnInit {
 
   calendarData(obj) {
     let choosen = this.resources.getFilter('Custom Date');
-    choosen.from = new Date(obj.from.year, obj.from.month, obj.from.day);
-    choosen.to = new Date(obj.to.year, obj.to.month, obj.to.day);
-    this.fromDate = choosen.from;
-    this.toDate = choosen.to;
+    choosen.from = new Date(obj.from.year, obj.from.month-1, obj.from.day);
+    choosen.to = new Date(obj.to.year, obj.to.month-1, obj.to.day);
+    this.fromDate = moment(choosen.from).startOf('day').toDate();
+    this.toDate = moment(choosen.to).endOf('day').toDate();
     this.store.set('dateFilter', choosen);
+    this.label = choosen.label;
     this.toggle();
+    this.setProps();
+    this.saveProps();
   }
 
   constructor(private http: Httpservice, private calendar: NgbCalendar, private resources: ResourcesService, private store: StoreService, private alert: AlertService) {
     this.query = this.store.get('query');
     if (this.query) {
-      this.selected(this.query.label);
+      this.selected(this.query.label, true);
       this.fromDate = this.query.fromDate;
       this.toDate = this.query.toDate;
     } else {
       this.query = {};
-      this.selected('Today'); // By default choose Today
+      this.selected('Today', false); // By default choose Today
     }
+    this.getFilter();
+  }
+
+  getFilter() {
+    this.http.GET(DSR_FILTER).subscribe(res => {
+      console.log(res);
+      this.filterBy.employee = res.name.sort();
+      this.filterBy.client = res.client.sort();
+      this.filterBy.status = res.sales.sort();
+    });
   }
 
   getJobs(query) {
@@ -74,41 +87,53 @@ export class DsrComponent implements OnInit {
       console.log(res);
       this.alert.showLoader(false);
       this.dsrList = res;
-      this.filterBy.employees = _.uniqBy(res, 'name');
-      this.filterBy.status = _.uniqBy(res, 'effort.sales');
-      this.filterBy.client = _.uniqBy(res, 'effort.client');
     });
   }
 
   public applyFilters(type, key, value) {
+    this.clearFils();
     this.filterSelected[type] = value;
     this.query.filter = this.filter = {};
     this.filter = { key: key, value: value };
     this.query.filter = this.filter;
+    this.setProps();
     this.saveProps();
   }
 
   public applySort(item) {
     this.sort = item.value;
     this.sorted = item.key;
+    this.setProps();
     this.saveProps();
   }
 
-  public applyorder(order){
+  public applyorder(order) {
     this.order = order;
+    this.setProps();
     this.saveProps();
   }
 
   clearFilter() {
     this.filter = null;
     this.query.filter = this.filter;
+    this.setProps();
     this.saveProps();
-    this.filterSelected = {
-      Employee: 'Employee',
-      Client: 'Client',
-      Status: 'Status'
-    };
+    this.clearFils();
   }
+
+  clearFils() {
+    for (let k in this.filterSelected) {
+      if (this.filterSelected.hasOwnProperty(k)) {
+        this.filterSelected[k] = k;
+      }
+    }
+  }
+
+  loadPage(page: any) {
+    this.page = page;
+    this.query.skip = page == 1 ? 0 : (page - 1) * this.limit;
+    this.saveProps();
+  };
 
   setProps() {
     this.query.fromDate = this.fromDate;
@@ -123,21 +148,37 @@ export class DsrComponent implements OnInit {
   }
 
 
-  selected(filter: string) {
+  selected(filter: string, open?: any) {
+    this.selectButton(filter);
     if (filter === 'Custom Date') {
-      this.toggle();
+      if (!open) {
+        this.toggle();
+      } else {
+        this.dateFilter(filter);
+      }
     } else {
-      this.selectButton(filter);
-      let choosen = this.resources.getFilter(filter);
-      this.label = filter;
-      this.fromDate = choosen.from;
-      this.toDate = choosen.to;
-      this.saveProps();
+      this.dateFilter(filter);
+    }        
+  }
+
+  dateFilter(filter){
+    let choosen = this.resources.getFilter(filter);
+    this.label = filter;
+    if(typeof choosen.from.year == 'number') {
+      let from = new Date(choosen.from.year, choosen.from.month, choosen.from.day);
+      let to = new Date(choosen.to.year, choosen.to.month, choosen.to.day);
+      this.fromDate = moment(from).startOf('day').toDate();
+      this.toDate = moment(to).endOf('day').toDate();
+    } else {
+      this.fromDate = moment(choosen.from).startOf('day').toDate();
+      this.toDate = moment(choosen.to).endOf('day').toDate();
     }
+    this.page = 1;
+    this.setProps();
+    this.saveProps();
   }
 
   saveProps() {
-    this.setProps();
     this.getJobs(this.query);
   }
 

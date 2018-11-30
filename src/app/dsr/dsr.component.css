@@ -143,6 +143,7 @@ ngb-pagination /deep/ .page-item.active .page-link {
 tr td:first-child {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
+  padding-left: 25px;
 }
 
 tr td:last-child {
@@ -154,6 +155,11 @@ tr td:last-child {
 .dropdown-item {
   cursor: pointer;
   font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background-color: #1474a4 !important;
+  color: #ffffff !important;
 }
 
 .whiteBox:hover {

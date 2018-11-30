@@ -40,21 +40,21 @@
           <button class="customBtn" id="dropdownBasic1" [class.selectedFilter]="filterSelected.Employee != 'Employee'"
             ngbDropdownToggle>{{filterSelected.Employee}}</button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item" (click)="applyFilters('Employee','name', item.name)" *ngFor="let item of filterBy.employees; let i = index">{{item.name}}</button>
+            <button class="dropdown-item" (click)="applyFilters('Employee','name', item)" *ngFor="let item of filterBy.employee; let i = index">{{item}}</button>
           </div>
         </div>
         <div ngbDropdown class="d-inline-block sameLine">
           <button class="customBtn" id="dropdownBasic1" [class.selectedFilter]="filterSelected.Status != 'Status'"
             ngbDropdownToggle>{{filterSelected.Status}}</button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item" (click)="applyFilters('Status', 'effort.sales', item.effort.sales)" *ngFor="let item of filterBy.status; let i = index">{{item.effort.sales}}</button>
+            <button class="dropdown-item" (click)="applyFilters('Status', 'effort.sales', item)" *ngFor="let item of filterBy.status; let i = index">{{item}}</button>
           </div>
         </div>
         <div ngbDropdown class="d-inline-block sameLine">
           <button class="customBtn" id="dropdownBasic1" [class.selectedFilter]="filterSelected.Client != 'Client'"
             ngbDropdownToggle>{{filterSelected.Client}}</button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item" (click)="applyFilters('Client', 'effort.client', item.effort.client)" *ngFor="let item of filterBy.client; let i = index">{{item.effort.client}}</button>
+            <button class="dropdown-item" (click)="applyFilters('Client', 'effort.client', item)" *ngFor="let item of filterBy.client; let i = index">{{item}}</button>
           </div>
         </div>
         <button class="customBtn" (click)="clearFilter()">Clear</button>
@@ -84,7 +84,8 @@
             <div ngbDropdown class="d-inline-block sameRow">
               <button class="roundBtn" id="actions" ngbDropdownToggle>Actions</button>
               <div ngbDropdownMenu aria-labelledby="actions">
-                <button class="dropdown-item">Delete</button>
+                <button class="dropdown-item"><i class="fa fa-trash" aria-hidden="true"> </i> Delete</button>
+                <button class="dropdown-item"><i class="fa fa-share-alt" aria-hidden="true"> </i> Share</button>
               </div>
             </div>
           </td>
@@ -101,8 +102,8 @@
         </tr>
       </tbody>
     </table>
-    <div style="float: right" *ngIf="dsrList.length > 0">
-      <ngb-pagination [collectionSize]="70" [(page)]="page" [boundaryLinks]="true"></ngb-pagination>
+    <div style="float: right">
+      <ngb-pagination [collectionSize]="50" [(page)]="page" [boundaryLinks]="false" (pageChange)="loadPage($event)"></ngb-pagination>
     </div>
   </div>
 </div>

@@ -1,3 +1,4 @@
+import { AlertService } from './../../services/alert.service';
 import { Router } from '@angular/router';
 import { StoreService } from './../../store/store.service';
 import { Component, OnInit } from '@angular/core';
@@ -9,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private store: StoreService, private router: Router) { }
+  constructor(private store: StoreService, private router: Router, private alert: AlertService) { }
 
   ngOnInit() {
   }
@@ -17,7 +18,8 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.store.clear('isLoggedIn');
     setTimeout(() => {
-      this.router.navigate(['login']);      
+      this.router.navigate(['login']);   
+      this.alert.showAlert('Logged Out Successfully', 'success');   
     }, 1000);
   }
 
