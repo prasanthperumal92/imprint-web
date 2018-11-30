@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private store: StoreService, private router: Router, private alert: AlertService) { }
+  constructor(public store: StoreService, public router: Router, public alert: AlertService) { }
 
   ngOnInit() {
   }

@@ -10,9 +10,9 @@ import * as _ from 'lodash';
 })
 export class DashboardComponent implements OnInit {
 
-  private apps: any = [];
+  public apps: any = [];
 
-  constructor(private store: StoreService, private router: Router) { 
+  constructor(public store: StoreService, public router: Router) { 
     if(!this.store.get('isLoggedIn')) {
       this.router.navigate(['login']);
     }   

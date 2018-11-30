@@ -1,3 +1,4 @@
+import { AlertService } from './alert.service';
 import { StoreService } from './../store/store.service';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpEvent, HttpInterceptor } from '@angular/common/http';
@@ -11,7 +12,7 @@ import 'rxjs/add/observable/throw';
   providedIn: 'root'
 })
 export class Httpservice {
-  constructor(private http: HttpClient, private store: StoreService) { }
+  constructor(private http: HttpClient, private store: StoreService, private alert: AlertService) { }
   MASTER_URL = environment.masterURL; 
   BASE_URL = environment.baseUrl;      
 
@@ -47,6 +48,8 @@ export class Httpservice {
   };
 
   private handleError(error: Response | any) {
+    this.alert.showLoader(false);
+    this.alert.showAlert('Server Error', 'error');
     console.error('ApiService::handleError', error);
     return Observable.throw(error);
   }

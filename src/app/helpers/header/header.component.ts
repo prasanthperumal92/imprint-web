@@ -11,7 +11,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class HeaderComponent implements OnInit {
 
   @Input() title: string;
-  constructor(private router: Router, private store: StoreService, private alert: AlertService) { }
+  constructor(public router: Router, public store: StoreService, public alert: AlertService) { }
 
   ngOnInit() {
   }

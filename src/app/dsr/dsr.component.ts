@@ -15,32 +15,32 @@ import * as _ from 'lodash';
 })
 export class DsrComponent implements OnInit {
 
-  private data: any = [];
+  public data: any = [];
   public show = false;
-  private filters = this.resources.filter;
-  private fromDate;
-  private toDate;
-  private sort = 'created';
-  private skip = 0;
-  private limit = 20;
-  private label;
-  private order = -1;
-  private sorted = 'Visited';
-  private dsrList: any = [];
-  private page: Number = 1;
-  private sortBy: any = [{ key: 'Visited', value: 'created' }, { key: 'Client', value: 'effort.client' }, { key: 'Status', value: 'effort.sales' }, { key: 'Followup', value: 'effort.followup' }, { key: 'Employee', value: 'name' }];
-  private filterBy: any = {
+  public filters = this.resources.filter;
+  public fromDate;
+  public toDate;
+  public sort = 'created';
+  public skip = 0;
+  public limit = 20;
+  public label;
+  public order = -1;
+  public sorted = 'Visited';
+  public dsrList: any = [];
+  public page: Number = 1;
+  public sortBy: any = [{ key: 'Visited', value: 'created' }, { key: 'Client', value: 'effort.client' }, { key: 'Status', value: 'effort.sales' }, { key: 'Followup', value: 'effort.followup' }, { key: 'Employee', value: 'name' }];
+  public filterBy: any = {
     employee: [],
     status: [],
     client: []
   };
-  private filterSelected = {
+  public filterSelected = {
     Employee: 'Employee',
     Client: 'Client',
     Status: 'Status'
   };
-  private query: any = {};
-  private filter: any = null;
+  public query: any = {};
+  public filter: any = null;
 
   toggle() {
     this.show = !this.show;
@@ -59,7 +59,7 @@ export class DsrComponent implements OnInit {
     this.saveProps();
   }
 
-  constructor(private http: Httpservice, private calendar: NgbCalendar, private resources: ResourcesService, private store: StoreService, private alert: AlertService) {
+  constructor(public http: Httpservice, public calendar: NgbCalendar, public resources: ResourcesService, public store: StoreService, public alert: AlertService) {
     this.query = this.store.get('query');
     if (this.query) {
       this.selected(this.query.label, true);
