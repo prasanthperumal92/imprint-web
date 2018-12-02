@@ -64,8 +64,8 @@ export class Httpservice {
   }
 
   private handleError(error: Response | any) {
-    self.alert.showLoader(false);
-    self.alert.showAlert("Server Error", "error");
+    this.self.alert.showLoader(false);
+    this.self.alert.showAlert("Server Error", "error");
     console.error("ApiService::handleError", error);
     return Observable.throw(error);
   }
