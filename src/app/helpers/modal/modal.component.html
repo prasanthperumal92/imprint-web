@@ -1,0 +1,15 @@
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" class="close" aria-label="Close" aria-label="Close button" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div [innerHTML]="content"></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="darkBtn" *ngIf="btnText" (click)="action()">{{btnText}}</button>
+    <button type="button" class="lightBtn" ngbAutofocus (click)="close()">Close</button>
+  </div>
+</ng-template>

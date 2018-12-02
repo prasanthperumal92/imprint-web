@@ -1,0 +1,78 @@
+<div class="modal-body">
+  <div class="container" *ngIf="data && data.name">
+    <div class="row">
+      <div class="col-12 modalPopup">
+        <div>
+          <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; DSR Information</h5>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Status</strong></span>
+              <span>{{data.effort.sales}}</span>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Employee Name</strong></span>
+              <span>{{data.name}}</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Date Visited</strong></span>
+              <span>{{data.created | date: 'mediumDate'}}</span>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Next Followup</strong></span>
+              <span>{{data.effort.followup | date: 'mediumDate'}}</span>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div>
+          <h5 class="popTitle"><i class="fa fa-user-circle" aria-hidden="true"></i> &nbsp; Client Information</h5>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Name</strong></span>
+              <span>{{data.effort.client}}</span>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Address</strong></span>
+              <span>{{data.effort.address}}</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Contact Person</strong></span>
+              <span>{{data.effort.person}}</span>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Contact Number</strong></span>
+              <span>{{data.effort.contact}}</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-12 col-6-grid">
+              <span class="primary"><strong>Remarks</strong></span>
+              <span>{{data.effort.remarks}}</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Signature</strong></span>
+              <a href={{data.effort.signature}} target="_blank">
+                <img src={{data.effort.signature}} alt="signature" />
+              </a>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Photo</strong></span>
+              <a href={{data.effort.photo}} target="_blank">
+                <img src={{data.effort.photo}} alt="signature" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div *ngIf="data.nothing" style="text-align: center; margin-top: 20%">
+    <h1 class="popTitle">Not Found</h1>
+  </div>
+</div>

@@ -9,23 +9,27 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class Httpservice {
-  constructor(private http: HttpClient, private store: StoreService, private alert: AlertService) { }
-  MASTER_URL = environment.masterURL; 
-  BASE_URL = environment.baseUrl;      
+  constructor(
+    private http: HttpClient,
+    private store: StoreService,
+    private alert: AlertService
+  ) {}
+  MASTER_URL = environment.masterURL;
+  BASE_URL = environment.baseUrl;
+  self = this;
 
-  public GET(API_URL): Observable<any> {      
+  public GET(API_URL): Observable<any> {
     //httpOptions.set('Authorization', );
     return this.http
-      .get(`${this.BASE_URL}${API_URL}`, { headers: this.getHeaders() })      
+      .get(`${this.BASE_URL}${API_URL}`, { headers: this.getHeaders() })
       .map(response => {
         return response;
       })
       .catch(this.handleError);
-  };
-
+  }
 
   public POST(API_URL, data = {}): Observable<any> {
     //httpOptions.set('Authorization', );
@@ -35,29 +39,43 @@ export class Httpservice {
         return response;
       })
       .catch(this.handleError);
-  };
+  }
 
-  public LOGIN(API_URL, data = {}): Observable<any> {
+  public DELETE(API_URL): Observable<any> {
     //httpOptions.set('Authorization', );
     return this.http
-      .post(`${this.MASTER_URL}${API_URL}`, data, { headers: this.getHeaders() })
+      .delete(`${this.BASE_URL}${API_URL}`, { headers: this.getHeaders() })
       .map(response => {
         return response;
       })
       .catch(this.handleError);
-  };
+  }
+
+  public LOGIN(API_URL, data = {}): Observable<any> {
+    //httpOptions.set('Authorization', );
+    return this.http
+      .post(`${this.MASTER_URL}${API_URL}`, data, {
+        headers: this.getHeaders()
+      })
+      .map(response => {
+        return response;
+      })
+      .catch(this.handleError);
+  }
 
   private handleError(error: Response | any) {
-    this.alert.showLoader(false);
-    this.alert.showAlert('Server Error', 'error');
-    console.error('ApiService::handleError', error);
+    self.alert.showLoader(false);
+    self.alert.showAlert("Server Error", "error");
+    console.error("ApiService::handleError", error);
     return Observable.throw(error);
   }
 
-  private getHeaders() {    
+  private getHeaders() {
     let headers: HttpHeaders = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    this.store.get('token') ? headers = headers.append('Authorization', this.store.get('token')) : '';
-    return headers;   
+    headers = headers.append("Content-Type", "application/json");
+    this.store.get("token")
+      ? (headers = headers.append("Authorization", this.store.get("token")))
+      : "";
+    return headers;
   }
 }

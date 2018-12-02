@@ -176,3 +176,36 @@ datepicker /deep/ ngb-datepicker {
   background-color: #1474a4;
   color: #ffffff
 }
+
+.modalPopup {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.popTitle {
+  color: #1474a4;
+  font-weight: 500;
+}
+
+.primary {
+  color: #1474a4;
+  font-size: 14px;
+}
+
+.col-6-grid {
+  display: inline-grid;
+  margin-bottom: 18px;
+  padding: 5px;
+}
+
+.col-6-grid a,
+.col-6-grid img {
+  height: 150px;
+  width: 225px;
+  background-color: #000;
+}
+
+.activeBtn {
+  background-color: #1474a4 !important;
+  color: #ffffff !important;
+}

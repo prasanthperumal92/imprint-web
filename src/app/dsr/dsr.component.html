@@ -18,6 +18,8 @@
     <div>
       <div style="float: left">
         <p class="sameRow">Total - {{dsrList.length}}</p>
+        <button class="customBtn" (click)="saveProps()" style="margin-right:20px;"> <i class="fa fa-refresh"
+            aria-hidden="true"></i> Refresh</button>
         <p class="sameLine">Sort: </p>
         <div ngbDropdown class="d-inline-block sameLine">
           <button class="customBtn" id="dropdownBasic1" ngbDropdownToggle>{{sorted}}</button>
@@ -81,11 +83,14 @@
           <td>{{item.created | date: 'mediumDate'}}</td>
           <td>{{item.name}}</td>
           <td>
+            <button class="roundBtn" id="open" style="margin-right: 10px;" (click)="openDSR(popup, item)">Open</button>
             <div ngbDropdown class="d-inline-block sameRow">
               <button class="roundBtn" id="actions" ngbDropdownToggle>Actions</button>
               <div ngbDropdownMenu aria-labelledby="actions">
-                <button class="dropdown-item"><i class="fa fa-trash" aria-hidden="true"> </i> Delete</button>
-                <button class="dropdown-item"><i class="fa fa-share-alt" aria-hidden="true"> </i> Share</button>
+                <button class="dropdown-item" (click)="delete(item)"><i class="fa fa-trash" aria-hidden="true"> </i>
+                  Delete</button>
+                <button class="dropdown-item" (click)="share(item)"><i class="fa fa-share-alt" aria-hidden="true"> </i>
+                  Share</button>
               </div>
             </div>
           </td>
@@ -106,4 +111,93 @@
       <ngb-pagination [collectionSize]="50" [(page)]="page" [boundaryLinks]="false" (pageChange)="loadPage($event)"></ngb-pagination>
     </div>
   </div>
+  <modal #modal title={{modalTitle}} content={{modalContent}} btnText={{modalBtnText}} (btnFn)="deleteDSR()"></modal>
 </div>
+
+<ng-template #popup let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <div>
+            <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; DSR Information</h5>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Status</strong></span>
+                <span>{{selectedItem.effort.sales}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Employee Name</strong></span>
+                <span>{{selectedItem.name}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Date Visited</strong></span>
+                <span>{{selectedItem.created | date: 'mediumDate'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Next Followup</strong></span>
+                <span>{{selectedItem.effort.followup | date: 'mediumDate'}}</span>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div>
+            <h5 class="popTitle"><i class="fa fa-user-circle" aria-hidden="true"></i> &nbsp; Client Information</h5>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Name</strong></span>
+                <span>{{selectedItem.effort.client}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Address</strong></span>
+                <span>{{selectedItem.effort.address}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Contact Person</strong></span>
+                <span>{{selectedItem.effort.person}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Contact Number</strong></span>
+                <span>{{selectedItem.effort.contact}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-12 col-6-grid">
+                <span class="primary"><strong>Remarks</strong></span>
+                <span>{{selectedItem.effort.remarks}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Signature</strong></span>
+                <a href={{selectedItem.effort.signature}} target="_blank">
+                  <img src={{selectedItem.effort.signature}} alt="signature" />
+                </a>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Photo</strong></span>
+                <a href={{selectedItem.effort.photo}} target="_blank">
+                  <img src={{selectedItem.effort.photo}} alt="signature" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="modalPopup" style="text-align: center" *ngIf="selectedItem.showMenu">
+            <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); delete(selectedItem)"><i
+                class="fa fa-trash" aria-hidden="true"></i>
+              &nbsp; Delete</button>
+            <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); share(selectedItem)"><i
+                class="fa fa-share-alt" aria-hidden="true">
+              </i>
+              &nbsp; Share</button>
+            <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

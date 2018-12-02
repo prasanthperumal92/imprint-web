@@ -1,12 +1,14 @@
+import { ModalComponent } from './../helpers/modal/modal.component';
 import { AlertService } from './../services/alert.service';
 import { StoreService } from './../store/store.service';
 import { ResourcesService } from './../config/resources.service';
 import { Httpservice } from './../services/httpservice.service';
-import { Component, OnInit } from '@angular/core';
-import { DSR, DSR_FILTER } from '../../constants';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DSR, DSR_FILTER, DSR_DELETE } from "../../constants";
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { NgbModalConfig, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dsr',
@@ -41,6 +43,12 @@ export class DsrComponent implements OnInit {
   };
   public query: any = {};
   public filter: any = null;
+  @ViewChild('modal') modal: ModalComponent;
+  @ViewChild('popup') popup;
+  public modalTitle;
+  public modalContent;
+  public modalBtnText;
+  public selectedItem;
 
   toggle() {
     this.show = !this.show;
@@ -48,8 +56,8 @@ export class DsrComponent implements OnInit {
 
   calendarData(obj) {
     let choosen = this.resources.getFilter('Custom Date');
-    choosen.from = new Date(obj.from.year, obj.from.month-1, obj.from.day);
-    choosen.to = new Date(obj.to.year, obj.to.month-1, obj.to.day);
+    choosen.from = new Date(obj.from.year, obj.from.month - 1, obj.from.day);
+    choosen.to = new Date(obj.to.year, obj.to.month - 1, obj.to.day);
     this.fromDate = moment(choosen.from).startOf('day').toDate();
     this.toDate = moment(choosen.to).endOf('day').toDate();
     this.store.set('dateFilter', choosen);
@@ -59,7 +67,8 @@ export class DsrComponent implements OnInit {
     this.saveProps();
   }
 
-  constructor(public http: Httpservice, public calendar: NgbCalendar, public resources: ResourcesService, public store: StoreService, public alert: AlertService) {
+  constructor(public http: Httpservice, public calendar: NgbCalendar, public resources: ResourcesService,
+    public store: StoreService, public alert: AlertService, public modalService: NgbModal) {
     this.query = this.store.get('query');
     if (this.query) {
       this.selected(this.query.label, true);
@@ -158,13 +167,13 @@ export class DsrComponent implements OnInit {
       }
     } else {
       this.dateFilter(filter);
-    }        
+    }
   }
 
-  dateFilter(filter){
+  dateFilter(filter) {
     let choosen = this.resources.getFilter(filter);
     this.label = filter;
-    if(typeof choosen.from.year == 'number') {
+    if (typeof choosen.from.year == 'number') {
       let from = new Date(choosen.from.year, choosen.from.month, choosen.from.day);
       let to = new Date(choosen.to.year, choosen.to.month, choosen.to.day);
       this.fromDate = moment(from).startOf('day').toDate();
@@ -193,4 +202,39 @@ export class DsrComponent implements OnInit {
   ngOnInit() {
   }
 
+  delete(item) {
+    this.selectedItem = item;
+    this.modalTitle = 'Delete Confirmation';
+    this.modalContent = 'Are you sure, you want to delete?';
+    this.modalBtnText = 'Delete';
+    this.modal.open();
+  }
+
+  deleteDSR() {
+    this.alert.showLoader(true);
+    this.http.DELETE(`${DSR_DELETE}${this.selectedItem._id}`).subscribe(res => {
+      console.log(res);
+      this.alert.showLoader(false);
+      this.modal.close();
+      this.saveProps();
+    });
+  }
+
+  share(item) {
+    let shareURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/share/' + item._id;
+    this.selectedItem = item;
+    this.modalTitle = 'Share';
+    this.modalContent = 'Copy the URL to share it!' + '\n' + '<span><strong>' + shareURL + '</strong></span>';
+    this.modal.open();
+  }
+
+  openDSR(elem, item) {
+    this.selectedItem = item;
+    this.selectedItem.showMenu = true;
+    this.modalService.open(elem, { centered: true, size: 'lg' }).result.then((result) => {
+      console.log(result);
+    }, (reason) => {
+      console.log(reason);
+    });
+  }
 }
