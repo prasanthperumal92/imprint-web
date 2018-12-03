@@ -1,7 +1,7 @@
 .alertBox {
     position: absolute;
-    margin-top: 20px;
+    margin-top: 40px;
     z-index: 1000;
-    width: 300px;
+    width: 306px;
     right: 10px;
 }
