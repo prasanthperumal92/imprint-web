@@ -14,7 +14,12 @@
     <form class="form-inline my-2 my-lg-0">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" style="cursor: pointer" (click)="logout()" >Sign Out <span class="sr-only">(current)</span></a>
+          <div ngbDropdown class="d-inline-block sameRow">
+            <button class="customBtn" id="actions" ngbDropdownToggle>{{name}}</button>
+            <div ngbDropdownMenu aria-labelledby="actions">
+              <button class="dropdown-item" (click)="logout()">Sign Out</button>
+            </div>
+          </div>
         </li>
       </ul>
     </form>

@@ -1,0 +1,50 @@
+<div>
+  <header title="Performance Bridge"></header>
+  <div class="container filterHeader">
+    <h2>Task Management</h2>
+    <br>
+    <div class="filterBox">
+      <p>{{ fromDate | date: 'mediumDate' }} - {{toDate | date: 'mediumDate' }}</p>
+      <div *ngFor="let item of filters; let i = index">
+        <button class="btn btn-secondary btn-sm float-left filerItem" [class.active]="item.selected" (click)="selected(item.label)"
+          title={{item.label}}>{{item.label}}</button>
+        <div *ngIf="item.name === 'Custom' && show" #datepicker id="datepicker" style="color: #000000">
+          <datepicker (change)="calendarData($event)"></datepicker>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="float: left">
+        <p class="sameRow">Total - {{dsrList.length}}</p>
+        <button class="customBtn" (click)="saveProps()" style="margin-right:20px;"> <i class="fa fa-refresh"
+            aria-hidden="true"></i>
+          Refresh</button>
+        <p class="sameLine">Order: </p>
+        <div ngbDropdown class="d-inline-block sameLine">
+          <button class="customBtn" id="dropdownBasic1" ngbDropdownToggle>{{order == 1 ? 'Ascending' : 'Descending'}}</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item" (click)="applyorder(1)">Ascending</button>
+            <button class="dropdown-item" (click)="applyorder(-1)">Descending</button>
+          </div>
+        </div>
+      </div>
+      <div style="float: right">
+        <p class="sameLine">Filters: </p>
+        <div ngbDropdown class="d-inline-block sameLine">
+          <button class="customBtn" id="dropdownBasic1" [class.selectedFilter]="filterSelected.Status != 'Status'"
+            ngbDropdownToggle>{{filterSelected.Status}}</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item" (click)="applyFilters('Status','status', item)" *ngFor="let item of filterBy.status; let i = index">{{item}}</button>
+          </div>
+        </div>
+        <div ngbDropdown class="d-inline-block sameLine">
+          <button class="customBtn" id="dropdownBasic1" [class.selectedFilter]="filterSelected.Employee != 'Employee'"
+            ngbDropdownToggle>{{filterSelected.Employee}}</button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button class="dropdown-item" (click)="applyFilters('Employee','assignedTo.name', item)" *ngFor="let item of filterBy.employee; let i = index">{{item}}</button>
+          </div>
+        </div>
+        <button class="customBtn" (click)="clearFilter()">Clear</button>
+      </div>
+    </div>
+  </div>

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  masterURL: "http://localhost:1234/api/v1/",
-  baseUrl: "http://localhost:1234/api/v1/"
+  masterURL: 'http://imp-dev.herokuapp.com/api/v1/',
+  baseUrl: 'http://imp-cli.herokuapp.com/api/v1/'
 };
 
 /*

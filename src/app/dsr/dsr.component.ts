@@ -4,11 +4,15 @@ import { StoreService } from './../store/store.service';
 import { ResourcesService } from './../config/resources.service';
 import { Httpservice } from './../services/httpservice.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DSR, DSR_FILTER, DSR_DELETE } from "../../constants";
+import { DSR, DSR_FILTER, DSR_DELETE } from '../../constants';
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { NgbModalConfig, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbModalConfig,
+  NgbModal,
+  NgbModalRef
+} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dsr',
@@ -16,7 +20,6 @@ import { NgbModalConfig, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./dsr.component.css']
 })
 export class DsrComponent implements OnInit {
-
   public data: any = [];
   public show = false;
   public filters = this.resources.filter;
@@ -30,7 +33,13 @@ export class DsrComponent implements OnInit {
   public sorted = 'Visited';
   public dsrList: any = [];
   public page: Number = 1;
-  public sortBy: any = [{ key: 'Visited', value: 'created' }, { key: 'Client', value: 'effort.client' }, { key: 'Status', value: 'effort.sales' }, { key: 'Followup', value: 'effort.followup' }, { key: 'Employee', value: 'name' }];
+  public sortBy: any = [
+    { key: 'Visited', value: 'created' },
+    { key: 'Client', value: 'effort.client' },
+    { key: 'Status', value: 'effort.sales' },
+    { key: 'Followup', value: 'effort.followup' },
+    { key: 'Employee', value: 'name' }
+  ];
   public filterBy: any = {
     employee: [],
     status: [],
@@ -58,8 +67,12 @@ export class DsrComponent implements OnInit {
     let choosen = this.resources.getFilter('Custom Date');
     choosen.from = new Date(obj.from.year, obj.from.month - 1, obj.from.day);
     choosen.to = new Date(obj.to.year, obj.to.month - 1, obj.to.day);
-    this.fromDate = moment(choosen.from).startOf('day').toDate();
-    this.toDate = moment(choosen.to).endOf('day').toDate();
+    this.fromDate = moment(choosen.from)
+      .startOf('day')
+      .toDate();
+    this.toDate = moment(choosen.to)
+      .endOf('day')
+      .toDate();
     this.store.set('dateFilter', choosen);
     this.label = choosen.label;
     this.toggle();
@@ -67,8 +80,14 @@ export class DsrComponent implements OnInit {
     this.saveProps();
   }
 
-  constructor(public http: Httpservice, public calendar: NgbCalendar, public resources: ResourcesService,
-    public store: StoreService, public alert: AlertService, public modalService: NgbModal) {
+  constructor(
+    public http: Httpservice,
+    public calendar: NgbCalendar,
+    public resources: ResourcesService,
+    public store: StoreService,
+    public alert: AlertService,
+    public modalService: NgbModal
+  ) {
     this.query = this.store.get('query');
     if (this.query) {
       this.selected(this.query.label, true);
@@ -142,7 +161,7 @@ export class DsrComponent implements OnInit {
     this.page = page;
     this.query.skip = page == 1 ? 0 : (page - 1) * this.limit;
     this.saveProps();
-  };
+  }
 
   setProps() {
     this.query.fromDate = this.fromDate;
@@ -155,7 +174,6 @@ export class DsrComponent implements OnInit {
     this.query.order = this.order;
     this.store.set('query', this.query);
   }
-
 
   selected(filter: string, open?: any) {
     this.selectButton(filter);
@@ -174,13 +192,25 @@ export class DsrComponent implements OnInit {
     let choosen = this.resources.getFilter(filter);
     this.label = filter;
     if (typeof choosen.from.year == 'number') {
-      let from = new Date(choosen.from.year, choosen.from.month, choosen.from.day);
+      let from = new Date(
+        choosen.from.year,
+        choosen.from.month,
+        choosen.from.day
+      );
       let to = new Date(choosen.to.year, choosen.to.month, choosen.to.day);
-      this.fromDate = moment(from).startOf('day').toDate();
-      this.toDate = moment(to).endOf('day').toDate();
+      this.fromDate = moment(from)
+        .startOf('day')
+        .toDate();
+      this.toDate = moment(to)
+        .endOf('day')
+        .toDate();
     } else {
-      this.fromDate = moment(choosen.from).startOf('day').toDate();
-      this.toDate = moment(choosen.to).endOf('day').toDate();
+      this.fromDate = moment(choosen.from)
+        .startOf('day')
+        .toDate();
+      this.toDate = moment(choosen.to)
+        .endOf('day')
+        .toDate();
     }
     this.page = 1;
     this.setProps();
@@ -193,14 +223,15 @@ export class DsrComponent implements OnInit {
 
   selectButton(filter) {
     let self = this;
-    this.filters.forEach(function (item, i) {
+    this.filters.forEach(function(item, i) {
       item.selected = false;
-      self.filters[i].label === filter ? self.filters[i].selected = true : self.filters[i].selected = false;
+      self.filters[i].label === filter
+        ? (self.filters[i].selected = true)
+        : (self.filters[i].selected = false);
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   delete(item) {
     this.selectedItem = item;
@@ -221,20 +252,34 @@ export class DsrComponent implements OnInit {
   }
 
   share(item) {
-    let shareURL = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '/share/' + item._id;
+    let shareURL =
+      location.protocol +
+      '//' +
+      location.hostname +
+      (location.port ? ':' + location.port : '') +
+      '/share/' +
+      item._id;
     this.selectedItem = item;
     this.modalTitle = 'Share';
-    this.modalContent = 'Copy the URL to share it!' + '\n' + '<span><strong>' + shareURL + '</strong></span>';
+    this.modalContent =
+      'Copy the URL to share it!' +
+      '\n' +
+      '<span><strong>' +
+      shareURL +
+      '</strong></span>';
     this.modal.open();
   }
 
   openDSR(elem, item) {
     this.selectedItem = item;
     this.selectedItem.showMenu = true;
-    this.modalService.open(elem, { centered: true, size: 'lg' }).result.then((result) => {
-      console.log(result);
-    }, (reason) => {
-      console.log(reason);
-    });
+    this.modalService.open(elem, { centered: true, size: 'lg' }).result.then(
+      result => {
+        console.log(result);
+      },
+      reason => {
+        console.log(reason);
+      }
+    );
   }
 }

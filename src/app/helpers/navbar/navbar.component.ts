@@ -9,17 +9,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-
-  constructor(public store: StoreService, public router: Router, public alert: AlertService) { }
+  public name: string;
+  constructor(public store: StoreService, public router: Router, public alert: AlertService) {
+    this.store.changes.subscribe(data => {
+      console.log('From header', data);
+      if (data.type === 'profile') {
+        this.name = data.value.employee.name;
+      }
+    });
+  }
 
   ngOnInit() {
   }
 
   logout() {
+    this.alert.showLoader(true);
     this.store.clear('isLoggedIn');
     setTimeout(() => {
-      this.router.navigate(['login']);   
-      this.alert.showAlert('Logged Out Successfully', 'success');   
+      this.router.navigate(['login']);
+      this.alert.showAlert('Logged Out Successfully', 'success');
+      this.alert.showLoader(false);
     }, 1000);
   }
 

@@ -2,3 +2,30 @@
     color: #ffffff !important;
     background-color: transparent !important;
 }
+
+.customBtn {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  cursor: pointer;
+  border: none;
+}
+
+.customBtn:focus {
+  outline: none;
+}
+
+.dropdown-item {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  padding: 2px;
+}
+
+.header {
+  padding: 0px 20px;
+  z-index: 1000;
+  position: relative;
+}

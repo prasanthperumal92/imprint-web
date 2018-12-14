@@ -17,6 +17,7 @@ import { HeaderComponent } from './helpers/header/header.component';
 import { DatepickerComponent } from './helpers/datepicker/datepicker.component';
 import { ModalComponent } from './helpers/modal/modal.component';
 import { ShareComponent } from './helpers/share/share.component';
+import { TaskComponent } from './task/task.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { ShareComponent } from './helpers/share/share.component';
     NavbarComponent,
     DsrComponent,
     HeaderComponent,    
-    DatepickerComponent, ModalComponent, ShareComponent    
+    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent    
   ],
   imports: [
     BrowserModule,

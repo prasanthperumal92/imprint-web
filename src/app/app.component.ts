@@ -14,11 +14,11 @@ export class AppComponent {
   type: string;
   loader: boolean = false;
 
-  constructor(private alert: AlertService, private router: Router, private store: StoreService) {    
+  constructor(private alert: AlertService, private router: Router, private store: StoreService) {
     router.events.subscribe((event: any) => {
       console.log(event);
       if (event instanceof NavigationEnd) {
-        if (event.url != '/login' && !this.store.get('isLoggedIn')) {
+        if (event.url !== '/login' && !this.store.get('isLoggedIn')) {
           this.router.navigate(['login']);
         }
       }
@@ -31,8 +31,8 @@ export class AppComponent {
       // Clear after 3 seconds
       setTimeout(() => {
         this.alert.clearAlert();
-      }, 3000);      
-    });         
+      }, 3000);
+    });
 
     this.alert.getLoader().subscribe(loader => {
       this.loader = loader;
