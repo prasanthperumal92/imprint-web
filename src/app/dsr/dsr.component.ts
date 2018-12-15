@@ -58,6 +58,7 @@ export class DsrComponent implements OnInit {
   public modalContent;
   public modalBtnText;
   public selectedItem;
+  public photos = [];
 
   toggle() {
     this.show = !this.show;
@@ -88,7 +89,11 @@ export class DsrComponent implements OnInit {
     public alert: AlertService,
     public modalService: NgbModal
   ) {
-    this.query = this.store.get('query');
+    this.query = this.store.get('dsrquery');
+    let tmp = this.store.get('photos');
+    for (let i = 0; i < tmp.length; i++) {
+      this.photos[tmp[i].name] = tmp[i].photo;
+    }
     if (this.query) {
       this.selected(this.query.label, true);
       this.fromDate = this.query.fromDate;
@@ -144,6 +149,7 @@ export class DsrComponent implements OnInit {
   clearFilter() {
     this.filter = null;
     this.query.filter = this.filter;
+    this.page = 1;
     this.setProps();
     this.saveProps();
     this.clearFils();
@@ -159,7 +165,7 @@ export class DsrComponent implements OnInit {
 
   loadPage(page: any) {
     this.page = page;
-    this.query.skip = page == 1 ? 0 : (page - 1) * this.limit;
+    this.query.skip  = this.skip = page === 1 ? 0 : (page - 1) * this.limit;
     this.saveProps();
   }
 
@@ -172,7 +178,7 @@ export class DsrComponent implements OnInit {
     this.query.filter = this.filter;
     this.query.label = this.label;
     this.query.order = this.order;
-    this.store.set('query', this.query);
+    this.store.set("dsrquery", this.query);
   }
 
   selected(filter: string, open?: any) {
@@ -257,7 +263,7 @@ export class DsrComponent implements OnInit {
       '//' +
       location.hostname +
       (location.port ? ':' + location.port : '') +
-      '/share/' +
+      '/share/dsr/' +
       item._id;
     this.selectedItem = item;
     this.modalTitle = 'Share';

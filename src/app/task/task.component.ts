@@ -1,10 +1,18 @@
-import { AlertService } from './../services/alert.service';
-import { Httpservice } from './../services/httpservice.service';
-import { Component, OnInit } from '@angular/core';
-import { ResourcesService } from '../config/resources.service';
-import * as moment from 'moment';
-import { StoreService } from '../store/store.service';
+import { ModalComponent } from "../helpers/modal/modal.component";
+import { AlertService } from "./../services/alert.service";
+import { StoreService } from "../store/store.service";
+import { Httpservice } from "./../services/httpservice.service";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ResourcesService } from "../config/resources.service";
 import { DSR_FILTER, GET_TASK } from "../../constants";
+import { NgbDate, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
+import * as moment from "moment";
+import * as _ from "lodash";
+import {
+  NgbModalConfig,
+  NgbModal,
+  NgbModalRef
+} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-task",
@@ -23,7 +31,7 @@ export class TaskComponent implements OnInit {
   public label;
   public order = -1;
   public sorted = "Visited";
-  public dsrList: any = [];
+  public taskList: any = [];
   public page: Number = 1;
   public filterBy: any = {
     employee: [],
@@ -35,6 +43,12 @@ export class TaskComponent implements OnInit {
   };
   public query: any = {};
   public filter: any = null;
+  @ViewChild("modal") modal: ModalComponent;
+  @ViewChild("popup") popup;
+  public modalTitle;
+  public modalContent;
+  public modalBtnText;
+  public selectedItem;
 
   toggle() {
     this.show = !this.show;
@@ -62,7 +76,7 @@ export class TaskComponent implements OnInit {
     this.http.POST(GET_TASK, query).subscribe(res => {
       console.log(res);
       this.alert.showLoader(false);
-      this.dsrList = res;
+      this.taskList = res;
     });
   }
 
@@ -155,16 +169,27 @@ export class TaskComponent implements OnInit {
     this.query.filter = this.filter;
     this.query.label = this.label;
     this.query.order = this.order;
-    this.store.set("query", this.query);
+    this.store.set("taskquery", this.query);
   }
 
   constructor(
+    public http: Httpservice,
+    public calendar: NgbCalendar,
     public resources: ResourcesService,
     public store: StoreService,
-    public http: Httpservice,
-    public alert: AlertService
+    public alert: AlertService,
+    public modalService: NgbModal
   ) {
-    this.selected("Today", false); // By default choose Today000000........0
+    this.query = this.store.get("taskquery");
+    // this.selected("Today", false); // By default choose Today000000........0
+    if (this.query) {
+      this.selected(this.query.label, true);
+      this.fromDate = this.query.fromDate;
+      this.toDate = this.query.toDate;
+    } else {
+      this.query = {};
+      this.selected("Today", false); // By default choose Today
+    }
     this.getFilter();
   }
 
@@ -184,5 +209,54 @@ export class TaskComponent implements OnInit {
         this.filterSelected[k] = k;
       }
     }
+  }
+
+  openTask(elem, item) {
+    this.selectedItem = item;
+    this.selectedItem.showMenu = true;
+    this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
+      result => {
+        console.log(result);
+      },
+      reason => {
+        console.log(reason);
+      }
+    );
+  }
+
+  shareTask(item) {
+    let shareURL =
+      location.protocol +
+      "//" +
+      location.hostname +
+      (location.port ? ":" + location.port : "") +
+      "/share/task/" +
+      item._id;
+    this.selectedItem = item;
+    this.modalTitle = "Share";
+    this.modalContent =
+      "Copy the URL to share it!" +
+      "\n" +
+      "<span><strong>" +
+      shareURL +
+      "</strong></span>";
+    this.modal.open();
+  }
+
+  loadPage(page: any) {
+    this.page = page;
+    this.query.skip = this.skip = page === 1 ? 0 : (page - 1) * this.limit;
+    this.saveProps();
+  }
+
+  createTask(elem, type) {
+    this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
+      result => {
+        console.log(result);
+      },
+      reason => {
+        console.log(reason);
+      }
+    );
   }
 }

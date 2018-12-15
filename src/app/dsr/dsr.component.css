@@ -114,7 +114,7 @@ td:nth-child(2) {
 .customBtn {
   border: 1px solid #ffffff;
   border-radius: 5px;
-  font-size: 12px;
+  font-size: 14px;
   color: #58585c;
   background-color: #ffffff;
   padding: 4px 18px;
@@ -178,7 +178,7 @@ datepicker /deep/ ngb-datepicker {
 }
 
 .modalPopup {
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   padding: 10px;
 }
 
@@ -202,10 +202,33 @@ datepicker /deep/ ngb-datepicker {
 .col-6-grid img {
   height: 150px;
   width: 225px;
-  background-color: #000;
+  /* background-color: #000; */
 }
 
 .activeBtn {
   background-color: #1474a4 !important;
   color: #ffffff !important;
+}
+
+.roundImg {
+  border-radius: 50px;
+  width: 45px;
+  height: 45px;
+}
+
+.imgText {
+  margin-top: 10px;
+  margin-left: 8px;
+}
+
+.whiteBox>td {
+  vertical-align: middle;
+}
+
+.col-6-grid>span {
+  font-size: 14px;
+}
+
+.dropdown-item > i {
+  margin-right: 5px;
 }

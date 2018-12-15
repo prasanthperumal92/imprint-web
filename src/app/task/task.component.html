@@ -15,7 +15,10 @@
     </div>
     <div>
       <div style="float: left">
-        <p class="sameRow">Total - {{dsrList.length}}</p>
+        <button class="customBtn activeBtn" (click)="createTask(newTask, 'create')" style="margin-right:20px;height: 36px;">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New Task
+        </button>
         <button class="customBtn" (click)="saveProps()" style="margin-right:20px;"> <i class="fa fa-refresh"
             aria-hidden="true"></i>
           Refresh</button>
@@ -47,4 +50,166 @@
         <button class="customBtn" (click)="clearFilter()">Clear</button>
       </div>
     </div>
+    <br>
   </div>
+  <div class="container">
+    <table id="dsr" class="table" cellpadding="10">
+      <thead>
+        <tr>
+          <th scope="col">TITLE</th>
+          <th scope="col">CLIENT</th>
+          <th scope="col">STATUS</th>
+          <th scope="col">DUE DATE</th>
+          <th scope="col">LAST UPDATE</th>
+          <th scope="col">EMPLOYEE</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="taskList.length > 0">
+        <tr class="whiteBox" *ngFor="let item of taskList; let i = index">
+          <td>{{item.title}}</td>
+          <td>{{item.client}}</td>
+          <td>{{item.status}}</td>
+          <td>{{item.due | date: 'mediumDate'}}</td>
+          <td>{{item.modified | date: 'mediumDate'}}</td>
+          <td>
+            <div style="display: inline-flex">
+              <img src={{item.assignedTo.photo}} class="roundImg" />
+              <p class="imgText">{{item.assignedTo.name}}</p>
+            </div>
+          </td>
+          <td>
+            <button class="roundBtn" id="open" style="margin-right: 10px;" (click)="openTask(popup, item)">Open</button>
+            <div ngbDropdown class="d-inline-block sameRow">
+              <button class="roundBtn" id="actions" ngbDropdownToggle>Actions</button>
+              <div ngbDropdownMenu aria-labelledby="actions">
+                <button class="dropdown-item" (click)="createTask(newTask, 'edit')"><i class="fa fa-pencil" aria-hidden="true">
+                  </i>
+                  Edit</button>
+                <button class="dropdown-item" (click)="shareTask(item)"><i class="fa fa-share-alt" aria-hidden="true">
+                  </i>
+                  Share</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="taskList.length === 0">
+        <tr class="whiteBox">
+          <td>No Data Available</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="float: right">
+      <ngb-pagination [collectionSize]="50" [(page)]="page" [boundaryLinks]="false" (pageChange)="loadPage($event)"></ngb-pagination>
+    </div>
+  </div>
+  <modal #modal title={{modalTitle}} content={{modalContent}} btnText={{modalBtnText}} (btnFn)="deleteDSR()"></modal>
+</div>
+
+<ng-template #popup let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <div>
+            <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; Task Information</h5>
+            <hr>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Title</strong></span>
+                <span>{{selectedItem.title}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Status</strong></span>
+                <span>{{selectedItem.status}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Created Date</strong></span>
+                <span>{{selectedItem.created | date: 'mediumDate'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Last Visited</strong></span>
+                <span>{{selectedItem.modified | date: 'mediumDate'}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Due Date</strong></span>
+                <span>{{selectedItem.due | date: 'mediumDate'}}</span>
+              </div>
+            </div>
+            <hr>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Client Name</strong></span>
+                <span>{{selectedItem.client}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Description</strong></span>
+                <span>{{selectedItem.description}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Contact Person</strong></span>
+                <span>{{selectedItem.person}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Contact Number</strong></span>
+                <span>{{selectedItem.contact}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Location</strong></span>
+                <span>{{selectedItem.location}}</span>
+              </div>
+            </div>
+            <hr>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Assigned By</strong></span>
+                <div style="display: inline-flex">
+                  <img src={{selectedItem.assignedBy.photo}} class="roundImg" />
+                  <p class="imgText">{{selectedItem.assignedBy.name}}</p>
+                </div>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Assigned To</strong></span>
+                <div style="display: inline-flex">
+                  <img src={{selectedItem.assignedTo.photo}} class="roundImg" />
+                  <p class="imgText">{{selectedItem.assignedTo.name}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="modalPopup" style="text-align: center" *ngIf="selectedItem.showMenu">
+            <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); createTask(newTask, 'edit')"><i
+                class="fa fa-pencil" aria-hidden="true"></i>
+              &nbsp; Edit</button>
+            <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); shareTask(selectedItem)"><i
+                class="fa fa-share-alt" aria-hidden="true">
+              </i>
+              &nbsp; Share</button>
+            <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #newTask let-modal>
+  <h1>New Task</h1>
+</ng-template>

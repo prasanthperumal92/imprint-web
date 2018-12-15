@@ -6,3 +6,4 @@ export const DSR_DELETE = 'job/dsr/';
 export const EMPLOYEE_PROFILE = 'employee';
 export const ALL_EMPLOYEE = 'employee/photos';
 export const GET_TASK = 'task/get';
+export const TASK_SHARE = 'task/';

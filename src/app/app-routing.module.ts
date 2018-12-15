@@ -25,7 +25,7 @@ const routes: Routes = [
     component: DsrComponent
   },
   {
-    path: 'share/:id',
+    path: 'share/:type/:id',
     component: ShareComponent
   },
   {

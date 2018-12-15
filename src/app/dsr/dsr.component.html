@@ -81,7 +81,12 @@
           <td>{{item.effort.sales}}</td>
           <td>{{item.effort.followup | date: 'mediumDate'}}</td>
           <td>{{item.created | date: 'mediumDate'}}</td>
-          <td>{{item.name}}</td>
+          <td>
+            <div style="display: inline-flex">
+              <img src={{photos[item.name]}} class="roundImg" />
+              <p class="imgText">{{item.name}}</p>
+            </div>
+          </td>
           <td>
             <button class="roundBtn" id="open" style="margin-right: 10px;" (click)="openDSR(popup, item)">Open</button>
             <div ngbDropdown class="d-inline-block sameRow">
@@ -121,6 +126,7 @@
         <div class="col-12 modalPopup">
           <div>
             <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; DSR Information</h5>
+            <hr>
             <div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Status</strong></span>

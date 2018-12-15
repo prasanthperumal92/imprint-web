@@ -1,7 +1,7 @@
 import { Httpservice } from './../../services/httpservice.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DSR_SHARE} from '../../../constants';
+import { DSR_SHARE, TASK_SHARE } from '../../../constants';
 
 @Component({
   selector: 'app-share',
@@ -9,18 +9,30 @@ import { DSR_SHARE} from '../../../constants';
   styleUrls: ['./share.component.css']
 })
 export class ShareComponent implements OnInit {
-  id: number;
+  id: string;
+  type: string;
   private sub: any;
-  public data;
+  public data: any = {};
+  public task;
   constructor(public http: Httpservice, public route: ActivatedRoute) {}
 
   ngOnInit() {
+    let url;
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
-      console.log(this.id);
-      this.http.GET(`${DSR_SHARE}${this.id}`).subscribe((res) => {
-        this.data = res;
+      this.type = params['type'];
+      console.log(this.id, this.type);
+      if (this.type === 'task') {
+        url = TASK_SHARE;
+      } else {
+        url = DSR_SHARE;
+      }
+      this.http.GET(`${url}${this.id}`).subscribe((res) => {
+        if (res) {
+          this.data = res;
+        }
         if (Object.keys(this.data).length === 0) {
+          this.data = {};
           this.data.nothing = true;
         }
       });
