@@ -110,7 +110,7 @@
       <ngb-pagination [collectionSize]="50" [(page)]="page" [boundaryLinks]="false" (pageChange)="loadPage($event)"></ngb-pagination>
     </div>
   </div>
-  <modal #modal title={{modalTitle}} content={{modalContent}} btnText={{modalBtnText}} (btnFn)="deleteDSR()"></modal>
+  <modal #modal title={{modalTitle}} content={{modalContent}} btnText={{modalBtnText}}></modal>
 </div>
 
 <ng-template #popup let-modal>
