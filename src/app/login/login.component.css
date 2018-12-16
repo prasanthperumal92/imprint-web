@@ -1,6 +1,6 @@
 .center {
   padding-top: 280px;
-  background-color: #1474a4;  
+  background-color: #1474a4;
   background-image: linear-gradient(to bottom right, #09508d, #1488c0);
   background-image: -webkit-linear-gradient(to bottom right, #09508d, #1488c0);
   background-image: -moz-linear-gradient(to bottom right, #09508d, #1488c0);
@@ -8,6 +8,11 @@
   height: 100% !important;
   position: absolute;
   width: 100%;
+}
+
+form .btn {
+  background-color: #1c2d66 !important;
+  border-color: #1c2d66 !important;
 }
 
 .login {
@@ -26,7 +31,7 @@
   color: #ffffff;
   position: absolute;
   bottom: 0 !important;
-  text-align: center;  
+  text-align: center;
   width: 100%;
   font-size: 12px;
 }

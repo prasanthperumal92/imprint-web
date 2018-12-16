@@ -31,7 +31,7 @@ export class AppComponent {
       // Clear after 3 seconds
       setTimeout(() => {
         this.alert.clearAlert();
-      }, 3000);
+      }, 10000);
     });
 
     this.alert.getLoader().subscribe(loader => {

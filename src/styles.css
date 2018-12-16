@@ -5,10 +5,7 @@ body {
     background-color: #edf0f5 !important;
 }
 
-form .btn {
-    background-color: #1c2d66 !important;
-    border-color: #1c2d66 !important;
-}
+
 
 .btn:focus {
     box-shadow: none !important;

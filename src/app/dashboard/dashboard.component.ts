@@ -2,7 +2,7 @@ import { Httpservice } from './../services/httpservice.service';
 import { Router } from '@angular/router';
 import { StoreService } from './../store/store.service';
 import { Component, OnInit } from '@angular/core';
-import { EMPLOYEE_PROFILE, ALL_EMPLOYEE } from '../../constants';
+import { EMPLOYEE_PROFILE, ALL_EMPLOYEE, GET_CLIENTS } from '../../constants';
 import * as _ from 'lodash';
 
 @Component({
@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
     this.apps = _.orderBy(this.store.get('config').appList, ['id'], ['asc']);
     this.getProfile();
     this.getEmployees();
+    this.getClients();
   }
 
   ngOnInit() {
@@ -33,6 +34,12 @@ export class DashboardComponent implements OnInit {
   getProfile() {
     this.http.GET(EMPLOYEE_PROFILE).subscribe((res) => {
       this.store.set('profile', res);
+    });
+  }
+
+  getClients() {
+    this.http.GET(GET_CLIENTS).subscribe((res) => {
+      this.store.set('clients', res);
     });
   }
 

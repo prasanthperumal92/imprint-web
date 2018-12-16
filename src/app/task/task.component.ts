@@ -4,15 +4,13 @@ import { StoreService } from "../store/store.service";
 import { Httpservice } from "./../services/httpservice.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ResourcesService } from "../config/resources.service";
-import { DSR_FILTER, GET_TASK } from "../../constants";
+import { DSR_FILTER, GET_TASK, CREATE_TASK } from "../../constants";
 import { NgbDate, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 import * as moment from "moment";
 import * as _ from "lodash";
-import {
-  NgbModalConfig,
-  NgbModal,
-  NgbModalRef
-} from "@ng-bootstrap/ng-bootstrap";
+import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
+import { Observable, Subject, merge } from "rxjs";
+import { debounceTime, distinctUntilChanged, filter, map } from "rxjs/operators";
 
 @Component({
   selector: "app-task",
@@ -20,6 +18,11 @@ import {
   styleUrls: ["./task.component.css"]
 })
 export class TaskComponent implements OnInit {
+  @ViewChild("modal") modal: ModalComponent;
+  @ViewChild("popup") popup;
+  @ViewChild("instance") instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
   public data: any = [];
   public show = false;
   public filters = this.resources.filter;
@@ -43,19 +46,57 @@ export class TaskComponent implements OnInit {
   };
   public query: any = {};
   public filter: any = null;
-  @ViewChild("modal") modal: ModalComponent;
-  @ViewChild("popup") popup;
   public modalTitle;
   public modalContent;
   public modalBtnText;
   public selectedItem;
+  public model: any = {};
+  public employees = {};
+  public selectedEmployee = {
+    name: "Select Employee",
+    photo: "/assets/images/default_user.png"
+  };
+  public selectedDate: any = {};
+  public clients = [];
+
+  search = (text: Observable<string>) => {
+    console.log(JSON.stringify(text));
+    return text.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 2 ? []
+        : this.clients.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    );
+  }
+
+  constructor(
+    public http: Httpservice,
+    public calendar: NgbCalendar,
+    public resources: ResourcesService,
+    public store: StoreService,
+    public alert: AlertService,
+    public modalService: NgbModal
+  ) {
+    this.query = this.store.get("taskquery");
+    this.employees = this.store.get("photos");
+    this.clients = this.store.get("clients") ? _.map(this.store.get("clients"), "name") : [];
+    if (this.query) {
+      this.selected(this.query.label, true);
+      this.fromDate = this.query.fromDate;
+      this.toDate = this.query.toDate;
+    } else {
+      this.query = {};
+      this.selected("Today", false); // By default choose Today
+    }
+    this.getFilter();
+  }
 
   toggle() {
     this.show = !this.show;
   }
 
   calendarData(obj) {
-    let choosen = this.resources.getFilter("Custom Date");
+    const choosen = this.resources.getFilter("Custom Date");
     choosen.from = new Date(obj.from.year, obj.from.month - 1, obj.from.day);
     choosen.to = new Date(obj.to.year, obj.to.month - 1, obj.to.day);
     this.fromDate = moment(choosen.from)
@@ -111,15 +152,15 @@ export class TaskComponent implements OnInit {
   }
 
   dateFilter(filter) {
-    let choosen = this.resources.getFilter(filter);
+    const choosen = this.resources.getFilter(filter);
     this.label = filter;
     if (typeof choosen.from.year === "number") {
-      let from = new Date(
+      const from = new Date(
         choosen.from.year,
         choosen.from.month,
         choosen.from.day
       );
-      let to = new Date(choosen.to.year, choosen.to.month, choosen.to.day);
+      const to = new Date(choosen.to.year, choosen.to.month, choosen.to.day);
       this.fromDate = moment(from)
         .startOf("day")
         .toDate();
@@ -151,8 +192,8 @@ export class TaskComponent implements OnInit {
   }
 
   selectButton(filter) {
-    let self = this;
-    this.filters.forEach(function(item, i) {
+    const self = this;
+    this.filters.forEach(function (item, i) {
       item.selected = false;
       self.filters[i].label === filter
         ? (self.filters[i].selected = true)
@@ -172,28 +213,7 @@ export class TaskComponent implements OnInit {
     this.store.set("taskquery", this.query);
   }
 
-  constructor(
-    public http: Httpservice,
-    public calendar: NgbCalendar,
-    public resources: ResourcesService,
-    public store: StoreService,
-    public alert: AlertService,
-    public modalService: NgbModal
-  ) {
-    this.query = this.store.get("taskquery");
-    // this.selected("Today", false); // By default choose Today000000........0
-    if (this.query) {
-      this.selected(this.query.label, true);
-      this.fromDate = this.query.fromDate;
-      this.toDate = this.query.toDate;
-    } else {
-      this.query = {};
-      this.selected("Today", false); // By default choose Today
-    }
-    this.getFilter();
-  }
-
-  ngOnInit() {}
+  ngOnInit() { }
 
   clearFilter() {
     this.filter = null;
@@ -204,7 +224,7 @@ export class TaskComponent implements OnInit {
   }
 
   clearFils() {
-    for (let k in this.filterSelected) {
+    for (const k in this.filterSelected) {
       if (this.filterSelected.hasOwnProperty(k)) {
         this.filterSelected[k] = k;
       }
@@ -225,7 +245,7 @@ export class TaskComponent implements OnInit {
   }
 
   shareTask(item) {
-    let shareURL =
+    const shareURL =
       location.protocol +
       "//" +
       location.hostname +
@@ -249,7 +269,57 @@ export class TaskComponent implements OnInit {
     this.saveProps();
   }
 
-  createTask(elem, type) {
+  createTask(elem, type, item) {
+    if (type === "edit") {
+      this.model = item;
+      this.selectedEmployee = _.find(this.employees, { id: this.model.assignedTo.id });
+      this.selectedDate = {
+        year: new Date(this.model.due).getFullYear(),
+        month: new Date(this.model.due).getMonth() + 1,
+        day: new Date(this.model.due).getDate()
+      };
+    }
+    this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
+      result => {
+        console.log(result);
+      },
+      reason => {
+        console.log(reason);
+      }
+    );
+  }
+
+  onSubmit() {
+    if (!this.model.assignedTo) {
+      this.alert.showAlert("Please select a Employee to assign the Task", "warning");
+      return false;
+    } else if (!this.selectedDate.day) {
+      this.alert.showAlert("Please select due date for the Task", "warning");
+      return false;
+    } else if (this.clients.indexOf(this.model.client) === -1) {
+      this.alert.showAlert("Your client is not available, So click 'Add  Client' button to add one", "warning");
+      return false;
+    } else if (this.model.contact.toString().length !== 10) {
+      this.alert.showAlert("Phone number should be 10 digit number", "warning");
+      return false;
+    }
+    this.model.due = new Date(this.selectedDate.year, this.selectedDate.month - 1, this.selectedDate.day, 23, 59);
+    this.model.status = "New";
+    console.log(this.model);
+    this.alert.showLoader(true);
+    this.http.POST(CREATE_TASK, this.model).subscribe(res => {
+      console.log(res);
+      this.alert.showLoader(false);
+      window.location.reload();
+    });
+  }
+
+  selectEmp(item) {
+    this.selectedEmployee = item;
+    this.model.assignedTo = item.id;
+  }
+
+  createClient(elem) {
     this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
       result => {
         console.log(result);

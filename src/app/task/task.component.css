@@ -214,14 +214,28 @@ datepicker /deep/ ngb-datepicker {
   margin-left: 8px;
 }
 
-.whiteBox > td {
+.whiteBox>td {
   vertical-align: middle;
 }
 
-.col-6-grid > span {
+.col-6-grid>span {
   font-size: 14px;
 }
 
 .dropdown-item>i {
   margin-right: 5px;
+}
+
+.empDropDown {
+  padding: 5px;
+  width: 70%;
+  cursor: pointer;
+}
+
+.empDropBtn,
+.empDropBtn:focus {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: #000;
 }
