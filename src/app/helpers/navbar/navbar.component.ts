@@ -10,13 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   public name: string;
+  public photo: string;
   constructor(public store: StoreService, public router: Router, public alert: AlertService) {
-    this.store.changes.subscribe(data => {
-      console.log('From header', data);
-      if (data.type === 'profile') {
-        this.name = data.value.employee.name;
-      }
-    });
+    const pro = this.store.get('profile');
+    if (pro) {
+      this.name = pro.employee.name;
+      this.photo = pro.employee.photo;
+    } else {
+      this.store.changes.subscribe(data => {
+        console.log('From header', data);
+        if (data.type === 'profile') {
+          this.name = data.value.employee.name;
+          this.photo = data.value.employee.photo;
+        }
+      });
+    }
   }
 
   ngOnInit() {

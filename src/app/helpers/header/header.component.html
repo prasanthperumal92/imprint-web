@@ -1,15 +1,21 @@
 <nav class="navbar navbar-light custom justify-content-between header">
   <div class="container">
     <a class="navbar-brand">
-      <i class="fa fa-th fa-1x" style="cursor: pointer" (click)="goto('dashboard')" aria-hidden="true"></i>
-      <p style="display: inline"> &nbsp;{{title}}</p>
+      <i class="fa fa-th fa-2x" style="cursor: pointer" (click)="goto('dashboard')" aria-hidden="true"></i>
+      <h4 style="display: inline"> &nbsp; Performance <strong>Bridge</strong> </h4>
     </a>
     <form class="form-inline my-2 my-lg-0">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <div ngbDropdown class="d-inline-block sameRow">
-            <button class="customBtn" id="actions" ngbDropdownToggle>{{name}}</button>
+          <div ngbDropdown class="d-inline-block sameRow" style="padding-top: 5px;">
+            <button type="button" class="empDropBtn" id="actions" ngbDropdownToggle>
+              <div style="display: inline-flex; color: #ffffff">
+                <img src={{photo}} class="roundImg" />
+                <p class="imgText">{{name}}</p>
+              </div>
+            </button>
             <div ngbDropdownMenu aria-labelledby="actions">
+              <button class="dropdown-item">My Account</button>
               <button class="dropdown-item" (click)="logout()">Sign Out</button>
             </div>
           </div>

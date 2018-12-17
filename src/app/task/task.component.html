@@ -216,7 +216,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12 modalPopup">
-          <h5 class="popTitle">Add Task</h5>
+          <h5 class="popTitle">{{taskModalTitle}}</h5>
           <form name="taskForm" (ngSubmit)="onSubmit()" #taskForm="ngForm">
             <div>
               <div class="col-6 col-6-grid">
@@ -302,7 +302,7 @@
               </div>
             </div>
             <div>
-              <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!taskForm.form.valid">Create</button>
+              <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!taskForm.form.valid">{{taskModalBtn}}</button>
               <button type="button" class="btn btn-default btn-sm btn-block" (click)="model = {}; modal.dismiss('Cross click')">Cancel</button>
             </div>
           </form>
@@ -314,5 +314,30 @@
 
 
 <ng-template #addClient let-modal>
-  <h1>Add Client</h1>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <h5 class="popTitle">{{taskModalTitle}}</h5>
+          <form name="clientForm" (ngSubmit)="modal.dismiss('Cross click'); clientSubmit(newTask, type, selectedItem)"
+            #clientForm="ngForm">
+            <div>
+              <div class="col-12 col-12-grid">
+                <span class="primary"><strong>Title</strong></span>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" name="name" [(ngModel)]="clientName"
+                    placeholder="Enter Client Name" [ngbTypeahead]="search" required>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!clientForm.form.valid">Add
+                Client</button>
+              <button type="button" class="btn btn-default btn-sm btn-block" (click)="modal.dismiss('Cross click'); createTask(newTask, type, selectedItem)">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </ng-template>

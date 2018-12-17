@@ -21,7 +21,6 @@ export class DashboardComponent implements OnInit {
     this.apps = _.orderBy(this.store.get('config').appList, ['id'], ['asc']);
     this.getProfile();
     this.getEmployees();
-    this.getClients();
   }
 
   ngOnInit() {
@@ -34,12 +33,6 @@ export class DashboardComponent implements OnInit {
   getProfile() {
     this.http.GET(EMPLOYEE_PROFILE).subscribe((res) => {
       this.store.set('profile', res);
-    });
-  }
-
-  getClients() {
-    this.http.GET(GET_CLIENTS).subscribe((res) => {
-      this.store.set('clients', res);
     });
   }
 

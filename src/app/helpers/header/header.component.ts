@@ -10,6 +10,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   public name: string;
+  public photo: string;
   @Input() title: string;
   constructor(
     public router: Router,
@@ -18,9 +19,10 @@ export class HeaderComponent implements OnInit {
   ) {
     let tmp = this.store.get('profile');
     this.name = tmp.employee.name;
+    this.photo = tmp.employee.photo;
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   goto(path: string) {
     this.router.navigate([path]);

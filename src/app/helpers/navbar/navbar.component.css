@@ -1,6 +1,7 @@
-.custom, .custom a {
-    color: #ffffff !important;
-    background-color: transparent !important;
+.custom,
+.custom a {
+  color: #ffffff !important;
+  background-color: transparent !important;
 }
 
 .customBtn {
@@ -22,10 +23,40 @@
 .dropdown-menu {
   position: absolute;
   padding: 2px;
+  width: 100%;
 }
 
 .header {
   padding: 0px 20px;
   z-index: 1000;
   position: relative;
+}
+
+.empDropBtn,
+.empDropBtn:focus {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: #000;
+}
+
+.imgText {
+  margin-top: 10px;
+  margin-left: 8px;
+}
+
+.sameRow {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.roundImg {
+  border-radius: 50px;
+  width: 45px;
+  height: 45px;
+}
+
+.dropdown-toggle::after {
+  margin-bottom: 15px;
+  color: #fff;
 }

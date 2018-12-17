@@ -4,7 +4,7 @@ import { StoreService } from "../store/store.service";
 import { Httpservice } from "./../services/httpservice.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ResourcesService } from "../config/resources.service";
-import { DSR_FILTER, GET_TASK, CREATE_TASK } from "../../constants";
+import { DSR_FILTER, GET_TASK, CREATE_TASK, GET_CLIENTS } from "../../constants";
 import { NgbDate, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 import * as moment from "moment";
 import * as _ from "lodash";
@@ -58,6 +58,10 @@ export class TaskComponent implements OnInit {
   };
   public selectedDate: any = {};
   public clients = [];
+  public taskModalTitle;
+  public taskModalBtn;
+  public clientName;
+  public type;
 
   search = (text: Observable<string>) => {
     console.log(JSON.stringify(text));
@@ -89,6 +93,7 @@ export class TaskComponent implements OnInit {
       this.selected("Today", false); // By default choose Today
     }
     this.getFilter();
+    this.getClients();
   }
 
   toggle() {
@@ -270,7 +275,13 @@ export class TaskComponent implements OnInit {
   }
 
   createTask(elem, type, item) {
+    this.type = type;
+    this.getClients();
+    this.taskModalTitle = 'Add Task';
+    this.taskModalBtn = 'Create Task';
     if (type === "edit") {
+      this.taskModalTitle = 'Edit Task';
+      this.taskModalBtn = 'Update Task';
       this.model = item;
       this.selectedEmployee = _.find(this.employees, { id: this.model.assignedTo.id });
       this.selectedDate = {
@@ -279,14 +290,32 @@ export class TaskComponent implements OnInit {
         day: new Date(this.model.due).getDate()
       };
     }
+    this.selectedItem = this.model;
     this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
       result => {
         console.log(result);
       },
       reason => {
         console.log(reason);
+        if (reason === 0) { this.model = {}; };
       }
     );
+  }
+
+  clientSubmit(elem, type, item) {
+    this.alert.showLoader(true);
+    this.http.POST(GET_CLIENTS, { name: this.clientName }).subscribe(res => {
+      console.log(res);
+      this.alert.showLoader(false);
+      this.createTask(elem, type, item);
+    });
+  }
+
+  getClients() {
+    this.http.GET(GET_CLIENTS).subscribe((res) => {
+      this.clients = res ? _.map(res, "name") : [];
+      this.store.set('clients', res);
+    });
   }
 
   onSubmit() {
@@ -307,7 +336,9 @@ export class TaskComponent implements OnInit {
     this.model.status = "New";
     console.log(this.model);
     this.alert.showLoader(true);
-    this.http.POST(CREATE_TASK, this.model).subscribe(res => {
+    let tmp = JSON.parse(JSON.stringify(this.model));
+    tmp.assignedTo = tmp.assignedTo.id;
+    this.http.POST(CREATE_TASK, tmp).subscribe(res => {
       console.log(res);
       this.alert.showLoader(false);
       window.location.reload();
@@ -320,6 +351,7 @@ export class TaskComponent implements OnInit {
   }
 
   createClient(elem) {
+    this.taskModalTitle = "Add Client";
     this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
       result => {
         console.log(result);
