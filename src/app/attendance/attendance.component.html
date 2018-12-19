@@ -1,0 +1,152 @@
+<div>
+  <header title="Performance Bridge"></header>
+  <div class="container filterHeader">
+    <h2>Attendance Management</h2>
+    <br>
+    <div class="row">
+      <div class="col-2" style="border-right: 1px solid #ccc;">
+        <ul class="list-group">
+          <li class="list-group-item" [class.active]="selectedMenu === item" *ngFor="let item of menus" (click)="open(item)">
+            {{item}}
+            <span class="badge badge-primary badge-pill" *ngIf="item === 'Inbox' && count > 0">{{count}}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-10">
+        <!--- CALENDAR -->
+        <div *ngIf="selectedMenu === 'Calendar'">
+          <p *ngIf="!calendarOptions">Calendar is Loading...</p>
+          <div *ngIf="calendarOptions">
+            <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick(popup, $event.detail)"></ng-fullcalendar>
+          </div>
+        </div>
+        <!--- INBOX -->
+        <div *ngIf="selectedMenu !== 'Calendar'">
+          <div class="container">
+            <table id="dsr" class="table" cellpadding="10">
+              <thead>
+                <tr>
+                  <th scope="col">TITLE</th>
+                  <th scope="col">STATUS</th>
+                  <th scope="col">DAYS</th>
+                  <th scope="col">EMPLOYEE</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody *ngIf="leaves.length > 0">
+                <tr class="whiteBox" *ngFor="let item of leaves; let i = index">
+                  <td>{{item.title | truncate:26}}</td>
+                  <td>{{item.status || 'Not Approved'}}</td>
+                  <td>{{item.days}}</td>
+                  <td>
+                    <div style="display: inline-flex">
+                      <img src={{item.appliedBy.photo}} class="roundImg" />
+                      <p class="imgText">{{item.appliedBy.name}}</p>
+                    </div>
+                  </td>
+                  <td>
+                    <button class="roundBtn" id="open" style="margin-right: 10px;" (click)="openLeave(popup, item)">Open</button>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="leaves.length === 0">
+                <tr class="whiteBox">
+                  <td>No Data Available</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #popup let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <div>
+            <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; Leave Information</h5>
+            <hr>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Title</strong></span>
+                <span>{{selectedItem.title}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Status</strong></span>
+                <span>{{selectedItem.status || 'Not Approved'}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Start Date</strong></span>
+                <span>{{selectedItem.start | date: 'mediumDate'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>End Date</strong></span>
+                <span>{{selectedItem.end | date: 'mediumDate'}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Leave Type</strong></span>
+                <span>{{selectedItem.type}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Description</strong></span>
+                <span>{{selectedItem.description}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Number of Days Leave</strong></span>
+                <span>{{selectedItem.days}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Applied On</strong></span>
+                <span>{{selectedItem.created}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Applied By</strong></span>
+                <div style="display: inline-flex">
+                  <img src={{selectedItem.appliedBy.photo}} class="roundImg" />
+                  <p class="imgText">{{selectedItem.appliedBy.name}}</p>
+                </div>
+              </div>
+              <div class="col-6 col-6-grid" *ngIf="selectedItem.comments">
+                <span class="primary"><strong>Approver Comments</strong></span>
+                <span>{{selectedItem.comments}}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedItem.status !== 'Approved' && selectedItem.status !== 'Declined'">
+            <div class="col-12 col-12-grid">
+              <span class="primary"><strong>Comments</strong></span>
+              <textarea class="form-control" rows="3" cols="50" name="comments" id="comments" [(ngModel)]="comments"
+                required placeholder="Comments..."></textarea>
+            </div>
+          </div>
+          <hr>
+          <div class="modalPopup" style="text-align: center">
+            <button class="customBtn sameLine activeBtn" *ngIf="selectedItem.status !== 'Approved' && selectedItem.status !== 'Declined'"
+              (click)="modal.dismiss('Cross click'); updateLeave('Approved')">Approve</button>
+            <button class="customBtn sameLine activeBtn" *ngIf="selectedItem.status !== 'Approved' && selectedItem.status !== 'Declined'"
+              (click)="modal.dismiss('Cross click'); updateLeave('Declined')">Decline</button>
+            <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -19,6 +19,8 @@ import { ModalComponent } from './helpers/modal/modal.component';
 import { ShareComponent } from './helpers/share/share.component';
 import { TaskComponent } from './task/task.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { AttendanceComponent } from './attendance/attendance.component';
+import { FullCalendarModule } from 'ng-fullcalendar';
 
 @NgModule({
   declarations: [
@@ -29,14 +31,15 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     NavbarComponent,
     DsrComponent,
     HeaderComponent,
-    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent, TruncatePipe
+    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent, TruncatePipe, AttendanceComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule.forRoot(),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FullCalendarModule
   ],
   providers: [AlertService, Httpservice],
   bootstrap: [AppComponent]

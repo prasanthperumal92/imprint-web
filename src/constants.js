@@ -9,3 +9,4 @@ export const GET_TASK = 'task/get';
 export const TASK_SHARE = 'task/';
 export const GET_CLIENTS = 'clients';
 export const CREATE_TASK = 'task';
+export const GET_ATTENDANCE = 'leave';

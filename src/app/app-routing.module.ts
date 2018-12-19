@@ -1,36 +1,41 @@
-import { TaskComponent } from './task/task.component';
-import { ShareComponent } from './helpers/share/share.component';
-import { DsrComponent } from './dsr/dsr.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { NgModule, Component } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { AttendanceComponent } from './attendance/attendance.component';
+import { TaskComponent } from "./task/task.component";
+import { ShareComponent } from "./helpers/share/share.component";
+import { DsrComponent } from "./dsr/dsr.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { NgModule, Component } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { LoginComponent } from "./login/login.component";
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
+    path: "",
+    redirectTo: "/login",
+    pathMatch: "full"
   },
   {
-    path: 'login',
+    path: "login",
     component: LoginComponent
   },
   {
-    path: 'dashboard',
+    path: "dashboard",
     component: DashboardComponent
   },
   {
-    path: 'dashboard/dsr',
+    path: "dashboard/dsr",
     component: DsrComponent
   },
   {
-    path: 'share/:type/:id',
+    path: "share/:type/:id",
     component: ShareComponent
   },
   {
-    path: 'dashboard/task',
+    path: "dashboard/task",
     component: TaskComponent
+  },
+  {
+    path: "dashboard/attendance",
+    component: AttendanceComponent
   }
 ];
 

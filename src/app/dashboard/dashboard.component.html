@@ -3,10 +3,10 @@
   <div class="center">
     <h4>Performance <strong>Bridge</strong> </h4>
     <br><br>
-    <div class="container">     
+    <div class="container">
       <ul>
-        <li *ngFor="let app of apps; let i = index">
-          <img class="icon" src={{app.image}} (click)="goto(app.id)" alt="app.id" srcset="" />
+        <li *ngFor="let app of apps; let i = index" (click)="goto(app.id)">
+          <img class="icon" src={{app.image}} alt="{{app.id}}" srcset="" />
           <p class="title">{{app.name}}</p>
         </li>
       </ul>

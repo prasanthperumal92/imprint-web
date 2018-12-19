@@ -23,7 +23,7 @@ export class Httpservice {
     public store: StoreService,
     public alert: AlertService,
     public router: Router
-  ) {}
+  ) { }
   MASTER_URL = environment.masterURL;
   BASE_URL = environment.baseUrl;
   self = this;
@@ -40,6 +40,17 @@ export class Httpservice {
   public POST(API_URL, data = {}): Observable<any> {
     return this.http
       .post(`${this.BASE_URL}${API_URL}`, data, {
+        headers: this.getHeaders()
+      })
+      .map(response => {
+        return response;
+      })
+      .catch((err, caught) => this.handleError(err, caught));
+  }
+
+  public PUT(API_URL, data = {}): Observable<any> {
+    return this.http
+      .put(`${this.BASE_URL}${API_URL}`, data, {
         headers: this.getHeaders()
       })
       .map(response => {
