@@ -77,7 +77,7 @@
       </thead>
       <tbody *ngIf="dsrList.length > 0">
         <tr class="whiteBox" *ngFor="let item of dsrList; let i = index">
-          <td>{{item.effort.client}}</td>
+          <td>{{item.effort.client | truncate}}</td>
           <td>{{item.effort.sales}}</td>
           <td>{{item.effort.followup | date: 'mediumDate'}}</td>
           <td>{{item.created | date: 'mediumDate'}}</td>

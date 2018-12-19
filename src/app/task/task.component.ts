@@ -62,6 +62,8 @@ export class TaskComponent implements OnInit {
   public taskModalBtn;
   public clientName;
   public type;
+  public selectedStatus;
+  public modalRef: NgbModalRef;
 
   search = (text: Observable<string>) => {
     console.log(JSON.stringify(text));
@@ -154,6 +156,11 @@ export class TaskComponent implements OnInit {
     this.query.filter = this.filter;
     this.setProps();
     this.saveProps();
+  }
+
+  public applyEditFilters(value) {
+    this.model.status = value;
+    this.selectedStatus = value;
   }
 
   dateFilter(filter) {
@@ -277,12 +284,14 @@ export class TaskComponent implements OnInit {
   createTask(elem, type, item) {
     this.type = type;
     this.getClients();
-    this.taskModalTitle = 'Add Task';
-    this.taskModalBtn = 'Create Task';
+    this.taskModalTitle = "Add Task";
+    this.taskModalBtn = "Create Task";
     if (type === "edit") {
-      this.taskModalTitle = 'Edit Task';
-      this.taskModalBtn = 'Update Task';
+      this.taskModalTitle = "Edit Task";
+      this.taskModalBtn = "Update Task";
       this.model = item;
+      this.selectedStatus = this.model.status;
+      this.model.contact = this.model.contact.length > 10 ? this.model.contact.substr(3, this.model.contact.length) : this.model.contact;
       this.selectedEmployee = _.find(this.employees, { id: this.model.assignedTo.id });
       this.selectedDate = {
         year: new Date(this.model.due).getFullYear(),
@@ -291,13 +300,14 @@ export class TaskComponent implements OnInit {
       };
     }
     this.selectedItem = this.model;
-    this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
+    this.modalRef = this.modalService.open(elem, { centered: true, size: "lg" });
+    this.modalRef.result.then(
       result => {
         console.log(result);
       },
       reason => {
         console.log(reason);
-        if (reason === 0) { this.model = {}; };
+        if (reason === 0) { this.model = {}; }
       }
     );
   }
@@ -314,7 +324,7 @@ export class TaskComponent implements OnInit {
   getClients() {
     this.http.GET(GET_CLIENTS).subscribe((res) => {
       this.clients = res ? _.map(res, "name") : [];
-      this.store.set('clients', res);
+      this.store.set("clients", res);
     });
   }
 
@@ -332,16 +342,25 @@ export class TaskComponent implements OnInit {
       this.alert.showAlert("Phone number should be 10 digit number", "warning");
       return false;
     }
-    this.model.due = new Date(this.selectedDate.year, this.selectedDate.month - 1, this.selectedDate.day, 23, 59);
-    this.model.status = "New";
+    this.modalRef.close();
+    if (!this.model._id) {
+      this.model.due = new Date(this.selectedDate.year, this.selectedDate.month - 1, this.selectedDate.day, 23, 59);
+      this.model.status = "New";
+    }
+    this.model.contact = "+91" + this.model.contact;
     console.log(this.model);
     this.alert.showLoader(true);
     let tmp = JSON.parse(JSON.stringify(this.model));
     tmp.assignedTo = tmp.assignedTo.id;
     this.http.POST(CREATE_TASK, tmp).subscribe(res => {
       console.log(res);
+      if (!this.model._id) {
+        this.alert.showAlert("Task Created SuccessFully", "success");
+      } else {
+        this.alert.showAlert("Task Updated SuccessFully", "success");
+      }
       this.alert.showLoader(false);
-      window.location.reload();
+      this.saveProps();
     });
   }
 

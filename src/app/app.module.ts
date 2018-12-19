@@ -18,6 +18,7 @@ import { DatepickerComponent } from './helpers/datepicker/datepicker.component';
 import { ModalComponent } from './helpers/modal/modal.component';
 import { ShareComponent } from './helpers/share/share.component';
 import { TaskComponent } from './task/task.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -27,8 +28,8 @@ import { TaskComponent } from './task/task.component';
     DashboardComponent,
     NavbarComponent,
     DsrComponent,
-    HeaderComponent,    
-    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent    
+    HeaderComponent,
+    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent, TruncatePipe
   ],
   imports: [
     BrowserModule,
