@@ -1,0 +1,52 @@
+.dropdown-item>i {
+  margin-right: 5px;
+}
+
+.empDropDown {
+  padding: 5px;
+  width: 45%;
+  cursor: pointer;
+}
+
+.empDropBtn,
+.empDropBtn:focus {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: #000;
+}
+
+.roundImg {
+  border-radius: 50px;
+  width: 45px;
+  height: 45px;
+}
+
+.imgText {
+  margin-top: 10px;
+  margin-left: 8px;
+}
+
+.sameRow {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.dropdown-toggle::after {
+  padding-top: 15px;
+}
+
+.customBtn {
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #58585c;
+  background-color: #ffffff;
+  padding: 4px 18px;
+  cursor: pointer;
+}
+
+.roundBtn:focus,
+.customBtn:focus {
+  outline: none !important;
+}

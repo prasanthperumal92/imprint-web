@@ -6,6 +6,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { NgModule, Component } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./login/login.component";
+import { TrackComponent } from './track/track.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: "dashboard/attendance",
     component: AttendanceComponent
+  },
+  {
+    path: "dashboard/tracking",
+    component: TrackComponent
   }
 ];
 

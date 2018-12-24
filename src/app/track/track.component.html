@@ -1,0 +1,42 @@
+<div>
+  <header title="Tracking Management"></header>
+  <div class="container filterHeader">
+    <br>
+    <div>
+      <div class="col-6 col-6-grid">
+        <span class="primary">Select an Employee to Track</span>
+        <div ngbDropdown>
+          <button type="button" class="empDropBtn item" id="actions" ngbDropdownToggle>
+            <div style="display: inline-flex">
+              <img src={{selectedEmployee.photo}} class="roundImg" />
+              <p class="imgText">{{selectedEmployee.name}}</p>
+            </div>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="actions" class="empDropDown">
+            <div *ngFor="let item of employees" style="display: inline-flex" (click)="selectEmp(item)">
+              <img src={{item.photo}} class="roundImg" />
+              <p class="imgText">{{item.name}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div>
+      <div *ngIf="coords.length === 0">
+        <p>Loading Maps...</p>
+      </div>
+      <div *ngIf="coords.length > 0">
+        <div class="pull-left" style="display: inline-flex;width: 100%">
+          <button class="customBtn" (click)="getCoords(selectedEmployee)" style="margin-right:20px;width: 10%"> <i
+              class="fa fa-refresh" aria-hidden="true"></i>
+            Refresh</button>
+          <div style="text-align: right;width: 100%;">Last Updated: <strong>{{data.modified | date: 'medium' }}</strong></div>
+        </div>
+        <br><br>
+        <div #gmap style="width:100%;height:700px;border: 2px solid #fff"></div>
+      </div>
+    </div>
+    <br><br>
+  </div>
+</div>
