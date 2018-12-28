@@ -1,0 +1,134 @@
+<div>
+  <header title="Client Management"></header>
+  <div *ngIf="!client.clientId">
+    <div class="container filterHeader">
+    </div>
+    <div class="container">
+      <table id="dsr" class="table" cellpadding="10">
+        <thead>
+          <tr>
+            <th scope="col">CLIENT ID</th>
+            <th scope="col">CLIENT</th>
+            <th scope="col">CREATED BY</th>
+            <th scope="col">ASSIGNED TO</th>
+            <th scope="col">LAST UPDATED</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody *ngIf="clientList.length > 0">
+          <tr class="whiteBox" *ngFor="let item of clientList; let i = index" (click)="openClient(item)">
+            <td>{{item.clientId}}</td>
+            <td>{{item.name | truncate}}</td>
+            <td>
+              <div style="display: inline-flex">
+                <img src={{item.createdBy.photo}} class="roundImg" />
+                <p class="imgText">{{item.createdBy.name}}</p>
+              </div>
+            </td>
+            <td>
+              <div style="display: inline-flex">
+                <img src={{item.assignedTo.photo}} class="roundImg" />
+                <p class="imgText">{{item.assignedTo.name}}</p>
+              </div>
+            </td>
+            <td>{{item.modified | date: 'mediumDate'}}</td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="clientList.length === 0">
+          <tr class="whiteBox">
+            <td>No Data Available</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="client.clientId">
+    <div class="container filterHeader">
+      <button class="noBtn" (click)="goBack()" style="margin-right:20px;"> <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Back</button>
+      <br><br>
+      <div class="container" style="background-color: #ffffff;">
+        <div class="row">
+          <div class="col-12 modalPopup">
+            <div>
+              <h5 class="popTitle">Client Information</h5>
+              <hr>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Client ID</strong></span>
+                  <span>{{client.clientId}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Client Name</strong></span>
+                  <span>{{client.name}}</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Created Date</strong></span>
+                  <span>{{client.created | date: 'mediumDate'}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Last Updated</strong></span>
+                  <span>{{client.modified | date: 'mediumDate'}}</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Client Address</strong></span>
+                  <span>{{client.address}}</span>
+                </div>
+              </div>
+              <hr>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Contact Person</strong></span>
+                  <span>{{client.person}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Contact Number</strong></span>
+                  <span>{{client.contact}}</span>
+                </div>
+              </div>
+              <hr>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Created By</strong></span>
+                  <div style="display: inline-flex">
+                    <img src={{client.createdBy.photo}} class="roundImg" />
+                    <p class="imgText">{{client.createdBy.name}}</p>
+                  </div>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Assigned To</strong></span>
+                  <div style="display: inline-flex">
+                    <img src={{client.assignedTo.photo}} class="roundImg" />
+                    <p class="imgText">{{client.assignedTo.name}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="modalPopup" style="text-align: center" *ngIf="client.showMenu">
+              <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); createTask(newTask, 'edit', client)"><i
+                  class="fa fa-pencil" aria-hidden="true"></i>
+                &nbsp; Edit</button>
+              <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); shareTask(client)"><i
+                  class="fa fa-share-alt" aria-hidden="true">
+                </i>
+                &nbsp; Share</button>
+              <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

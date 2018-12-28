@@ -230,7 +230,7 @@
                 <div class="form-group">
                   <input id="typeahead-focus" type="text" class="form-control form-control-sm" [(ngModel)]="model.client"
                     [ngbTypeahead]="search" name="client" placeholder="Client Name" required />
-                  <small id="emailHelp" class="form-text text-muted float-right">Not found? <a (click)="modal.dismiss('Cross click'); createClient(addClient)"
+                  <small id="emailHelp" class="form-text text-muted float-right">Not found? <a (click)="modal.dismiss('Cross click'); goto('client')"
                       style="cursor: pointer; color: #1474a4">Add
                       Client</a></small>
                 </div>

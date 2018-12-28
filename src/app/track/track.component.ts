@@ -33,7 +33,7 @@ export class TrackComponent implements OnInit {
   }
 
   initMap() {
-    const mapProp = {
+    const mapProp: any = {
       center: new google.maps.LatLng(11.0448, 76.91613),
       zoom: 15,
       gestureHandling: "cooperative",

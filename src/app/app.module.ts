@@ -22,6 +22,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { FullCalendarModule } from 'ng-fullcalendar';
 import { TrackComponent } from './track/track.component';
+import { ClientComponent } from './client/client.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { TrackComponent } from './track/track.component';
     NavbarComponent,
     DsrComponent,
     HeaderComponent,
-    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent, TruncatePipe, AttendanceComponent, TrackComponent
+    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent, TruncatePipe, AttendanceComponent, TrackComponent, ClientComponent
   ],
   imports: [
     BrowserModule,

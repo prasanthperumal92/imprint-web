@@ -11,6 +11,7 @@ import * as _ from "lodash";
 import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { Observable, Subject, merge } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, map } from "rxjs/operators";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-task",
@@ -81,7 +82,8 @@ export class TaskComponent implements OnInit {
     public resources: ResourcesService,
     public store: StoreService,
     public alert: AlertService,
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    public router: Router
   ) {
     this.query = this.store.get("taskquery");
     this.employees = this.store.get("photos");
@@ -211,6 +213,10 @@ export class TaskComponent implements OnInit {
         ? (self.filters[i].selected = true)
         : (self.filters[i].selected = false);
     });
+  }
+
+  goto(page) {
+    this.router.navigate(["dashboard/" + page]);
   }
 
   setProps() {

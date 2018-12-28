@@ -1,3 +1,4 @@
+import { ClientComponent } from './client/client.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { TaskComponent } from "./task/task.component";
 import { ShareComponent } from "./helpers/share/share.component";
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path: "dashboard/tracking",
     component: TrackComponent
+  },
+  {
+    path: "dashboard/client",
+    component: ClientComponent
   }
 ];
 
