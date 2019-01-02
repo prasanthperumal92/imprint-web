@@ -46,6 +46,10 @@ const routes: Routes = [
   {
     path: "dashboard/client",
     component: ClientComponent
+  },
+  {
+    path: "dashboard/client/:id",
+    component: ClientComponent
   }
 ];
 

@@ -241,3 +241,9 @@ datepicker /deep/ ngb-datepicker {
   background-color: transparent;
   color: #000;
 }
+
+.leftLine {
+  border-left: 4px solid #1474a4;
+  padding: 10px;
+  margin-bottom: 15px;
+}

@@ -1,6 +1,6 @@
 <div>
   <header title="Client Management"></header>
-  <div *ngIf="!client.clientId">
+  <div *ngIf="available && !client.clientId">
     <div class="container filterHeader">
     </div>
     <div class="container">
@@ -49,7 +49,7 @@
       </table>
     </div>
   </div>
-  <div *ngIf="client.clientId">
+  <div *ngIf="available && client.clientId">
     <div class="container filterHeader">
       <button class="noBtn" (click)="goBack()" style="margin-right:20px;"> <i class="fa fa-chevron-left" aria-hidden="true"></i>
         Back</button>
@@ -58,7 +58,9 @@
         <div class="row">
           <div class="col-12 modalPopup">
             <div>
-              <h5 class="popTitle">Client Information</h5>
+              <div>
+                <h5 class="popTitle">Client Information</h5>
+              </div>
               <hr>
               <div>
                 <div class="col-6 col-6-grid">
@@ -86,7 +88,6 @@
                   <span>{{client.address}}</span>
                 </div>
               </div>
-              <hr>
               <div>
                 <div class="col-6 col-6-grid">
                   <span class="primary"><strong>Contact Person</strong></span>
@@ -97,7 +98,6 @@
                   <span>{{client.contact}}</span>
                 </div>
               </div>
-              <hr>
               <div>
                 <div class="col-6 col-6-grid">
                   <span class="primary"><strong>Created By</strong></span>
@@ -115,16 +115,18 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="container" style="background-color: #ffffff;">
+        <div class="row">
+          <div class="col-12 modalPopup">
+            <br>
+            <h5 class="popTitle">Client Activity</h5>
             <hr>
-            <div class="modalPopup" style="text-align: center" *ngIf="client.showMenu">
-              <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); createTask(newTask, 'edit', client)"><i
-                  class="fa fa-pencil" aria-hidden="true"></i>
-                &nbsp; Edit</button>
-              <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); shareTask(client)"><i
-                  class="fa fa-share-alt" aria-hidden="true">
-                </i>
-                &nbsp; Share</button>
-              <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+            <div class="col-12 col-12-grid" *ngFor="let item of client.logs;">
+              <div class="leftLine"><strong>{{item.by}}</strong> {{item.text}} <strong>{{item.type}}</strong> on
+                <strong>{{item.created | date: 'medium'}}</strong></div>
             </div>
           </div>
         </div>
