@@ -1,7 +1,14 @@
 <div>
   <header title="Client Management"></header>
+  <br>
   <div *ngIf="available && !client.clientId">
     <div class="container filterHeader">
+      <div style="float: left">
+        <button class="customBtn activeBtn" (click)="newClient(modal, 'create', '')" style="margin-right:20px;height: 36px;">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          New Client
+        </button>
+      </div>
     </div>
     <div class="container">
       <table id="dsr" class="table" cellpadding="10">
@@ -59,8 +66,11 @@
           <div class="col-12 modalPopup">
             <div>
               <div>
-                <h5 class="popTitle">Client Information</h5>
+                <p class="popTitle pull-left">Client Information</p>
+                <p class="pull-right" style="cursor: pointer" (click)="newClient(modal, 'edit', client)"><i class="fa fa-pencil"
+                    aria-hidden="true"></i> Edit</p>
               </div>
+              <br>
               <hr>
               <div>
                 <div class="col-6 col-6-grid">
@@ -134,3 +144,75 @@
     </div>
   </div>
 </div>
+
+<ng-template #modal let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <h5 class="popTitle">{{title}}</h5>
+          <hr>
+          <form name="clientForm" (ngSubmit)="onSubmit()" #taskForm="ngForm">
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Client Name</strong></span>
+                <div class="form-group">
+                  <input id="typeahead-focus" type="text" class="form-control form-control-sm" [(ngModel)]="model.name"
+                    [ngbTypeahead]="search" name="client" placeholder="Client Name" required />
+                </div>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Address</strong></span>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" cols="20" name="address" id="address" [(ngModel)]="model.address"
+                    required placeholder="Address..."></textarea>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Contact Person</strong></span>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" name="person" [(ngModel)]="model.person"
+                    placeholder="Contact Person">
+                </div>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Contact Number</strong></span>
+                <div class="form-group">
+                  <input type="number" class="form-control form-control-sm" name="number" [(ngModel)]="model.number"
+                    placeholder="Contact Number">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Assign To</strong></span>
+                <div ngbDropdown class="d-inline-block sameRow">
+                  <p *ngIf="!selectedEmployee.name" id="actions" style="cursor: pointer" ngbDropdownToggle>Select an
+                    Employee</p>
+                  <button type="button" class="empDropBtn" id="actions" ngbDropdownToggle *ngIf="selectedEmployee.name">
+                    <div style="display: inline-flex">
+                      <img src={{selectedEmployee.photo}} class="roundImg" />
+                      <p class="imgText">{{selectedEmployee.name}}</p>
+                    </div>
+                  </button>
+                  <div ngbDropdownMenu aria-labelledby="actions" class="empDropDown">
+                    <div *ngFor="let item of employees" style="display: inline-flex" (click)="selectEmp(item)">
+                      <img src={{item.photo}} class="roundImg" />
+                      <p class="imgText">{{item.name}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!taskForm.form.valid">{{btn}}</button>
+              <button type="button" class="btn btn-default btn-sm btn-block" (click)="model = {}; modal.dismiss('Cross click')">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
