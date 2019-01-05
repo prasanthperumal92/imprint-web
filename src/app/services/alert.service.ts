@@ -6,7 +6,7 @@ export class AlertService {
 
   private alert = new Subject<any>();
   private loader = new Subject<any>();
-  
+
   showAlert(message: string, type: string) {
     this.alert.next({
       message: message,
@@ -26,12 +26,12 @@ export class AlertService {
     this.loader.next(message);
   }
 
-  hideLoader(){
+  hideLoader() {
     this.loader.next();
   }
 
-  getLoader(){
+  getLoader() {
     return this.loader.asObservable();
   }
- 
+
 }

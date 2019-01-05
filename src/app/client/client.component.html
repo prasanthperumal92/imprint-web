@@ -66,9 +66,11 @@
           <div class="col-12 modalPopup">
             <div>
               <div>
-                <p class="popTitle pull-left">Client Information</p>
-                <p class="pull-right" style="cursor: pointer" (click)="newClient(modal, 'edit', client)"><i class="fa fa-pencil"
+                <h5 class="popTitle pull-left"><i class="fa fa-shield" aria-hidden="true"></i> Client Information</h5>
+                <p class="roundBtn pull-right" (click)="newClient(modal, 'edit', client)"><i class="fa fa-pencil"
                     aria-hidden="true"></i> Edit</p>
+                <p class="roundBtn pull-right" style="margin-right: 10px;" (click)="openReference(refer, client)"><i
+                    class="fa fa-plus" aria-hidden="true"></i> Reference</p>
               </div>
               <br>
               <hr>
@@ -132,11 +134,14 @@
         <div class="row">
           <div class="col-12 modalPopup">
             <br>
-            <h5 class="popTitle">Client Activity</h5>
+            <h5 class="popTitle"> Client Activity</h5>
             <hr>
             <div class="col-12 col-12-grid" *ngFor="let item of client.logs;">
-              <div class="leftLine"><strong>{{item.by}}</strong> {{item.text}} <strong>{{item.type}}</strong> on
-                <strong>{{item.created | date: 'medium'}}</strong></div>
+              <div class="leftLine" *ngIf="item.type === 'Client'"><strong>{{item.by}}</strong> {{item.text}} <strong>{{item.type}}</strong>
+                on <strong>{{item.created | date: 'medium'}}</strong></div>
+              <div class="leftLine" *ngIf="item.type === 'Feedback'"><strong>{{item.by}}</strong> added a Reference
+                <strong>{{item.description}}</strong>
+                on <strong>{{item.created | date: 'medium'}}</strong></div>
             </div>
           </div>
         </div>
@@ -208,6 +213,35 @@
             </div>
             <div>
               <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!taskForm.form.valid">{{btn}}</button>
+              <button type="button" class="btn btn-default btn-sm btn-block" (click)="modal.dismiss('Cross click')">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #refer let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <h5 class="popTitle">Reference</h5>
+          <hr>
+          <form name="referenceForm" (ngSubmit)="addReference(client)" #referenceForm="ngForm">
+            <div>
+              <div class="col-12 col-12-grid">
+                <div class="form-group">
+                  <textarea class="form-control" rows="5" cols="30" name="reference" id="reference" [(ngModel)]="reference"
+                    required placeholder="Feedback..."></textarea>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!referenceForm.form.valid">Add
+                Reference</button>
               <button type="button" class="btn btn-default btn-sm btn-block" (click)="model = {}; modal.dismiss('Cross click')">Cancel</button>
             </div>
           </form>

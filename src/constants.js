@@ -8,6 +8,7 @@ export const ALL_EMPLOYEE = 'employee/photos';
 export const GET_TASK = 'task/get';
 export const TASK_SHARE = 'task/';
 export const GET_CLIENTS = 'clients';
+export const REFERENCE = 'clients/reference';
 export const CREATE_TASK = 'task';
 export const GET_ATTENDANCE = 'leave';
 export const GET_TRACKING = 'track';
