@@ -1,0 +1,14 @@
+<div>
+  <header title="My Calendar"></header>
+  <div class="container filterHeader">
+    <br>
+    <div class="row">
+      <div>
+        <p *ngIf="!calendarOptions">Calendar is Loading...</p>
+        <div *ngIf="calendarOptions">
+          <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick(popup, $event.detail)"></ng-fullcalendar>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

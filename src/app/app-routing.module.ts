@@ -1,3 +1,4 @@
+import { MyCalendarComponent } from './calendar/calendar.component';
 import { ClientComponent } from './client/client.component';
 import { AttendanceComponent } from './attendance/attendance.component';
 import { TaskComponent } from "./task/task.component";
@@ -50,6 +51,10 @@ const routes: Routes = [
   {
     path: "dashboard/client/:id",
     component: ClientComponent
+  },
+  {
+    path: "dashboard/calendar",
+    component: MyCalendarComponent
   }
 ];
 

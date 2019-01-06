@@ -23,6 +23,7 @@ import { AttendanceComponent } from './attendance/attendance.component';
 import { FullCalendarModule } from 'ng-fullcalendar';
 import { TrackComponent } from './track/track.component';
 import { ClientComponent } from './client/client.component';
+import { MyCalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,15 @@ import { ClientComponent } from './client/client.component';
     NavbarComponent,
     DsrComponent,
     HeaderComponent,
-    DatepickerComponent, ModalComponent, ShareComponent, TaskComponent, TruncatePipe, AttendanceComponent, TrackComponent, ClientComponent
+    DatepickerComponent,
+    ModalComponent,
+    ShareComponent,
+    TaskComponent,
+    TruncatePipe,
+    AttendanceComponent,
+    TrackComponent,
+    ClientComponent,
+    MyCalendarComponent
   ],
   imports: [
     BrowserModule,

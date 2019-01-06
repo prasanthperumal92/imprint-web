@@ -1,18 +1,18 @@
-.background {    
+.background {
   color: #ffffff;
   background-color: #1474a4;
   background-image: linear-gradient(to bottom right, #09508d, #1488c0);
   background-image: -webkit-linear-gradient(to bottom right, #09508d, #1488c0);
   background-image: -moz-linear-gradient(to bottom right, #09508d, #1488c0);
-  background-image: -o-linear-gradient(to bottom right, #09508d, #1488c0);  
+  background-image: -o-linear-gradient(to bottom right, #09508d, #1488c0);
   position: absolute;
   width: 100%;
   min-height: 100% !important;
 }
 
 .center {
-  margin-top: 420px;
-  text-align: center;  
+  margin-top: 200px;
+  text-align: center;
 }
 
 @media (max-width: 1024px) {
@@ -34,13 +34,13 @@ h4 {
 }
 
 .icon {
-  height: 95px;
+  height: 72px;
 }
 
-.title {  
+.title {
   font-size: 14px;
   margin-top: 5px;
-  width: 104px;
+  width: 100%;
 }
 
 .app {
@@ -59,10 +59,12 @@ ul {
 
 li {
   cursor: pointer;
-  display:inline-block;
+  display: inline-block;
   text-align: center;
-  color: #fff;    
-  list-style: none;  
+  color: #fff;
+  list-style: none;
   padding: 8px;
-  max-width: 125px;
+  min-width: 186px;
+  min-height: 160px;
+  vertical-align: middle;
 }

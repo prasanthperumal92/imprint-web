@@ -12,3 +12,4 @@ export const REFERENCE = 'clients/reference';
 export const CREATE_TASK = 'task';
 export const GET_ATTENDANCE = 'leave';
 export const GET_TRACKING = 'track';
+export const CALENDAR = 'calendar';
