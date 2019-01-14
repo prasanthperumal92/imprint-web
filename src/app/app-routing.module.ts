@@ -1,3 +1,5 @@
+import { ProfileComponent } from './profile/profile.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 import { MyCalendarComponent } from './calendar/calendar.component';
 import { ClientComponent } from './client/client.component';
 import { AttendanceComponent } from './attendance/attendance.component';
@@ -55,6 +57,14 @@ const routes: Routes = [
   {
     path: "dashboard/calendar",
     component: MyCalendarComponent
+  },
+  {
+    path: "dashboard/analytics",
+    component: AnalyticsComponent
+  },
+  {
+    path: "dashboard/profile",
+    component: ProfileComponent
   }
 ];
 

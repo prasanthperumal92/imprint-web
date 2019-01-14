@@ -1,9 +1,13 @@
-import { Httpservice } from './../services/httpservice.service';
+import { AlertService } from "./../services/alert.service";
+import { Httpservice } from "./../services/httpservice.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { StoreService } from "../store/store.service";
 import * as _ from "lodash";
+import * as moment from "moment";
 import { } from "googlemaps";
 import { GET_TRACKING } from "../../constants";
+import { ResourcesService } from "../config/resources.service";
+import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-track",
@@ -12,6 +16,7 @@ import { GET_TRACKING } from "../../constants";
 })
 export class TrackComponent implements OnInit {
   @ViewChild("gmap") gmapElement: any;
+  @ViewChild("dp") datepicker: any;
   map: google.maps.Map;
 
   public employees: any = [];
@@ -19,13 +24,25 @@ export class TrackComponent implements OnInit {
   public coords: any = [];
   public markerArray: any = [];
   public data: any = [];
+  public done: Boolean = false;
+  public filters = _.filter(this.resources.filter, function (o) {
+    return (o.name === "T" || o.name === "Y" || o.name === "Custom");
+  });
+  public show: Boolean = false;
+  public labelDate = new Date();
+  public distance: any = 0;
+  public maxDate;
+  public selectedDate;
 
-  constructor(public store: StoreService, public http: Httpservice) {
+  constructor(public store: StoreService, public http: Httpservice, public alert: AlertService, public resources: ResourcesService) {
     const pro = this.store.get("profile");
-    const tmp = _.filter(this.store.get("photos"), function (o) { return o.name !== pro.employee.name; });
+    let tmp = _.filter(this.store.get("photos"), function (o) { return o.name !== pro.employee.name; });
     this.employees = tmp;
     this.selectedEmployee = this.employees[0];
     this.getCoords(this.selectedEmployee);
+    this.selected(this.filters[0]);
+    tmp = moment(this.filters[0].from).startOf("day").toDate();
+    this.maxDate = this.convert(tmp);
   }
 
   ngOnInit() {
@@ -43,7 +60,9 @@ export class TrackComponent implements OnInit {
     google.maps.event.addListener(google.maps.Marker, "click", function () {
       alert("Hi");
     });
-    this.draw(this.coords);
+    if (this.coords && this.coords.length > 0) {
+      this.draw(this.coords);
+    }
   }
 
   draw(location) {
@@ -98,6 +117,13 @@ export class TrackComponent implements OnInit {
     }, function (response, status) {
       if (status === "OK") {
         console.log(response);
+        const tmp = response.routes[0].legs;
+        let dis = 0;
+        for (let i = 0; i < tmp.length; i++) {
+          dis += parseFloat((tmp[i].distance.value / 1000).toFixed(1));
+        }
+        self.distance = dis || 0;
+        self.data.distance = self.distance;
         directionsDisplay.setDirections(response);
         self.showSteps(response, this.map);
       } else {
@@ -112,16 +138,67 @@ export class TrackComponent implements OnInit {
   }
 
   getCoords(item) {
+    this.alert.showLoader(true);
     this.coords = [];
-    let self = this;
-    this.http.GET(`${GET_TRACKING}/${item.id}`).subscribe(res => {
+    const self = this;
+    const date = `${this.labelDate.getFullYear()}-${this.labelDate.getMonth() + 1}-${this.labelDate.getDate()}`;
+    this.http.GET(`${GET_TRACKING}/${item.id}/${date}`).subscribe(res => {
       console.log(res);
-      this.coords = res.location;
-      this.data = res;
-      setTimeout(function () {
-        self.initMap();
-      }, 0);
+      this.alert.showLoader(false);
+      this.done = true;
+      if (res) {
+        this.coords = res.location;
+        this.data = res;
+        this.data.distance = 0;
+        setTimeout(function () {
+          self.initMap();
+        }, 0);
+      } else {
+        this.data = [];
+        this.alert.showAlert("No Data available!!!", "warning");
+        setTimeout(function () {
+          self.initMap();
+        }, 0);
+      }
     });
+  }
+
+  selected(label) {
+    this.selectActive(label.name);
+    if (label.name === "Custom") {
+      this.toggle();
+    } else {
+      this.labelDate = moment(label.from)
+        .startOf("day")
+        .toDate();
+      this.getCoords(this.selectedEmployee);
+      this.selectedDate = this.convert(this.labelDate);
+    }
+    console.log(label);
+  }
+
+  selectActive(i) {
+    for (let k = 0; k < this.filters.length; k++) {
+      if (this.filters.hasOwnProperty(k)) {
+        this.filters[k].name === i ? this.filters[k].selected = true : this.filters[k].selected = false;
+      }
+    }
+  }
+
+  calendarData(label, event) {
+    this.selectActive(label.name);
+    this.labelDate = moment(new Date(event.year, event.month - 1, event.day, 1, 0, 0)).startOf("day").toDate();
+    this.toggle();
+    this.getCoords(this.selectedEmployee);
+    this.selectedDate = this.convert(this.labelDate);
+  }
+
+  toggle() {
+    this.show = !this.show;
+  }
+
+  convert(d) {
+    return { day: d.getDate(), month: d.getMonth() + 1, year: d.getFullYear() };
   }
 
 }

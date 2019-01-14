@@ -1,5 +1,8 @@
 <div class="loading" *ngIf="loader">
+  <div class="box">
     <i class="fa fa-spinner fa-spin fa-5x loading-icon"></i>
+    <h5 style="margin-top:10px;">Loading...</h5>
+  </div>
 </div>
 <alert [type]="type" [message]="message"></alert>
 <router-outlet></router-outlet>

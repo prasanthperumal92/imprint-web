@@ -24,6 +24,8 @@ import { FullCalendarModule } from 'ng-fullcalendar';
 import { TrackComponent } from './track/track.component';
 import { ClientComponent } from './client/client.component';
 import { MyCalendarComponent } from './calendar/calendar.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AnalyticsComponent } from './analytics/analytics.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { MyCalendarComponent } from './calendar/calendar.component';
     AttendanceComponent,
     TrackComponent,
     ClientComponent,
-    MyCalendarComponent
+    MyCalendarComponent,
+    ProfileComponent,
+    AnalyticsComponent
   ],
   imports: [
     BrowserModule,

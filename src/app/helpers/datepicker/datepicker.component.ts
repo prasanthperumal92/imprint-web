@@ -1,24 +1,25 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
-import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from "@angular/core";
+import { NgbDate, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
-  selector: 'datepicker',
-  templateUrl: './datepicker.component.html',
-  styleUrls: ['./datepicker.component.css']
+  selector: "datepicker",
+  templateUrl: "./datepicker.component.html",
+  styleUrls: ["./datepicker.component.css"]
 })
 export class DatepickerComponent implements OnInit {
 
   @Output() change = new EventEmitter<any>();
+  @Input() displayMonths = "2";
 
   hoveredDate: NgbDate;
 
   fromDate: NgbDate;
-  toDate: NgbDate;  
+  toDate: NgbDate;
 
-  constructor(private calendar: NgbCalendar) {    
+  constructor(private calendar: NgbCalendar) {
     this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 2);
-  } 
+    this.toDate = calendar.getNext(calendar.getToday(), "d", 2);
+  }
 
   ngOnInit() {
   }
@@ -30,7 +31,7 @@ export class DatepickerComponent implements OnInit {
   }
 
   close() {
-    this.change.emit({ from: this.fromDate, to: this.toDate});
+    this.change.emit({ from: this.fromDate, to: this.toDate });
   }
 
   onDateSelection(date: NgbDate) {

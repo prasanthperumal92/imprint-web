@@ -34,7 +34,7 @@ export class Httpservice {
       .map(response => {
         return response;
       })
-      .catch(this.handleError);
+      .catch((err, caught) => this.handleError(this, err, caught));
   }
 
   public POST(API_URL, data = {}): Observable<any> {
@@ -45,7 +45,7 @@ export class Httpservice {
       .map(response => {
         return response;
       })
-      .catch((err, caught) => this.handleError(err, caught));
+      .catch((err, caught) => this.handleError(this, err, caught));
   }
 
   public PUT(API_URL, data = {}): Observable<any> {
@@ -56,7 +56,7 @@ export class Httpservice {
       .map(response => {
         return response;
       })
-      .catch((err, caught) => this.handleError(err, caught));
+      .catch((err, caught) => this.handleError(this, err, caught));
   }
 
   public DELETE(API_URL): Observable<any> {
@@ -65,7 +65,7 @@ export class Httpservice {
       .map(response => {
         return response;
       })
-      .catch((err, caught) => this.handleError(err, caught));
+      .catch((err, caught) => this.handleError(this, err, caught));
   }
 
   public LOGIN(API_URL, data = {}): Observable<any> {
@@ -76,16 +76,19 @@ export class Httpservice {
       .map(response => {
         return response;
       })
-      .catch((err, caught) => this.handleError(err, caught));
+      .catch((err, caught) => this.handleError(this, err, caught));
   }
 
-  private handleError(error: Response | any, caught) {
+  private handleError(inst, error: Response | any, caught) {
     if (error.status === 401) {
-      this.store.clear();
-      this.router.navigate(['login']);
+      inst.store.clear();
+      inst.router.navigate(['login']);
+      inst.alert.showAlert('Session Timeout,! Please Login again.', 'danger');
+    } else {
+      inst.alert.showAlert('Server is Busy! Please try again.', 'danger');
     }
-    this.alert.showLoader(false);
-    this.alert.showAlert('Server is Busy! Please try again.', 'danger');
+    inst.alert.showLoader(false);
+
     return Observable.throw(error);
   }
 
