@@ -161,8 +161,13 @@ export class TaskComponent implements OnInit {
   }
 
   public applyEditFilters(value) {
-    this.model.status = value;
-    this.selectedStatus = value;
+    if (this.taskModalBtn === "Create Task") {
+      this.model.status = "New";
+      this.selectedStatus = "New";
+    } else {
+      this.model.status = value;
+      this.selectedStatus = value;
+    }
   }
 
   dateFilter(filter) {
@@ -357,7 +362,7 @@ export class TaskComponent implements OnInit {
     console.log(this.model);
     this.alert.showLoader(true);
     let tmp = JSON.parse(JSON.stringify(this.model));
-    tmp.assignedTo = tmp.assignedTo.id;
+    if (this.model._id) { tmp.assignedTo = tmp.assignedTo.id; }
     this.http.POST(CREATE_TASK, tmp).subscribe(res => {
       console.log(res);
       if (!this.model._id) {

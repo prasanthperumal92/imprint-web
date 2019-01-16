@@ -56,7 +56,7 @@
       <thead>
         <tr>
           <th scope="col">TITLE</th>
-          <th scope="col">CLIENT</th>
+          <!-- <th scope="col">CLIENT</th> -->
           <th scope="col">STATUS</th>
           <th scope="col">DUE DATE</th>
           <th scope="col">LAST UPDATE</th>
@@ -67,7 +67,7 @@
       <tbody *ngIf="taskList.length > 0">
         <tr class="whiteBox" *ngFor="let item of taskList; let i = index">
           <td>{{item.title | truncate:26}}</td>
-          <td>{{item.client | truncate}}</td>
+          <!-- <td>{{item.client | truncate}}</td> -->
           <td style="font-weight: 600">{{item.status}}</td>
           <td>{{item.due | date: 'mediumDate'}}</td>
           <td>{{item.modified | date: 'mediumDate'}}</td>
@@ -106,7 +106,7 @@
         </tr>
       </tbody>
     </table>
-    <div style="float: right">
+    <div style="float: right; margin-top: 40px;">
       <ngb-pagination [collectionSize]="50" [(page)]="page" [boundaryLinks]="false" (pageChange)="loadPage($event)"></ngb-pagination>
     </div>
   </div>
@@ -146,9 +146,13 @@
                 <span class="primary"><strong>Due Date</strong></span>
                 <span>{{selectedItem.due | date: 'mediumDate'}}</span>
               </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Description</strong></span>
+                <span>{{selectedItem.description}}</span>
+              </div>
             </div>
             <hr>
-            <div>
+            <!-- <div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Client Name</strong></span>
                 <span>{{selectedItem.client}}</span>
@@ -174,7 +178,7 @@
                 <span>{{selectedItem.location}}</span>
               </div>
             </div>
-            <hr>
+            <hr> -->
             <div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Assigned By</strong></span>
