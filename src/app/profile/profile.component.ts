@@ -15,12 +15,13 @@ export class ProfileComponent implements OnInit {
   public photo = "/assets/images/default_user.png";
   public employees: any = [];
   public manager: any = {};
+  public logs: any = [];
 
   constructor(public alert: AlertService, public store: StoreService, public http: Httpservice) {
     this.profile = this.store.get("profile");
     this.getProfile();
     this.employees = this.store.get("photos");
-    this.manager = _.find(this.employees, { id: this.profile.employee.reportingTo });
+    this.manager = _.find(this.employees, { id: this.profile.employee.reportingTo }) || this.employees[0];
   }
 
   ngOnInit() {
@@ -32,6 +33,14 @@ export class ProfileComponent implements OnInit {
       this.profile = res;
       this.photo = this.profile.employee.photo;
       this.store.set("profile", res);
+      this.alert.showLoader(false);
+    });
+  }
+
+  getLog() {
+    this.alert.showLoader(true);
+    this.http.GET(EMPLOYEE_PROFILE).subscribe((res) => {
+      this.logs = res;
       this.alert.showLoader(false);
     });
   }

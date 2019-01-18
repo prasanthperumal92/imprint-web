@@ -30,7 +30,7 @@
 
 .titleSmall {
   color: #726868;
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 0.5;
   font-weight: 700;
   margin-bottom: 5px;
@@ -41,6 +41,7 @@
   background-color: transparent !important;
   color: #a59f9f !important;
   font-weight: 500 !important;
+  font-size: 12px;
 }
 
 :host ::ng-deep .customTabs a.nav-link.active {
@@ -49,6 +50,7 @@
   background-color: transparent !important;
   color: #726868 !important;
   font-weight: 700 !important;
+  font-size: 12px;
 }
 
 .rowText {
@@ -65,5 +67,31 @@
 }
 
 .titleText {
+  color: #000;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.titleAdjust {
   margin-bottom: 2px;
+}
+
+.lastUpdate {
+  text-align: right;
+  margin-top: 35px;
+  position: absolute;
+  right: 0;
+  color: #726868;
+  font-size: 12px;
+}
+
+.roundImg {
+  border-radius: 50px;
+  width: 45px;
+  height: 45px;
+}
+
+.imgText {
+  margin-top: 10px;
+  margin-left: 8px;
 }

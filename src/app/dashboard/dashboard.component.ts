@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
     this.alert.showLoader(true);
     this.http.GET(EMPLOYEE_PROFILE).subscribe((res) => {
       this.store.set("profile", res);
+      this.apps = _.filter(this.apps, function (o) { return o.type.indexOf(res.employee.type) > -1; });
       this.alert.showLoader(false);
     });
   }
