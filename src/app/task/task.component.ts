@@ -302,7 +302,7 @@ export class TaskComponent implements OnInit {
       this.taskModalBtn = "Update Task";
       this.model = item;
       this.selectedStatus = this.model.status;
-      this.model.contact = this.model.contact.length > 10 ? this.model.contact.substr(3, this.model.contact.length) : this.model.contact;
+      // this.model.contact = this.model.contact.length > 10 ? this.model.contact.substr(3, this.model.contact.length) : this.model.contact;
       this.selectedEmployee = _.find(this.employees, { id: this.model.assignedTo.id });
       this.selectedDate = {
         year: new Date(this.model.due).getFullYear(),
@@ -346,19 +346,20 @@ export class TaskComponent implements OnInit {
     } else if (!this.selectedDate.day) {
       this.alert.showAlert("Please select due date for the Task", "warning");
       return false;
-    } else if (this.clients.indexOf(this.model.client) === -1) {
-      this.alert.showAlert("Your client is not available, So click 'Add  Client' button to add one", "warning");
-      return false;
-    } else if (this.model.contact.toString().length !== 10) {
-      this.alert.showAlert("Phone number should be 10 digit number", "warning");
-      return false;
     }
+    // } else if (this.clients.indexOf(this.model.client) === -1) {
+    //   this.alert.showAlert("Your client is not available, So click 'Add  Client' button to add one", "warning");
+    //   return false;
+    // } else if (this.model.contact.toString().length !== 10) {
+    //   this.alert.showAlert("Phone number should be 10 digit number", "warning");
+    //   return false;
+    // }
     this.modalRef.close();
     if (!this.model._id) {
       this.model.due = new Date(this.selectedDate.year, this.selectedDate.month - 1, this.selectedDate.day, 23, 59);
       this.model.status = "New";
     }
-    this.model.contact = "+91" + this.model.contact;
+    // this.model.contact = "+91" + this.model.contact;
     console.log(this.model);
     this.alert.showLoader(true);
     let tmp = JSON.parse(JSON.stringify(this.model));
@@ -372,6 +373,12 @@ export class TaskComponent implements OnInit {
       }
       this.alert.showLoader(false);
       this.saveProps();
+      this.model = {};
+      this.selectedDate = {};
+      this.selectedEmployee = {
+        name: "",
+        photo: ""
+      };
     });
   }
 

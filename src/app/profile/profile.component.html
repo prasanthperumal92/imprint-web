@@ -5,7 +5,14 @@
     <div class="row">
       <div class="col-4 col-4-grid">
         <div class="imgBox">
-          <img src="{{photo}}" alt="Employee Picture">
+          <img class="profileImg" src="{{photo}}" alt="Employee Picture">
+          <div class="overlay"></div>
+          <div class="imgBtn"><a>
+              <label style="cursor: pointer" for="file"> <i class="fa fa-cloud-upload" aria-hidden="true"></i>Upload</label>
+              <input type="file" style="opacity: 0;position: absolute;z-index: -1;" id="file" accept="image/x-png,image/jpeg"
+                (change)="handleFileInput($event.target.files)">
+            </a>
+          </div>
         </div>
         <div style="margin-left: 20px;">
           <p class="titleAdjust" style="font-weight: 500;">{{profile.name}}</p>
@@ -71,9 +78,10 @@
                     <div class="col-8">
                       <p class="titleSmall" style="margin-bottom: 20px;">BASIC INFORMATION</p>
                     </div>
-                    <div class="col-4" style="text-align: right;">
-                      <button class="noBtn primary"> <i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
-                    </div>
+                  </div>
+                  <div class="rowText">
+                    <p class="titleSmall col-3">Employee ID:</p>
+                    <p class="titleText col-9">{{profile.employee.employeeId || 'Not Available'}}</p>
                   </div>
                   <div class="rowText">
                     <p class="titleSmall col-3">Date of Joining:</p>
@@ -89,13 +97,55 @@
             <ngb-tab>
               <ng-template ngbTabTitle> <i class="fa fa-user-secret" aria-hidden="true"></i> Change Password</ng-template>
               <ng-template ngbTabContent>
-                <p>Yet to design.</p>
+                <br>
+                <div class="row">
+                  <br>
+                  <div class="col-12">
+                    <form name="passwordForm" (ngSubmit)="onPassForm()" #loginForm="ngForm">
+                      <div class="rowText">
+                        <p class="titleSmall col-3">Old Password:</p>
+                        <div class="col-5 form-group">
+                          <input type="password" class="form-control form-control-sm" name="exampleInputPassword1"
+                            [(ngModel)]="pass.old" placeholder="Old Password" required>
+                        </div>
+                      </div>
+                      <div class="rowText">
+                        <p class="titleSmall col-3">New Password:</p>
+                        <div class="col-5 form-group">
+                          <input type="password" class="form-control form-control-sm" name="exampleInputPassword2"
+                            [(ngModel)]="pass.new" placeholder="New Password" required>
+                        </div>
+                      </div>
+                      <div class="rowText">
+                        <p class="titleSmall col-3">Confirm Password:</p>
+                        <div class="col-5 form-group">
+                          <input type="password" class="form-control form-control-sm" name="exampleInputPassword3"
+                            [(ngModel)]="pass.confirm" placeholder="Confirm Password" required>
+                        </div>
+                      </div>
+                      <div class="alignLeft">
+                        <button type="submit" class="btn btn-primary btn-sm" style="width: 200px;    margin-right: 20px;"
+                          [disabled]="!loginForm.form.valid">Update Password</button>
+                        <button type="button" class="btn btn-sm" style="width: 100px;" (click)="pass = {}">Clear</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </ng-template>
             </ngb-tab>
             <ngb-tab>
               <ng-template ngbTabTitle> <i class="fa fa-vcard" aria-hidden="true"></i> Log</ng-template>
               <ng-template ngbTabContent>
-                <p>Yet to design.</p>
+                <br>
+                <div class="logRow whiteBox">
+                  <div class="col-12" style="display: inline-flex">
+                    <p class="col-8 logHead" style="text-align: left;">Task Activity</p>
+                    <p class="col-4 logHead" style="text-align: right;">Jan 29 2019 11 AM</p>
+                  </div>
+                  <div class="col-12">
+                    <p style="margin-bottom: 5px;">Sathya Nadella Updated the Task on Jan 29 2019 11 AM</p>
+                  </div>
+                </div>
               </ng-template>
             </ngb-tab>
           </ngb-tabset>

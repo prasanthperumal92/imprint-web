@@ -230,6 +230,13 @@
                 </div>
               </div>
               <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Description</strong></span>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" cols="20" name="description" id="description" [(ngModel)]="model.description"
+                    required placeholder="Description..."></textarea>
+                </div>
+              </div>
+              <!-- <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Client Name</strong></span>
                 <div class="form-group">
                   <input id="typeahead-focus" type="text" class="form-control form-control-sm" [(ngModel)]="model.client"
@@ -238,7 +245,7 @@
                       style="cursor: pointer; color: #1474a4">Add
                       Client</a></small>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div>
               <div class="col-6 col-6-grid">
@@ -249,14 +256,23 @@
                 </div>
               </div>
               <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Task Status</strong></span>
+                <div ngbDropdown class="d-inline-block sameLine">
+                  <button type="button" class="customBtn" id="dropdownBasic1" ngbDropdownToggle>{{selectedStatus}}</button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button type="button" class="dropdown-item" (click)="applyEditFilters(item)" *ngFor="let item of filterBy.status; let i = index">{{item}}</button>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Client Location</strong></span>
                 <div class="form-group">
                   <input type="text" class="form-control form-control-sm" name="location" [(ngModel)]="model.location"
                     placeholder="Location">
                 </div>
-              </div>
+              </div> -->
             </div>
-            <div>
+            <!-- <div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Contact Person</strong></span>
                 <div class="form-group">
@@ -271,7 +287,7 @@
                     placeholder="Contact Number" required>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Due Date</strong></span>
@@ -286,17 +302,6 @@
                   </div>
                 </div>
               </div>
-              <div class="col-6 col-6-grid">
-                <span class="primary"><strong>Task Status</strong></span>
-                <div ngbDropdown class="d-inline-block sameLine">
-                  <button type="button" class="customBtn" id="dropdownBasic1" ngbDropdownToggle>{{selectedStatus}}</button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button type="button" class="dropdown-item" (click)="applyEditFilters(item)" *ngFor="let item of filterBy.status; let i = index">{{item}}</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Assign To</strong></span>
                 <div ngbDropdown class="d-inline-block sameRow">
@@ -314,6 +319,8 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div>
             </div>
             <div>
               <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!taskForm.form.valid">{{taskModalBtn}}</button>

@@ -6,6 +6,7 @@ import { Httpservice } from "./../services/httpservice.service";
 import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { CALENDAR } from "../../constants";
 import * as moment from "moment";
+import * as _ from "lodash";
 
 @Component({
   selector: "app-calendar",
@@ -17,6 +18,9 @@ export class MyCalendarComponent implements OnInit {
   public data: any = [];
   public events: any = [];
   public date: Date;
+  public selectedEvent: any = {};
+  public eventType: String = "";
+
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
   constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal) {
 
@@ -55,7 +59,14 @@ export class MyCalendarComponent implements OnInit {
       editable: true,
       events: this.events,
       eventBackgroundColor: "green",
-      eventTextColor: "white"
+      eventTextColor: "white",
+      eventClick: function (calEvent, jsEvent, view) {
+
+        console.log("Event: " + calEvent.title);
+        console.log("Coordinates: " + jsEvent.pageX + "," + jsEvent.pageY);
+        console.log("View: " + view.name);
+
+      }
     };
   }
 
@@ -101,5 +112,25 @@ export class MyCalendarComponent implements OnInit {
         self.alert.hideLoader();
       }, 2000);
     });
+  }
+
+  eventClick(popup, detail) {
+    console.log(detail);
+    this.selectedEvent = _.find(this.data, { _id: detail.event.id });
+    if (this.selectedEvent.effort) {
+      this.eventType = "dsr";
+    } else if (this.selectedEvent.due) {
+      this.eventType = "task";
+    } else if (this.selectedEvent.days) {
+      this.eventType = "leave";
+    }
+    this.modalService.open(popup, { centered: true, size: "lg" }).result.then(
+      result => {
+        console.log(result);
+      },
+      reason => {
+        console.log(reason);
+      }
+    );
   }
 }

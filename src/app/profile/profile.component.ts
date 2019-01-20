@@ -16,6 +16,8 @@ export class ProfileComponent implements OnInit {
   public employees: any = [];
   public manager: any = {};
   public logs: any = [];
+  public pass: any = {};
+  public fileToUpload: File = null;
 
   constructor(public alert: AlertService, public store: StoreService, public http: Httpservice) {
     this.profile = this.store.get("profile");
@@ -43,6 +45,11 @@ export class ProfileComponent implements OnInit {
       this.logs = res;
       this.alert.showLoader(false);
     });
+  }
+
+  handleFileInput(files: FileList) {
+    this.fileToUpload = files.item(0);
+    console.log(this.fileToUpload);
   }
 
 }

@@ -12,3 +12,190 @@
     </div>
   </div>
 </div>
+
+<ng-template #popup let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; {{eventType | titlecase }}
+            Information</h5>
+          <hr>
+          <div *ngIf="eventType === 'dsr'">
+            <div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Status</strong></span>
+                  <span>{{selectedEvent.effort.sales}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Employee Name</strong></span>
+                  <span>{{selectedEvent.name}}</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Date Visited</strong></span>
+                  <span>{{selectedEvent.created | date: 'mediumDate'}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Next Followup</strong></span>
+                  <span>{{selectedEvent.effort.followup | date: 'mediumDate'}}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Name</strong></span>
+                  <span>{{selectedEvent.effort.client}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Address</strong></span>
+                  <span>{{selectedEvent.effort.address}}</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Contact Person</strong></span>
+                  <span>{{selectedEvent.effort.person}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Contact Number</strong></span>
+                  <span>{{selectedEvent.effort.contact}}</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-12 col-6-grid">
+                  <span class="primary"><strong>Remarks</strong></span>
+                  <span>{{selectedEvent.effort.remarks}}</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Signature</strong></span>
+                  <a href={{selectedEvent.effort.signature}} target="_blank">
+                    <img src={{selectedEvent.effort.signature}} alt="signature" />
+                  </a>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Photo</strong></span>
+                  <a href={{selectedEvent.effort.photo}} target="_blank">
+                    <img src={{selectedEvent.effort.photo}} alt="signature" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="eventType === 'task'">
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Title</strong></span>
+                <span>{{selectedEvent.title}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Status</strong></span>
+                <span>{{selectedEvent.status}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Created Date</strong></span>
+                <span>{{selectedEvent.created | date: 'mediumDate'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Last Visited</strong></span>
+                <span>{{selectedEvent.modified | date: 'mediumDate'}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Due Date</strong></span>
+                <span>{{selectedEvent.due | date: 'mediumDate'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Description</strong></span>
+                <span>{{selectedEvent.description}}</span>
+              </div>
+            </div>
+            <hr>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Assigned By</strong></span>
+                <div style="display: inline-flex">
+                  <img src={{selectedEvent.assignedBy.photo}} class="roundImg" />
+                  <p class="imgText">{{selectedEvent.assignedBy.name}}</p>
+                </div>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Assigned To</strong></span>
+                <div style="display: inline-flex">
+                  <img src={{selectedEvent.assignedTo.photo}} class="roundImg" />
+                  <p class="imgText">{{selectedEvent.assignedTo.name}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="eventType === 'leave'">
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Title</strong></span>
+                <span>{{selectedEvent.title}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Status</strong></span>
+                <span>{{selectedEvent.status || 'Not Approved'}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Start Date</strong></span>
+                <span>{{selectedEvent.start | date: 'mediumDate'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>End Date</strong></span>
+                <span>{{selectedEvent.end | date: 'mediumDate'}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Leave Type</strong></span>
+                <span>{{selectedEvent.type}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Description</strong></span>
+                <span>{{selectedEvent.description}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Number of Days Leave</strong></span>
+                <span>{{selectedEvent.days}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Applied On</strong></span>
+                <span>{{selectedEvent.created}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Applied By</strong></span>
+                <div style="display: inline-flex">
+                  <img src={{selectedEvent.appliedBy.photo}} class="roundImg" />
+                  <p class="imgText">{{selectedEvent.appliedBy.name}}</p>
+                </div>
+              </div>
+              <div class="col-6 col-6-grid" *ngIf="selectedEvent.comments">
+                <span class="primary"><strong>Approver Comments</strong></span>
+                <span>{{selectedEvent.comments}}</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align: center">
+            <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
