@@ -1,25 +1,28 @@
-import { Router, NavigationEnd } from '@angular/router';
-import { AlertService } from './services/alert.service';
-import { Component } from '@angular/core';
-import { StoreService } from './store/store.service';
+import { Router, NavigationEnd } from "@angular/router";
+import { AlertService } from "./services/alert.service";
+import { Component } from "@angular/core";
+import { StoreService } from "./store/store.service";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
-  title = 'imprint';
+  title = "imprint";
   message: string;
   type: string;
   loader: boolean = false;
 
   constructor(private alert: AlertService, private router: Router, private store: StoreService) {
+    if (!this.store.get("isLoggedIn")) {
+      this.router.navigate(["login"]);
+    }
     router.events.subscribe((event: any) => {
       console.log(event);
       if (event instanceof NavigationEnd) {
-        if (event.url !== '/login' && !this.store.get('isLoggedIn')) {
-          this.router.navigate(['login']);
+        if (event.url !== "/login" && !this.store.get("isLoggedIn")) {
+          this.router.navigate(["login"]);
         }
       }
     });

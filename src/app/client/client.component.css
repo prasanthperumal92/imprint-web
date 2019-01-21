@@ -247,3 +247,15 @@ datepicker /deep/ ngb-datepicker {
   padding: 10px;
   margin-bottom: 15px;
 }
+
+.logRow {
+  margin: 5px;
+  padding: 5px;
+  font-size: 12px;
+}
+
+.logHead {
+  padding-left: 0px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}

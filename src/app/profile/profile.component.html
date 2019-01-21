@@ -42,8 +42,8 @@
         </div>
         <br>
         <div>
-          <ngb-tabset class="customTabs">
-            <ngb-tab>
+          <ngb-tabset class="customTabs" #tabRef="ngbTabset">
+            <ngb-tab id="about">
               <ng-template ngbTabTitle> <i class="fa fa-id-badge" aria-hidden="true"></i> About</ng-template>
               <ng-template ngbTabContent>
                 <br>
@@ -53,24 +53,47 @@
                       <p class="titleSmall" style="margin-bottom: 20px;">CONTACT INFORMATION</p>
                     </div>
                     <div class="col-4" style="text-align: right;">
-                      <button class="noBtn primary"> <i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+                      <button class="customBtn primary" *ngIf="!edit" (click)="editForm()"> <i class="fa fa-pencil"
+                          aria-hidden="true"></i>
+                        Edit</button>
+                      <button class="customBtn primary" *ngIf="edit" (click)="updateForm()" style="margin-right: 10px;">
+                        Update</button>
+                      <button class="customBtn primary" *ngIf="edit" (click)="edit = false"> Clear</button>
                     </div>
                   </div>
                   <div class="rowText">
                     <p class="titleSmall col-3">Phone:</p>
-                    <p class="titleText col-9">+91-{{profile.employee.phone || 'Not Available'}}</p>
+                    <p class="titleText col-9" *ngIf="!edit">+91-{{profile.employee.phone || 'Not Available'}}</p>
+                    <div class="col-5 form-group" *ngIf="edit">
+                      <input type="number" class="form-control form-control-sm" name="phone" [(ngModel)]="model.phone"
+                        placeholder="Phone Number" required>
+                    </div>
                   </div>
                   <div class="rowText">
                     <p class="titleSmall col-3">Email:</p>
-                    <p class="titleText col-9">{{profile.employee.email || 'Not Available'}}</p>
+                    <p class="titleText col-9" *ngIf="!edit">{{profile.employee.email || 'Not Available'}}</p>
+                    <div class="col-5 form-group" *ngIf="edit">
+                      <input type="email" class="form-control form-control-sm" name="email" [(ngModel)]="model.email"
+                        placeholder="Email Address" required>
+                    </div>
                   </div>
                   <div class="rowText">
                     <p class="titleSmall col-3">Address:</p>
-                    <p class="titleText col-9" *ngIf="profile.employee.address.street">{{profile.employee.address.street}},
+                    <p class="titleText col-9" *ngIf="profile.employee.address.street && !edit">{{profile.employee.address.street}},
                       {{profile.employee.address.city}}, {{profile.employee.address.state}},
                       {{profile.employee.address.country}}
                       {{profile.employee.address.pincode}}</p>
                     <p class="titleText col-9" *ngIf="!profile.employee.address.street">Not Available</p>
+                    <div class="col-5 form-group" *ngIf="edit">
+                      <input type="text" class="form-control form-control-sm" name="email" [(ngModel)]="model.address.street"
+                        placeholder="Street" style=" margin-bottom: 5px;">
+                      <input type="text" class="form-control form-control-sm" name="email" [(ngModel)]="model.address.city"
+                        placeholder="City" style=" margin-bottom: 5px;" required>
+                      <input type="text" class="form-control form-control-sm" name="email" [(ngModel)]="model.address.state"
+                        placeholder="State" style=" margin-bottom: 5px;" required>
+                      <input type="number" class="form-control form-control-sm" name="email" [(ngModel)]="model.address.pincode"
+                        placeholder="pincode" style=" margin-bottom: 5px;" required>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -94,14 +117,14 @@
                 </div>
               </ng-template>
             </ngb-tab>
-            <ngb-tab>
+            <ngb-tab id="password">
               <ng-template ngbTabTitle> <i class="fa fa-user-secret" aria-hidden="true"></i> Change Password</ng-template>
               <ng-template ngbTabContent>
                 <br>
                 <div class="row">
                   <br>
                   <div class="col-12">
-                    <form name="passwordForm" (ngSubmit)="onPassForm()" #loginForm="ngForm">
+                    <form name="passwordForm" (ngSubmit)="updatePass()" #loginForm="ngForm">
                       <div class="rowText">
                         <p class="titleSmall col-3">Old Password:</p>
                         <div class="col-5 form-group">
@@ -133,17 +156,17 @@
                 </div>
               </ng-template>
             </ngb-tab>
-            <ngb-tab>
+            <ngb-tab id="log">
               <ng-template ngbTabTitle> <i class="fa fa-vcard" aria-hidden="true"></i> Log</ng-template>
               <ng-template ngbTabContent>
                 <br>
-                <div class="logRow whiteBox">
+                <div class="logRow whiteBox" *ngFor="let item of profile.logs">
                   <div class="col-12" style="display: inline-flex">
-                    <p class="col-8 logHead" style="text-align: left;">Task Activity</p>
-                    <p class="col-4 logHead" style="text-align: right;">Jan 29 2019 11 AM</p>
+                    <p class="col-8 logHead" style="text-align: left;">{{item.type | titlecase}} Activity</p>
+                    <p class="col-4 logHead" style="text-align: right;">{{item.created | date: 'medium'}}</p>
                   </div>
                   <div class="col-12">
-                    <p style="margin-bottom: 5px;">Sathya Nadella Updated the Task on Jan 29 2019 11 AM</p>
+                    <p style="margin-bottom: 5px;"> You {{item.text}} on {{item.created | date: 'medium'}}</p>
                   </div>
                 </div>
               </ng-template>

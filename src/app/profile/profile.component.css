@@ -118,6 +118,31 @@
   border-left: 4px solid #1474a4;
 }
 
+.roundBtn {
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  font-size: 12px;
+  color: #58585c;
+  background-color: transparent;
+  padding: 4px 18px;
+  cursor: pointer;
+}
+
+.customBtn {
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #58585c;
+  background-color: #ffffff;
+  padding: 4px 18px;
+  cursor: pointer;
+}
+
+.roundBtn:focus,
+.customBtn:focus {
+  outline: none !important;
+}
+
 .imgBox {
   position: relative;
   margin-top: 10px;

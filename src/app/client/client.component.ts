@@ -58,7 +58,10 @@ export class ClientComponent implements OnInit {
   }
 
   getClients() {
-    this.alert.showLoader(true);
+    const self = this;
+    setTimeout(function () {
+      self.alert.showLoader(true);
+    }, 0);
     this.http.GET(GET_CLIENTS).subscribe(res => {
       this.alert.showLoader(false);
       this.available = true;
