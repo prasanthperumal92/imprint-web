@@ -83,7 +83,7 @@
                       {{profile.employee.address.city}}, {{profile.employee.address.state}},
                       {{profile.employee.address.country}}
                       {{profile.employee.address.pincode}}</p>
-                    <p class="titleText col-9" *ngIf="!profile.employee.address.street">Not Available</p>
+                    <p class="titleText col-9" *ngIf="!profile.employee.address.street  && !edit">Not Available</p>
                     <div class="col-5 form-group" *ngIf="edit">
                       <input type="text" class="form-control form-control-sm" name="email" [(ngModel)]="model.address.street"
                         placeholder="Street" style=" margin-bottom: 5px;">

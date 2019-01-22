@@ -92,6 +92,7 @@ export class ProfileComponent implements OnInit {
     this.http.GET(EMPLOYEE_PROFILE).subscribe((res) => {
       this.profile = res;
       this.photo = this.profile.employee.photo;
+      this.profile.employee.address = {};
       this.store.set("profile", res);
       this.alert.showLoader(false);
     });
