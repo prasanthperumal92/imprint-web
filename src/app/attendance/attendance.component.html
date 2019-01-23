@@ -4,6 +4,12 @@
     <br>
     <div class="row">
       <div class="col-2" style="border-right: 1px solid #ccc;">
+        <div style="float: left;display: contents;">
+          <button class="customBtn activeBtn" (click)="applyLeave(newLeave)" style="margin-right:20px;height: 36px;">
+            Apply Leave
+          </button>
+        </div>
+        <br>
         <ul class="list-group">
           <li class="list-group-item" [class.active]="selectedMenu === item" *ngFor="let item of menus" (click)="open(item)">
             {{item}}
@@ -144,6 +150,78 @@
               (click)="modal.dismiss('Cross click'); updateLeave('Declined')">Decline</button>
             <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #newLeave let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <form name="leaveForm" (ngSubmit)="onSubmit()" #leaveForm="ngForm">
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Title</strong></span>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" name="title" [(ngModel)]="apply.title"
+                    placeholder="Title" required>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Start Date</strong></span>
+                <div class="form-group">
+                  <div class="input-group">
+                    <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="apply.start"
+                      ngbDatepicker #d="ngbDatepicker" [minDate]="minDate">
+                    <div class="input-group-append">
+                      <button class="empDropBtn" style="border: 1px solid #ccc;" (click)="d.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>End Date</strong></span>
+                <div class="form-group">
+                  <div class="input-group">
+                    <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" name="dp1" [(ngModel)]="apply.end"
+                      ngbDatepicker #d1="ngbDatepicker" [minDate]="minDate">
+                    <div class="input-group-append">
+                      <button class="empDropBtn" style="border: 1px solid #ccc;" (click)="d1.toggle()" type="button"><i
+                          class="fa fa-calendar" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Description</strong></span>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" cols="20" name="description" id="description" [(ngModel)]="apply.description"
+                    required placeholder="Description..."></textarea>
+                </div>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Leave Type</strong></span>
+                <div ngbDropdown class="d-inline-block sameLine">
+                  <button type="button" class="customBtn" id="dropdownBasic1" ngbDropdownToggle>{{selectedStatus}}</button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button type="button" class="dropdown-item" (click)="applyType(item)" *ngFor="let item of leaveTypes; let i = index">{{item}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!leaveForm.form.valid">Apply</button>
+              <button type="button" class="btn btn-default btn-sm btn-block" (click)="model = {}; modal.dismiss('Cross click')">Cancel</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

@@ -30,6 +30,10 @@ export class AttendanceComponent implements OnInit {
   public selectedItem;
   public modalRef: NgbModalRef;
   public comments;
+  public apply: any = {};
+  public leaveTypes = ["Sick Leave", "Casual Leave"];
+  public selectedStatus = "Casual Leave";
+  public minDate;
 
   constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal) {
     this.getCalendar();
@@ -37,6 +41,8 @@ export class AttendanceComponent implements OnInit {
 
   ngOnInit() {
     this.count = 0;
+    const tomorrow = moment(new Date()).add(1, "days");
+    this.minDate = this.convert(tomorrow.toDate());
   }
 
   public open(menu) {
@@ -127,6 +133,22 @@ export class AttendanceComponent implements OnInit {
     );
   }
 
+  applyLeave(elem) {
+    this.modalRef = this.modalService.open(elem, { centered: true, size: "lg" });
+    this.modalRef.result.then(
+      result => {
+        console.log(result);
+      },
+      reason => {
+        console.log(reason);
+      }
+    );
+  }
+
+  convert(d) {
+    return { day: d.getDate(), month: d.getMonth() + 1, year: d.getFullYear() };
+  }
+
   updateLeave(status) {
     const tmp = {
       _id: this.selectedItem._id,
@@ -140,5 +162,33 @@ export class AttendanceComponent implements OnInit {
       this.selectedMenu = "Calendar";
       this.getCalendar();
     });
+  }
+
+  onSubmit() {
+    this.apply.type = this.selectedStatus;
+    let from = this.apply.start;
+    let to = this.apply.end;
+    from = new Date(from.year, from.month, from.day);
+    to = new Date(to.year, to.month, to.day);
+    if (from.valueOf() > to.valueOf()) {
+      this.alert.showAlert("Wrong Start date and End date selected", "warning");
+      return false;
+    }
+    this.alert.showLoader(true);
+    this.modalRef.close();
+    this.apply.start = from;
+    this.apply.end = to;
+    console.log(this.apply);
+    this.http.POST(GET_ATTENDANCE, this.apply).subscribe(res => {
+      this.alert.showLoader(false);
+      this.apply = {};
+      this.clearAll();
+      this.selectedMenu = "Calendar";
+      this.getCalendar();
+    });
+  }
+
+  applyType(item) {
+    this.selectedStatus = item;
   }
 }
