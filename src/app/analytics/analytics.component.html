@@ -1,3 +1,62 @@
 <div>
   <header title="Protocol Analytics"></header>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-grid">
+        <div class="col-sm-12 whiteBox">
+          <div *ngIf="chartData">
+            <div ngbDropdown class="headRow">
+              <p class="col-sm-6 textLeft bold">My Daily Update <i class="fa fa-question-circle-o" aria-hidden="true"
+                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed today."></i>
+              </p>
+              <div class="col-sm-6 textRight">
+                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle></i>
+                  &nbsp; &nbsp;</button>
+                <div ngbDropdownMenu>
+                  <button class="dropdown-item">Download Image</button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <app-barchart *ngIf="chartData" [data]="chartData" [xAxisName]="'# of Activities'"></app-barchart>
+            </div>
+          </div>
+          <div *ngIf="!chartData">
+            <p class="notAvailable">Not Available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6 col-6-grid">
+        <div class="col-sm-12 whiteBox">
+          <div>
+            <div class="headRow">
+              <p class="col-sm-6 textLeft bold">My Weekly Update <i class="fa fa-question-circle-o" aria-hidden="true"
+                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed in this week."></i>
+              </p>
+            </div>
+            <div class="notAvailable">
+              <p>Not Available</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-6-grid">
+        <div class="col-sm-12 whiteBox">
+          <div>
+            <div class="headRow">
+              <p class="col-sm-6 textLeft bold">My Monthly Update <i class="fa fa-question-circle-o" aria-hidden="true"
+                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed in this month."></i>
+              </p>
+            </div>
+            <div class="notAvailable">
+              <p>Not Available</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

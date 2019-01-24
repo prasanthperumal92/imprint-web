@@ -1,0 +1,49 @@
+.whiteBox {
+  min-height: 300px;
+  background-color: #ffffff;
+  padding: 10px;
+  margin: 10px;
+  box-shadow: 0px 0px 5px #ccc;
+}
+
+.headRow {
+  width: 100%;
+  display: inline-flex;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.textLeft {
+  text-align: left;
+}
+
+.bold {
+  font-weight: bolder;
+}
+
+.noBtn {
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: #58585c;
+  cursor: pointer;
+}
+
+.noBtn:focus {
+  outline: none !important;
+}
+
+.headRow .dropdown-toggle::after {
+  display: none !important;
+}
+
+.notAvailable {
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 18%;
+  font-size: 18px;
+  font-weight: 600;
+}

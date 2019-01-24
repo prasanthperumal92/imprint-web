@@ -27,13 +27,13 @@ export class ProfileComponent implements OnInit {
   public model: any = {};
   @ViewChild("tabRef") public tabs: NgbTabset;
 
-  private hasBaseDropZoneOver: Boolean = false;
-  private uploader: FileUploader;
-  private title: string;
+  public hasBaseDropZoneOver: Boolean = false;
+  public uploader: FileUploader;
+  public title: string;
   public responses: any;
 
   constructor(public alert: AlertService, public store: StoreService, public http: Httpservice,
-    private cloudinary: Cloudinary, private zone: NgZone) {
+    public cloudinary: Cloudinary, public zone: NgZone) {
     this.profile = this.store.get("profile");
     this.getProfile();
     this.employees = this.store.get("photos");
