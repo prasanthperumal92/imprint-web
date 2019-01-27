@@ -1,0 +1,172 @@
+import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, ViewEncapsulation } from "@angular/core";
+import { COLORS } from "../../../constants";
+
+declare let d3: any;
+
+@Component({
+  selector: "app-piechart",
+  templateUrl: "./piechart.component.html",
+  styleUrls: ["./piechart.component.css"]
+})
+export class PiechartComponent implements OnInit {
+  @ViewChild("piechart") private chartContainer: ElementRef;
+  @Input() private data: Array<any>;
+  @Input() private xAxisName?: String;
+  @Input() private yAxisName?: String;
+  private margin: any = { top: 20, bottom: 40, left: 60, right: 20 };
+  private chart: any;
+
+  constructor() { }
+
+  ngOnInit() {
+    this.createChart();
+  }
+
+  createChart() {
+    const element = this.chartContainer.nativeElement;
+    let width = element.offsetWidth - this.margin.left - this.margin.right;
+    let height = element.offsetHeight - this.margin.top - this.margin.bottom;
+    let xAxisName = this.xAxisName || "X-Axis";
+    let yAxisName = this.yAxisName || "Y-Axis";
+    let data = this.data || [];
+
+    let svg = d3.select("#piechart")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    svg.append("g")
+      .attr("class", "slices");
+    svg.append("g")
+      .attr("class", "labels");
+    svg.append("g")
+      .attr("class", "lines");
+
+    let radius = Math.min(width, height) / 2;
+
+    let pie = d3.pie()
+      .sort(null)
+      .value(function (d) {
+        return d.value;
+      });
+
+    let arc = d3.arc()
+      .outerRadius(radius * 0.8)
+      .innerRadius(radius * 0.4);
+
+    let outerArc = d3.arc()
+      .innerRadius(radius * 0.9)
+      .outerRadius(radius * 0.9);
+
+    // Define the div for the tooltip
+    let div = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    let key = function (d) { return d.data.key; };
+
+    let colors = d3.scaleLinear().domain([0, data.length]).range(<any[]>COLORS);
+    colors.domain([0, data.length]);
+
+    /* ------- PIE SLICES -------*/
+    svg.select(".slices").selectAll("path.slice")
+      .data(pie(data), key)
+      .enter()
+      .insert("path")
+      .style("fill", (d, i) => colors(i))
+      .attr("class", "slice")
+      .on("mouseover", function (d) {
+        div.transition()
+          .duration(200)
+          .style("opacity", .9);
+        div.html((`<strong>${yAxisName}:</strong> ${d.data.key}`) + "<br/>" + `<strong>${xAxisName}:</strong> ${d.data.value}`)
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mousemove", function (d) {
+        div.transition()
+          .duration(100)
+          .style("opacity", .9);
+        div.html((`<strong>${yAxisName}:</strong> ${d.data.key}`) + "<br/>" + `<strong>${xAxisName}:</strong> ${d.data.value}`)
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function (d) {
+        div.transition()
+          .duration(500)
+          .style("opacity", 0);
+      })
+      .transition().duration(1000)
+      .attrTween("d", function (d) {
+        console.log(d);
+        this._current = this._current || d;
+        let interpolate = d3.interpolate(this._current, d);
+        this._current = interpolate(0);
+        return function (t) {
+          return arc(interpolate(t));
+        };
+      });
+    /* ------- TEXT LABELS -------*/
+
+    svg.select(".labels").selectAll("text")
+      .data(pie(data), key)
+      .enter()
+      .append("text")
+      .attr("dy", ".35em")
+      .text(function (d) {
+        return `${d.data.key}: ${d.data.value}`;
+      })
+      .transition().duration(1000)
+      .attrTween("transform", function (d) {
+        this._current = this._current || d;
+        let interpolate = d3.interpolate(this._current, d);
+        this._current = interpolate(0);
+        return function (t) {
+          let d2 = interpolate(t);
+          let pos = outerArc.centroid(d2);
+          pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+          return "translate(" + pos + ")";
+        };
+      })
+      .styleTween("text-anchor", function (d) {
+        this._current = this._current || d;
+        let interpolate = d3.interpolate(this._current, d);
+        this._current = interpolate(0);
+        return function (t) {
+          let d2 = interpolate(t);
+          return midAngle(d2) < Math.PI ? "start" : "end";
+        };
+      });
+
+    function midAngle(d) {
+      return d.startAngle + (d.endAngle - d.startAngle) / 2;
+    }
+
+    /* ------- SLICE TO TEXT POLYLINES -------*/
+
+    svg.select(".lines")
+      .selectAll("polyline")
+      .data(pie(data), key)
+      .enter()
+      .append("polyline")
+      .style("opacity", ".3")
+      .style("stroke", "black")
+      .style("stroke - width", "2px")
+      .style("fill", "none")
+      .transition().duration(1000)
+      .attrTween("points", function (d) {
+        this._current = this._current || d;
+        let interpolate = d3.interpolate(this._current, d);
+        this._current = interpolate(0);
+        return function (t) {
+          let d2 = interpolate(t);
+          let pos = outerArc.centroid(d2);
+          pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+          return [arc.centroid(d2), outerArc.centroid(d2), pos];
+        };
+      });
+  }
+
+}

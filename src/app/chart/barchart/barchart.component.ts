@@ -12,8 +12,8 @@ declare let d3: any;
 export class BarchartComponent implements OnInit, OnChanges {
   @ViewChild("chart") private chartContainer: ElementRef;
   @Input() private data: Array<any>;
-  @Input() private xAxisName?: String = undefined;
-  @Input() private yAxisName?: String = undefined;
+  @Input() private xAxisName?: String;
+  @Input() private yAxisName?: String;
   private margin: any = { top: 20, bottom: 40, left: 60, right: 20 };
   private chart: any;
   private width: number;

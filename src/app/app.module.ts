@@ -33,6 +33,7 @@ import { AnalyticsComponent } from "./analytics/analytics.component";
 
 import { CLOUDINARY_NAME, CLOUDINARY_PRESET } from "../constants";
 import { BarchartComponent } from "./chart/barchart/barchart.component";
+import { PiechartComponent } from './chart/piechart/piechart.component';
 
 export const cloudinary = {
   Cloudinary: CloudinaryCore
@@ -63,7 +64,8 @@ export const config: CloudinaryConfiguration = {
     MyCalendarComponent,
     ProfileComponent,
     AnalyticsComponent,
-    BarchartComponent
+    BarchartComponent,
+    PiechartComponent
   ],
   imports: [
     BrowserModule,
