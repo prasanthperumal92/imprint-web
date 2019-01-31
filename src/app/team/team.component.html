@@ -1,0 +1,82 @@
+<div>
+  <header title="Attendance Management"></header>
+  <br>
+  <div class="container filterHeader">
+    <br>
+    <div class="row">
+      <div class="col-2">
+        <div style="float: left;display: contents;">
+          <button class="customBtn activeBtn" (click)="openCreate(team)" style="margin-right:20px;height: 36px;">
+            Create Team
+          </button>
+        </div>
+        <br><br>
+        <div *ngIf="teams.length > 0">
+          <h4 class="teamHead">Teams</h4>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let item of teams" [class.active]="selectedTeam.name === item.name"
+              (click)="selectTeam(item)">
+              <h6>{{item.name}}</h6>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-10">
+        <div *ngIf="teams.length === 0">
+          <h5>No Teams Available</h5>
+        </div>
+        <div *ngIf="teams.length > 0">
+          <div class="pull-left sameRow">
+            <h4>Sales Team</h4>
+            <p class="sameLine"><span>No of Members:</span> {{selectedTeam.members.length}} </p>
+            <p class="sameLine"><span>Created: </span> {{selectedTeam.created | date: 'mediumDate'}} </p>
+            <p class="sameLine"><span>Last Updated:</span>{{selectedTeam.modified | date: 'mediumDate'}}</p>
+          </div>
+          <br>
+          <div class="levels" *ngIf="levelA.length > 0">
+            <div class="whiteBox" *ngFor="let item of levelA">
+              <div style="display: inline-flex">
+                <img src={{item.photo}} class="roundImgBig" />
+                <p class="imgText">{{item.name}} <br> <span>{{item.designation}}</span> </p>
+              </div>
+              <div class="divFooter">
+                <p class="divFooterText">Level {{item.level}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="levels" *ngIf="levelB.length > 0">
+            <div class="whiteBox" *ngFor="let item of levelB">
+              <div style="display: inline-flex">
+                <img src={{item.photo}} class="roundImgBig" />
+                <p class="imgText">{{item.name}} <br> <span>{{item.designation}}</span> </p>
+              </div>
+              <div class="divFooter">
+                <p class="divFooterText">Level {{item.level}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #team let-modal>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 modalPopup">
+          <form name="teamForm" (ngSubmit)="onSubmit()" #teamForm="ngForm">
+            <div>
+              <p>Form Elements</p>
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!teamForm.form.valid">Apply</button>
+              <button type="button" class="btn btn-default btn-sm btn-block" (click)="model = {}; modal.dismiss('Cross click')">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

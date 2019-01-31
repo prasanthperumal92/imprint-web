@@ -11,6 +11,7 @@ import { NgModule, Component } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./login/login.component";
 import { TrackComponent } from './track/track.component';
+import { TeamComponent } from './team/team.component';
 
 const routes: Routes = [
   {
@@ -65,6 +66,10 @@ const routes: Routes = [
   {
     path: "dashboard/profile",
     component: ProfileComponent
+  },
+  {
+    path: "dashboard/team",
+    component: TeamComponent
   }
 ];
 
