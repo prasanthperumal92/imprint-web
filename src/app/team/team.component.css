@@ -249,8 +249,8 @@ datepicker /deep/ ngb-datepicker {
 }
 
 .empDropDown {
-  padding: 5px;
-  width: 70%;
+  padding: 10px;
+  width: 45%;
   cursor: pointer;
 }
 
@@ -260,6 +260,19 @@ datepicker /deep/ ngb-datepicker {
   border: none;
   background-color: transparent;
   color: #000;
+}
+
+.empDropBtn.dropdown-toggle::after {
+  display: inline !important;
+}
+
+.empDropSelect {
+  display: inline-flex;
+  background: #fff;
+  padding: 4px;
+  border-radius: 25px;
+  margin: 0px 2px;
+  border: 2px solid #1474a4;
 }
 
 .divFooter {
@@ -301,4 +314,11 @@ datepicker /deep/ ngb-datepicker {
 .teamHead {
   font-weight: 400 !important;
   border-bottom: 2px solid #1474a4;
+}
+
+.cross {
+  border-radius: 25px;
+  background-color: #000;
+  padding: 2px 7px;
+  color: #fff;
 }
