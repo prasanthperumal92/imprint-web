@@ -1,3 +1,4 @@
+import { CommonService } from './../services/common.service';
 import { ModalComponent } from "./../helpers/modal/modal.component";
 import { ActivatedRoute } from "@angular/router";
 import { AlertService } from "./../services/alert.service";
@@ -42,8 +43,8 @@ export class ClientComponent implements OnInit {
   }
 
   constructor(public http: Httpservice, public alert: AlertService, public route: ActivatedRoute, public modalService: NgbModal,
-    public store: StoreService) {
-    this.employees = this.store.get("photos");
+    public store: StoreService, public common: CommonService) {
+    this.employees = this.common.getAllEmpData();
   }
 
   ngOnInit() {
@@ -59,12 +60,21 @@ export class ClientComponent implements OnInit {
 
   getClients() {
     const self = this;
+    this.alert.showLoader(true);
     setTimeout(function () {
+      console.log("error1");
       self.alert.showLoader(true);
     }, 0);
     this.http.GET(GET_CLIENTS).subscribe(res => {
-      this.alert.showLoader(false);
+      setTimeout(function () {
+        console.log("error2");
+        self.alert.showLoader(false);
+      }, 0);
       this.available = true;
+      for (let i = 0; i < res.length; i++) {
+        res[i].assignedTo = this.common.getEmpData(res[i].assignedTo);
+        res[i].createdBy = this.common.getEmpData(res[i].createdBy);
+      }
       this.clientList = res;
       this.clients = res ? _.map(res, "name") : [];
       this.store.set("clients", res);
@@ -78,6 +88,8 @@ export class ClientComponent implements OnInit {
       this.alert.showLoader(false);
       if (res && res[0]) {
         this.available = true;
+        res[0].assignedTo = this.common.getEmpData(res[0].assignedTo);
+        res[0].createdBy = this.common.getEmpData(res[0].createdBy);
         this.client = res[0];
         let tmp = [...this.client.logs, ...this.client.reference];
         tmp = _.sortBy(tmp, "created");
@@ -149,7 +161,7 @@ export class ClientComponent implements OnInit {
       console.log(client, this.reference);
       this.modalRef.close();
       this.alert.showLoader(true);
-      this.http.POST(REFERENCE, { id: client._id, reference: this.reference }).subscribe(res => {
+      this.http.POST(REFERENCE, { _id: client._id, reference: this.reference }).subscribe(res => {
         this.alert.showLoader(false);
         this.available = false;
         this.goBack();
@@ -173,7 +185,7 @@ export class ClientComponent implements OnInit {
       return false;
     }
     this.model.contact = "+91" + this.model.number;
-    this.model.assignedTo = this.selectedEmployee;
+    this.model.assignedTo = this.selectedEmployee.id;
     console.log(this.model);
     if (this.type === "create") {
       this.alert.showLoader(true);

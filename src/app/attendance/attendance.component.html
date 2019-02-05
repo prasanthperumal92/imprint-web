@@ -144,9 +144,9 @@
           </div>
           <hr>
           <div class="modalPopup" style="text-align: center">
-            <button class="customBtn sameLine activeBtn" *ngIf="selectedItem.status !== 'Approved' && selectedItem.status !== 'Declined'"
+            <button class="customBtn sameLine activeBtn" *ngIf="!selectedItem.status || selectedItem.status === 'Declined'"
               (click)="modal.dismiss('Cross click'); updateLeave('Approved')">Approve</button>
-            <button class="customBtn sameLine activeBtn" *ngIf="selectedItem.status !== 'Approved' && selectedItem.status !== 'Declined'"
+            <button class="customBtn sameLine activeBtn" *ngIf="!selectedItem.status || selectedItem.status === 'Approved'"
               (click)="modal.dismiss('Cross click'); updateLeave('Declined')">Decline</button>
             <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
           </div>

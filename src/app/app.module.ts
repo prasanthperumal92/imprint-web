@@ -35,6 +35,7 @@ import { CLOUDINARY_NAME, CLOUDINARY_PRESET } from "../constants";
 import { BarchartComponent } from "./chart/barchart/barchart.component";
 import { PiechartComponent } from './chart/piechart/piechart.component';
 import { TeamComponent } from './team/team.component';
+import { CommonService } from './services/common.service';
 
 export const cloudinary = {
   Cloudinary: CloudinaryCore
@@ -79,7 +80,7 @@ export const config: CloudinaryConfiguration = {
     CloudinaryModule.forRoot(cloudinary, config),
     FileUploadModule
   ],
-  providers: [AlertService, Httpservice],
+  providers: [AlertService, Httpservice, CommonService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

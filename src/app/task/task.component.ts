@@ -1,3 +1,4 @@
+import { CommonService } from './../services/common.service';
 import { ModalComponent } from "../helpers/modal/modal.component";
 import { AlertService } from "./../services/alert.service";
 import { StoreService } from "../store/store.service";
@@ -83,10 +84,11 @@ export class TaskComponent implements OnInit {
     public store: StoreService,
     public alert: AlertService,
     public modalService: NgbModal,
-    public router: Router
+    public router: Router,
+    public common: CommonService
   ) {
     this.query = this.store.get("taskquery");
-    this.employees = this.store.get("photos");
+    this.employees = this.common.getAllEmpData();
     this.clients = this.store.get("clients") ? _.map(this.store.get("clients"), "name") : [];
     if (this.query) {
       this.selected(this.query.label, true);
@@ -125,6 +127,10 @@ export class TaskComponent implements OnInit {
     this.alert.showLoader(true);
     this.http.POST(GET_TASK, query).subscribe(res => {
       console.log(res);
+      for (let i = 0; i < res.length; i++) {
+        res[i].assignedBy = this.common.getEmpData(res[i].assignedBy);
+        res[i].assignedTo = this.common.getEmpData(res[i].assignedTo);
+      }
       this.alert.showLoader(false);
       this.taskList = res;
     });
@@ -340,7 +346,7 @@ export class TaskComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.model.assignedTo) {
+    if (Object.keys(this.model.assignedTo).length === 0) {
       this.alert.showAlert("Please select a Employee to assign the Task", "warning");
       return false;
     } else if (!this.selectedDate.day) {
@@ -363,7 +369,7 @@ export class TaskComponent implements OnInit {
     console.log(this.model);
     this.alert.showLoader(true);
     let tmp = JSON.parse(JSON.stringify(this.model));
-    if (this.model._id) { tmp.assignedTo = tmp.assignedTo.id; }
+    tmp.assignedTo = tmp.assignedTo.id;
     this.http.POST(CREATE_TASK, tmp).subscribe(res => {
       console.log(res);
       if (!this.model._id) {
@@ -376,15 +382,15 @@ export class TaskComponent implements OnInit {
       this.model = {};
       this.selectedDate = {};
       this.selectedEmployee = {
-        name: "",
-        photo: ""
+        name: "Select Employee",
+        photo: "/assets/images/default_user.png"
       };
     });
   }
 
   selectEmp(item) {
     this.selectedEmployee = item;
-    this.model.assignedTo = item.id;
+    this.model.assignedTo = item;
   }
 
   createClient(elem) {

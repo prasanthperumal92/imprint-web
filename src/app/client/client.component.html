@@ -142,7 +142,9 @@
                 <p class="col-4 logHead" style="text-align: right;">{{item.created | date: 'medium'}}</p>
               </div>
               <div class="col-12">
-                <p style="margin-bottom: 5px;"> {{item.by}} {{item.text}} on {{item.created | date: 'medium'}}</p>
+                <p *ngIf="item.description">{{item.description}}</p>
+                <p style="margin-bottom: 5px;"> {{item.by}} {{item.text}} the Client on {{item.created | date:
+                  'medium'}}</p>
               </div>
             </div>
           </div>

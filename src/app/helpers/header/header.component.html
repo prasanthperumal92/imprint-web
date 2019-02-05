@@ -12,7 +12,7 @@
           <div ngbDropdown class="d-inline-block sameRow" style="padding-top: 5px;">
             <button type="button" class="empDropBtn" id="actions" ngbDropdownToggle>
               <div style="display: inline-flex; color: #ffffff">
-                <img src={{photo}} class="roundImg" />
+                <img src='{{photo || "/assets/images/default_user.png"}}' class="roundImg" />
                 <p class="imgText">{{name}}</p>
               </div>
             </button>

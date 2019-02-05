@@ -7,6 +7,7 @@ import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstr
 import { CALENDAR } from "../../constants";
 import * as moment from "moment";
 import * as _ from "lodash";
+import { CommonService } from '../services/common.service';
 
 @Component({
   selector: "app-calendar",
@@ -22,7 +23,7 @@ export class MyCalendarComponent implements OnInit {
   public eventType: String = "";
 
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
-  constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal) {
+  constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal, public common: CommonService) {
 
   }
 
@@ -60,6 +61,7 @@ export class MyCalendarComponent implements OnInit {
       events: this.events,
       eventBackgroundColor: "green",
       eventTextColor: "white",
+      fixedWeekCount: false,
       eventClick: function (calEvent, jsEvent, view) {
 
         console.log("Event: " + calEvent.title);
@@ -76,9 +78,12 @@ export class MyCalendarComponent implements OnInit {
     this.events = [];
     this.http.GET(`${CALENDAR}/${this.date.getFullYear()}/${this.date.getMonth() + 1}`).subscribe(res => {
       console.log(res);
+      this.alert.showLoader(false);
       if (res) {
         this.data = [...res.dsr, ...res.task, ...res.leave];
         for (let i = 0; i < this.data.length; i++) {
+          this.data[i].appliedBy = this.common.getEmpData(this.data[i].appliedBy);
+          this.data[i].assignedTo = this.common.getEmpData(this.data[i].assignedTo);
           const item = this.data[i];
           let tmp: any = {};
           if (item.effort) {
@@ -90,12 +95,14 @@ export class MyCalendarComponent implements OnInit {
             tmp.color = "green";
             this.events.push(tmp);
           } else if (item.days) {
-            tmp.id = item._id;
-            tmp.allDay = true;
-            tmp.title = `Leave: ${item.appliedBy.name}, ${item.type}`;
-            tmp.start = moment(item.start, "YYYY-MM-DD");
-            tmp.end = moment(item.end, "YYYY-MM-DD").add(1, "days");
-            tmp.color = "purple";
+            if (item.status) {
+              tmp.id = item._id;
+              tmp.allDay = true;
+              tmp.title = `Leave: ${item.appliedBy.name}, ${item.type}`;
+              tmp.start = moment(item.start, "YYYY-MM-DD");
+              tmp.end = moment(item.end, "YYYY-MM-DD").add(1, "days");
+              tmp.color = "purple";
+            }
           } else {
             tmp.id = item._id;
             tmp.allDay = true;
@@ -107,10 +114,10 @@ export class MyCalendarComponent implements OnInit {
           this.events.push(tmp);
         }
       }
-      this.ucCalendar.fullCalendar("renderEvents", this.events);
-      setTimeout(() => {
-        self.alert.hideLoader();
-      }, 2000);
+      this.ucCalendar.fullCalendar("refetchEvents", this.events);
+      // setTimeout(() => {
+      //   self.alert.hideLoader();
+      // }, 2000);
     });
   }
 

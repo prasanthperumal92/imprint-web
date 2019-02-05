@@ -1,23 +1,24 @@
-import { ModalComponent } from './../helpers/modal/modal.component';
-import { AlertService } from './../services/alert.service';
-import { StoreService } from './../store/store.service';
-import { ResourcesService } from './../config/resources.service';
-import { Httpservice } from './../services/httpservice.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { DSR, DSR_FILTER, DSR_DELETE } from '../../constants';
-import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
-import * as _ from 'lodash';
+import { CommonService } from './../services/common.service';
+import { ModalComponent } from "./../helpers/modal/modal.component";
+import { AlertService } from "./../services/alert.service";
+import { StoreService } from "./../store/store.service";
+import { ResourcesService } from "./../config/resources.service";
+import { Httpservice } from "./../services/httpservice.service";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { DSR, DSR_FILTER, DSR_DELETE } from "../../constants";
+import { NgbDate, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
+import * as moment from "moment";
+import * as _ from "lodash";
 import {
   NgbModalConfig,
   NgbModal,
   NgbModalRef
-} from '@ng-bootstrap/ng-bootstrap';
+} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
-  selector: 'app-dsr',
-  templateUrl: './dsr.component.html',
-  styleUrls: ['./dsr.component.css']
+  selector: "app-dsr",
+  templateUrl: "./dsr.component.html",
+  styleUrls: ["./dsr.component.css"]
 })
 export class DsrComponent implements OnInit {
   public data: any = [];
@@ -25,20 +26,20 @@ export class DsrComponent implements OnInit {
   public filters = this.resources.filter;
   public fromDate;
   public toDate;
-  public sort = 'created';
+  public sort = "created";
   public skip = 0;
   public limit = 20;
   public label;
   public order = -1;
-  public sorted = 'Visited';
+  public sorted = "Visited";
   public dsrList: any = [];
   public page: Number = 1;
   public sortBy: any = [
-    { key: 'Visited', value: 'created' },
-    { key: 'Client', value: 'effort.client' },
-    { key: 'Status', value: 'effort.sales' },
-    { key: 'Followup', value: 'effort.followup' },
-    { key: 'Employee', value: 'name' }
+    { key: "Visited", value: "created" },
+    { key: "Client", value: "effort.client" },
+    { key: "Status", value: "effort.sales" },
+    { key: "Followup", value: "effort.followup" },
+    { key: "Employee", value: "name" }
   ];
   public filterBy: any = {
     employee: [],
@@ -46,14 +47,14 @@ export class DsrComponent implements OnInit {
     client: []
   };
   public filterSelected = {
-    Employee: 'Employee',
-    Client: 'Client',
-    Status: 'Status'
+    Employee: "Employee",
+    Client: "Client",
+    Status: "Status"
   };
   public query: any = {};
   public filter: any = null;
-  @ViewChild('modal') modal: ModalComponent;
-  @ViewChild('popup') popup;
+  @ViewChild("modal") modal: ModalComponent;
+  @ViewChild("popup") popup;
   public modalTitle;
   public modalContent;
   public modalBtnText;
@@ -65,16 +66,16 @@ export class DsrComponent implements OnInit {
   }
 
   calendarData(obj) {
-    let choosen = this.resources.getFilter('Custom Date');
+    let choosen = this.resources.getFilter("Custom Date");
     choosen.from = new Date(obj.from.year, obj.from.month - 1, obj.from.day);
     choosen.to = new Date(obj.to.year, obj.to.month - 1, obj.to.day);
     this.fromDate = moment(choosen.from)
-      .startOf('day')
+      .startOf("day")
       .toDate();
     this.toDate = moment(choosen.to)
-      .endOf('day')
+      .endOf("day")
       .toDate();
-    this.store.set('dateFilter', choosen);
+    this.store.set("dateFilter", choosen);
     this.label = choosen.label;
     this.toggle();
     this.setProps();
@@ -87,10 +88,11 @@ export class DsrComponent implements OnInit {
     public resources: ResourcesService,
     public store: StoreService,
     public alert: AlertService,
-    public modalService: NgbModal
+    public modalService: NgbModal,
+    public common: CommonService
   ) {
-    this.query = this.store.get('dsrquery');
-    let tmp = this.store.get('photos');
+    this.query = this.store.get("dsrquery");
+    let tmp = this.common.getAllEmpData();
     for (let i = 0; i < tmp.length; i++) {
       this.photos[tmp[i].name] = tmp[i].photo;
     }
@@ -100,7 +102,7 @@ export class DsrComponent implements OnInit {
       this.toDate = this.query.toDate;
     } else {
       this.query = {};
-      this.selected('Today', false); // By default choose Today
+      this.selected("Today", false); // By default choose Today
     }
     this.getFilter();
   }
@@ -165,7 +167,7 @@ export class DsrComponent implements OnInit {
 
   loadPage(page: any) {
     this.page = page;
-    this.query.skip  = this.skip = page === 1 ? 0 : (page - 1) * this.limit;
+    this.query.skip = this.skip = page === 1 ? 0 : (page - 1) * this.limit;
     this.saveProps();
   }
 
@@ -183,7 +185,7 @@ export class DsrComponent implements OnInit {
 
   selected(filter: string, open?: any) {
     this.selectButton(filter);
-    if (filter === 'Custom Date') {
+    if (filter === "Custom Date") {
       if (!open) {
         this.toggle();
       } else {
@@ -197,7 +199,7 @@ export class DsrComponent implements OnInit {
   dateFilter(filter) {
     let choosen = this.resources.getFilter(filter);
     this.label = filter;
-    if (typeof choosen.from.year == 'number') {
+    if (typeof choosen.from.year == "number") {
       let from = new Date(
         choosen.from.year,
         choosen.from.month,
@@ -205,17 +207,17 @@ export class DsrComponent implements OnInit {
       );
       let to = new Date(choosen.to.year, choosen.to.month, choosen.to.day);
       this.fromDate = moment(from)
-        .startOf('day')
+        .startOf("day")
         .toDate();
       this.toDate = moment(to)
-        .endOf('day')
+        .endOf("day")
         .toDate();
     } else {
       this.fromDate = moment(choosen.from)
-        .startOf('day')
+        .startOf("day")
         .toDate();
       this.toDate = moment(choosen.to)
-        .endOf('day')
+        .endOf("day")
         .toDate();
     }
     this.page = 1;
@@ -229,7 +231,7 @@ export class DsrComponent implements OnInit {
 
   selectButton(filter) {
     let self = this;
-    this.filters.forEach(function(item, i) {
+    this.filters.forEach(function (item, i) {
       item.selected = false;
       self.filters[i].label === filter
         ? (self.filters[i].selected = true)
@@ -237,13 +239,13 @@ export class DsrComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   delete(item) {
     this.selectedItem = item;
-    this.modalTitle = 'Delete Confirmation';
-    this.modalContent = 'Are you sure, you want to delete?';
-    this.modalBtnText = 'Delete';
+    this.modalTitle = "Delete Confirmation";
+    this.modalContent = "Are you sure, you want to delete?";
+    this.modalBtnText = "Delete";
     this.modal.open();
   }
 
@@ -260,26 +262,26 @@ export class DsrComponent implements OnInit {
   share(item) {
     let shareURL =
       location.protocol +
-      '//' +
+      "//" +
       location.hostname +
-      (location.port ? ':' + location.port : '') +
-      '/share/dsr/' +
+      (location.port ? ":" + location.port : "") +
+      "/share/dsr/" +
       item._id;
     this.selectedItem = item;
-    this.modalTitle = 'Share';
+    this.modalTitle = "Share";
     this.modalContent =
-      'Copy the URL to share it!' +
-      '\n' +
-      '<span><strong>' +
+      "Copy the URL to share it!" +
+      "\n" +
+      "<span><strong>" +
       shareURL +
-      '</strong></span>';
+      "</strong></span>";
     this.modal.open();
   }
 
   openDSR(elem, item) {
     this.selectedItem = item;
     this.selectedItem.showMenu = true;
-    this.modalService.open(elem, { centered: true, size: 'lg' }).result.then(
+    this.modalService.open(elem, { centered: true, size: "lg" }).result.then(
       result => {
         console.log(result);
       },

@@ -4,9 +4,16 @@
 
 export const environment = {
   production: false,
-  masterURL: "http://imp-dev.herokuapp.com/api/v1/",
-  baseUrl: "http://imp-cli.herokuapp.com/api/v1/"
+  masterURL: "http://localhost:1233/api/v1/",
+  baseUrl: "http://localhost:1234/api/v1/"
 };
+
+
+// export const environment = {
+//   production: false,
+//   masterURL: "http://localhost:1233/api/v1/",
+//   baseUrl: "http://localhost:1234/api/v1/"
+// };
 
 /*
  * For easier debugging in development mode, you can import the following file

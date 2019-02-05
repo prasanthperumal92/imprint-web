@@ -133,7 +133,10 @@
               </div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Employee Name</strong></span>
-                <span>{{selectedItem.name}}</span>
+                <div style="display: inline-flex">
+                  <img src={{photos[selectedItem.name]}} class="roundImg" />
+                  <p class="imgText">{{selectedItem.name}}</p>
+                </div>
               </div>
             </div>
             <div>

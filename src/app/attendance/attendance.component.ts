@@ -1,3 +1,4 @@
+import { CommonService } from './../services/common.service';
 import { AlertService } from "./../services/alert.service";
 import { Httpservice } from "./../services/httpservice.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
@@ -35,7 +36,7 @@ export class AttendanceComponent implements OnInit {
   public selectedStatus = "Casual Leave";
   public minDate;
 
-  constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal) {
+  constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal, public common: CommonService) {
     this.getCalendar();
   }
 
@@ -60,10 +61,13 @@ export class AttendanceComponent implements OnInit {
     this.alert.showLoader(true);
     this.http.GET(`${GET_ATTENDANCE}${str}`).subscribe(res => {
       console.log(res);
+      this.events = [];
       this.alert.showLoader(false);
       if (res) {
         this.data = res;
         for (let i = 0; i < res.length; i++) {
+          res[i].appliedBy = this.common.getEmpData(res[i].appliedBy);
+          res[i].approvedBy = this.common.getEmpData(res[i].approvedBy);
           if (res[i].status === "Approved") {
             this.approvedLeaves.push(res[i]);
             const tmp: any = {};
@@ -86,8 +90,10 @@ export class AttendanceComponent implements OnInit {
           editable: true,
           events: this.events,
           eventBackgroundColor: "green",
-          eventTextColor: "white"
+          eventTextColor: "white",
+          fixedWeekCount: false
         };
+        this.ucCalendar ? this.ucCalendar.fullCalendar("refetchEvents", this.events) : "";
       }
     });
   }
@@ -155,11 +161,16 @@ export class AttendanceComponent implements OnInit {
       status: status,
       comments: this.comments
     };
+    const today = new Date();
+    const from = new Date(this.selectedItem.start);
+    if (today.valueOf() > from.valueOf()) {
+      this.alert.showAlert("Sorry, You cannot" + status + " Now!!!, Time has Elapsed", "warning");
+      return false;
+    }
     this.alert.showLoader(true);
     this.http.PUT(GET_ATTENDANCE, tmp).subscribe(res => {
       this.alert.showLoader(false);
       this.clearAll();
-      this.selectedMenu = "Calendar";
       this.getCalendar();
     });
   }

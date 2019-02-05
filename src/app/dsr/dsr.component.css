@@ -214,8 +214,8 @@ datepicker /deep/ ngb-datepicker {
 
 .roundImg {
   border-radius: 50px;
-  width: 45px;
-  height: 45px;
+  width: 45px !important;
+  height: 45px !important;
 }
 
 .imgText {

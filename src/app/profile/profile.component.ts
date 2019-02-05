@@ -1,3 +1,4 @@
+import { CommonService } from './../services/common.service';
 import { Httpservice } from "./../services/httpservice.service";
 import { StoreService } from "./../store/store.service";
 import { AlertService } from "./../services/alert.service";
@@ -33,10 +34,10 @@ export class ProfileComponent implements OnInit {
   public responses: any;
 
   constructor(public alert: AlertService, public store: StoreService, public http: Httpservice,
-    public cloudinary: Cloudinary, public zone: NgZone) {
+    public cloudinary: Cloudinary, public zone: NgZone, public common: CommonService) {
     this.profile = this.store.get("profile");
     this.getProfile();
-    this.employees = this.store.get("photos");
+    this.employees = this.common.getAllEmpData();
     this.manager = _.find(this.employees, { id: this.profile.employee.reportingTo }) || this.employees[0];
 
     this.responses = [];
@@ -100,7 +101,7 @@ export class ProfileComponent implements OnInit {
     this.alert.showLoader(true);
     this.http.GET(EMPLOYEE_PROFILE).subscribe((res) => {
       this.profile = res;
-      this.photo = this.profile.employee.photo;
+      this.photo = this.profile.employee.photo || this.photo;
       this.profile.employee.address = {};
       this.store.set("profile", res);
       this.alert.showLoader(false);
