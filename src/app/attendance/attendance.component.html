@@ -13,7 +13,7 @@
         <ul class="list-group">
           <li class="list-group-item" [class.active]="selectedMenu === item" *ngFor="let item of menus" (click)="open(item)">
             {{item}}
-            <span class="badge badge-primary badge-pill" *ngIf="item === 'Inbox' && count > 0">{{count}}</span>
+            <span class="badge badge-primary badge-pill" *ngIf="profile.employee.type === 'manager' && item === 'Inbox' && count > 0">{{count}}</span>
           </li>
         </ul>
       </div>
@@ -135,7 +135,7 @@
               </div>
             </div>
           </div>
-          <div *ngIf="selectedItem.status !== 'Approved' && selectedItem.status !== 'Declined'">
+          <div *ngIf="profile.employee.type === 'manager'">
             <div class="col-12 col-12-grid">
               <span class="primary"><strong>Comments</strong></span>
               <textarea class="form-control" rows="3" cols="50" name="comments" id="comments" [(ngModel)]="comments"
@@ -144,10 +144,8 @@
           </div>
           <hr>
           <div class="modalPopup" style="text-align: center">
-            <button class="customBtn sameLine activeBtn" *ngIf="!selectedItem.status || selectedItem.status === 'Declined'"
-              (click)="modal.dismiss('Cross click'); updateLeave('Approved')">Approve</button>
-            <button class="customBtn sameLine activeBtn" *ngIf="!selectedItem.status || selectedItem.status === 'Approved'"
-              (click)="modal.dismiss('Cross click'); updateLeave('Declined')">Decline</button>
+            <button class="customBtn sameLine activeBtn" *ngIf="profile.employee.type === 'manager'" (click)="modal.dismiss('Cross click'); updateLeave('Approved')">Approve</button>
+            <button class="customBtn sameLine activeBtn" *ngIf="profile.employee.type === 'manager'" (click)="modal.dismiss('Cross click'); updateLeave('Declined')">Decline</button>
             <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
           </div>
         </div>

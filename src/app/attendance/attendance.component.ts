@@ -1,3 +1,4 @@
+import { StoreService } from './../store/store.service';
 import { CommonService } from './../services/common.service';
 import { AlertService } from "./../services/alert.service";
 import { Httpservice } from "./../services/httpservice.service";
@@ -35,9 +36,12 @@ export class AttendanceComponent implements OnInit {
   public leaveTypes = ["Sick Leave", "Casual Leave"];
   public selectedStatus = "Casual Leave";
   public minDate;
+  public profile;
 
-  constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal, public common: CommonService) {
+  constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal, public common: CommonService,
+    public store: StoreService) {
     this.getCalendar();
+    this.profile = this.store.get("profile");
   }
 
   ngOnInit() {
