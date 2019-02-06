@@ -1,3 +1,4 @@
+import { CommonService } from './../services/common.service';
 import { AlertService } from "./../services/alert.service";
 import { Httpservice } from "./../services/httpservice.service";
 import { Component, OnInit } from "@angular/core";
@@ -31,9 +32,10 @@ export class TeamComponent implements OnInit {
     levelC: []
   };
 
-  constructor(public http: Httpservice, public alert: AlertService, public store: StoreService, public modalService: NgbModal) {
-    this.employees = this.store.get("photos");
-    this.plannedEmps = this.store.get("photos");
+  constructor(public http: Httpservice, public alert: AlertService, public store: StoreService, public modalService: NgbModal,
+    public common: CommonService) {
+    this.employees = this.common.getAllEmpData();
+    this.plannedEmps = this.common.getAllEmpData();
     this.getTeams();
   }
 
@@ -41,7 +43,7 @@ export class TeamComponent implements OnInit {
   }
 
   openCreate(elem) {
-    this.plannedEmps = this.store.get("photos");
+    this.plannedEmps = this.common.getAllEmpData();
     this.selected = {
       name: "",
       leader: [],
@@ -62,7 +64,7 @@ export class TeamComponent implements OnInit {
   }
 
   openEdit(elem, selectedTeam) {
-    let emps = this.store.get("photos");
+    let emps = this.common.getAllEmpData();
     this.selected = {
       name: selectedTeam.name,
       leader: [],
@@ -73,7 +75,7 @@ export class TeamComponent implements OnInit {
     this.isEdit = true;
     this.selectEmp(_.remove(emps, function (e) { return e.id === selectedTeam.leaderId; })[0], "0");
     for (let i = 0; i < selectedTeam.members.length; i++) {
-      emps = this.store.get("photos");
+      emps = this.common.getAllEmpData();
       const arr = _.remove(emps, function (e) { return e.id === selectedTeam.members[i].userId; });
       this.selectEmp(
         arr[0],
@@ -172,7 +174,7 @@ export class TeamComponent implements OnInit {
     }
     const itemRemoved = _.remove(this.selected[key], function (e) { return e.id !== emp.id; });
     this.selected[key] = itemRemoved;
-    const arr = this.store.get("photos");
+    const arr = this.common.getAllEmpData();
     const item = _.remove(arr, function (e) { return e.id === emp.id; });
     this.plannedEmps.push(item[0]);
   }

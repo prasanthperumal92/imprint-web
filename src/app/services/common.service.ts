@@ -1,5 +1,5 @@
-import { StoreService } from './../store/store.service';
-import { Injectable } from '@angular/core';
+import { StoreService } from "./../store/store.service";
+import { Injectable } from "@angular/core";
 
 @Injectable()
 export class CommonService {
@@ -10,6 +10,7 @@ export class CommonService {
   }
 
   getAllEmpData() {
+    this.empData = this.store.get("photos");
     for (let i = 0; i < this.empData.length; i++) {
       if (!this.empData[i].photo) {
         this.empData[i].photo = "/assets/images/default_user.png";
@@ -19,6 +20,7 @@ export class CommonService {
   }
 
   getEmpData(id) {
+    this.empData = this.store.get("photos");
     let found = false;
     for (let i = 0; i < this.empData.length; i++) {
       if (this.empData[i].id === id) {

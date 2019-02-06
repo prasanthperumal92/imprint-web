@@ -1,3 +1,4 @@
+import { CommonService } from './../services/common.service';
 import { AlertService } from "./../services/alert.service";
 import { Httpservice } from "./../services/httpservice.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
@@ -34,9 +35,10 @@ export class TrackComponent implements OnInit {
   public maxDate;
   public selectedDate;
 
-  constructor(public store: StoreService, public http: Httpservice, public alert: AlertService, public resources: ResourcesService) {
+  constructor(public store: StoreService, public http: Httpservice, public alert: AlertService, public resources: ResourcesService,
+    public common: CommonService) {
     const pro = this.store.get("profile");
-    let tmp = _.filter(this.store.get("photos"), function (o) { return o.name !== pro.employee.name; });
+    let tmp = _.filter(this.common.getAllEmpData(), function (o) { return o.name !== pro.employee.name; });
     this.employees = tmp;
     this.selectedEmployee = this.employees[0];
     this.getCoords(this.selectedEmployee);
