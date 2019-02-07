@@ -36,6 +36,7 @@ import { BarchartComponent } from "./chart/barchart/barchart.component";
 import { PiechartComponent } from './chart/piechart/piechart.component';
 import { TeamComponent } from './team/team.component';
 import { CommonService } from './services/common.service';
+import { MultibarstackedComponent } from './chart/multibarstacked/multibarstacked.component';
 
 export const cloudinary = {
   Cloudinary: CloudinaryCore
@@ -68,7 +69,8 @@ export const config: CloudinaryConfiguration = {
     AnalyticsComponent,
     BarchartComponent,
     PiechartComponent,
-    TeamComponent
+    TeamComponent,
+    MultibarstackedComponent
   ],
   imports: [
     BrowserModule,

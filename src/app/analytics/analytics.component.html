@@ -63,7 +63,10 @@
                   placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed in this month."></i>
               </p>
             </div>
-            <div class="notAvailable">
+            <div *ngIf="teamData">
+              <app-multibarstacked [data]="teamData" [yAxisName]="'Activity'" [xAxisName]="'Count'"></app-multibarstacked>
+            </div>
+            <div class="notAvailable" *ngIf="!teamData">
               <p>Not Available</p>
             </div>
           </div>
