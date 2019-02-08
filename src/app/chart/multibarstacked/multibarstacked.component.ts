@@ -55,10 +55,9 @@ export class MultibarstackedComponent implements OnInit {
       .rangeRound([height, 0]);
 
     let z = d3.scaleOrdinal()
-      .range(["#98abc5", "#a05d56", "#d0743c", "#ff8c00"]);
+      .range(COLORS);
 
     // Nest stock values by symbol.
-    // let dataByYear = [{ "values": [{ "symbol": "IBM", "sum_price": 1162.97 }, { "symbol": "AMZN", "sum_price": 527.17 }, { "symbol": "MSFT", "sum_price": 356.07999999999987 }, { "symbol": "AAPL", "sum_price": 260.98 }], "year": "2000" }, { "values": [{ "symbol": "IBM", "sum_price": 1163.6200000000001 }, { "symbol": "MSFT", "sum_price": 304.17 }, { "symbol": "AMZN", "sum_price": 140.87 }, { "symbol": "AAPL", "sum_price": 122.11000000000003 }], "year": "2001" }, { "values": [{ "symbol": "IBM", "sum_price": 901.4999999999999 }, { "symbol": "MSFT", "sum_price": 261.92 }, { "symbol": "AMZN", "sum_price": 200.68 }, { "symbol": "AAPL", "sum_price": 112.89999999999998 }], "year": "2002" }, { "values": [{ "symbol": "IBM", "sum_price": 927.69 }, { "symbol": "AMZN", "sum_price": 468.20000000000005 }, { "symbol": "MSFT", "sum_price": 251.21 }, { "symbol": "AAPL", "sum_price": 112.16999999999999 }], "year": "2003" }, { "values": [{ "symbol": "IBM", "sum_price": 1006.6299999999999 }, { "symbol": "AMZN", "sum_price": 519.21 }, { "symbol": "MSFT", "sum_price": 272.09 }, { "symbol": "AAPL", "sum_price": 224.68 }], "year": "2004" }, { "values": [{ "symbol": "IBM", "sum_price": 929.97 }, { "symbol": "AAPL", "sum_price": 578.0600000000001 }, { "symbol": "AMZN", "sum_price": 482.25 }, { "symbol": "MSFT", "sum_price": 286.15000000000003 }], "year": "2005" }, { "values": [{ "symbol": "IBM", "sum_price": 944.6100000000002 }, { "symbol": "AAPL", "sum_price": 864.52 }, { "symbol": "AMZN", "sum_price": 435.02000000000004 }, { "symbol": "MSFT", "sum_price": 297.1 }], "year": "2006" }, { "values": [{ "symbol": "AAPL", "sum_price": 1600.24 }, { "symbol": "IBM", "sum_price": 1215.3200000000002 }, { "symbol": "AMZN", "sum_price": 839.43 }, { "symbol": "MSFT", "sum_price": 351.40999999999997 }], "year": "2007" }, { "values": [{ "symbol": "AAPL", "sum_price": 1661.77 }, { "symbol": "IBM", "sum_price": 1286.7000000000003 }, { "symbol": "AMZN", "sum_price": 828.1800000000001 }, { "symbol": "MSFT", "sum_price": 302.50000000000006 }], "year": "2008" }, { "values": [{ "symbol": "AAPL", "sum_price": 1804.7200000000003 }, { "symbol": "IBM", "sum_price": 1311.56 }, { "symbol": "AMZN", "sum_price": 1088.7700000000002 }, { "symbol": "MSFT", "sum_price": 274.47 }], "year": "2009" }, { "values": [{ "symbol": "AAPL", "sum_price": 619.7 }, { "symbol": "IBM", "sum_price": 374.56 }, { "symbol": "AMZN", "sum_price": 372.63 }, { "symbol": "MSFT", "sum_price": 85.52 }], "year": "2010" }]
 
     var dataByYear = d3.nest()
       .key(d => d.name)
@@ -144,28 +143,31 @@ export class MultibarstackedComponent implements OnInit {
     };
 
     let drawAxis = () => {
+      console.log(d3.axisLeft(y));
       g.append("g")
         .attr("class", "axis")
+        .style("font", "12px times")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x0));
 
       g.append("g")
         .attr("class", "axis")
-        .call(d3.axisLeft(y).ticks(null, "s"))
+        .style("font", "12px times")
+        .call(d3.axisLeft(y))
         .append("text")
-        .attr("x", 2)
-        .attr("y", y(y.ticks().pop()) + 0.5)
+        .attr("x", 1)
+        .attr("y", y(y.ticks().pop()) + 0)
         .attr("dy", "0.32em")
         .attr("fill", "#000")
         .attr("font-weight", "bold")
         .attr("text-anchor", "start")
-        .text("Price");
+        .text("Count");
     };
 
     let drawLegend = (data) => {
       let legend = g.append("g")
         .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
+        .attr("font-size", 12)
         .attr("text-anchor", "end")
         .selectAll("g")
         .data(data)

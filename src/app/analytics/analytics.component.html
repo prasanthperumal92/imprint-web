@@ -54,24 +54,30 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12 col-12-grid">
-        <div class="col-sm-12 whiteBox">
-          <div>
-            <div class="headRow">
-              <p class="col-sm-6 textLeft bold">My Monthly Update <i class="fa fa-question-circle-o" aria-hidden="true"
-                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed in this month."></i>
-              </p>
-            </div>
-            <div *ngIf="teamData">
-              <app-multibarstacked [data]="teamData" [yAxisName]="'Activity'" [xAxisName]="'Count'"></app-multibarstacked>
-            </div>
-            <div class="notAvailable" *ngIf="!teamData">
-              <p>Not Available</p>
+    <br>
+    <div class="container" *ngIf="teamData">
+      <h5>My Teams Data</h5>
+      <div class="row" *ngFor="let team of teamData">
+        <div class="col-12 col-12-grid" style="padding: 0px !important;">
+          <div class="col-sm-12 whiteBox">
+            <div>
+              <div class="headRow">
+                <p class="col-sm-6 textLeft bold">{{team.title}}<i class="fa fa-question-circle-o" aria-hidden="true"
+                    placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed in this team."></i>
+                </p>
+              </div>
+              <div *ngIf="teamData">
+                <app-multibarstacked [data]="team" [yAxisName]="'Activity'" [xAxisName]="'Count'"></app-multibarstacked>
+              </div>
+              <div class="notAvailable" *ngIf="!teamData">
+                <p>Not Available</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+
   </div>
 </div>

@@ -17,10 +17,10 @@ import { ResourcesService } from "../config/resources.service";
 })
 export class AnalyticsComponent implements OnInit {
 
-  public dailyChart: Array<any>;
-  public weeklyChart: Array<any>;
-  public monthlyChart: Array<any>;
-  public teamData: Array<any>;
+  public dailyChart: Array<any> = [];
+  public weeklyChart: Array<any> = [];
+  public monthlyChart: Array<any> = [];
+  public teamData: Array<any> = [];
   public filters = this.resources.filter;
   public profile;
   public employees = [];
@@ -87,7 +87,7 @@ export class AnalyticsComponent implements OnInit {
     const end = filter.to.format("YYYY-MM-DD");
     this.http.GET(`${TEAM_CHART}${team._id}/${start}/${end}`).subscribe(res => {
       res.data = this.getNames(res.data);
-      this.teamData = res;
+      this.teamData.push(res);
       console.log(res);
       this.alert.showLoader(false);
     });
