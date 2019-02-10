@@ -29,7 +29,6 @@
 .header {
   padding: 0px 20px;
   z-index: 1000;
-  position: relative;
 }
 
 .empDropBtn,

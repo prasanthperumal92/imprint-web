@@ -1,5 +1,6 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, ViewEncapsulation, Inject } from "@angular/core";
 import { COLORS } from "../../../constants";
+import { DOCUMENT } from "@angular/common";
 
 declare let d3: any;
 
@@ -9,28 +10,40 @@ declare let d3: any;
   styleUrls: ["./piechart.component.css"]
 })
 export class PiechartComponent implements OnInit {
-  @ViewChild("piechart") private chartContainer: ElementRef;
   @Input() private data: Array<any>;
   @Input() private xAxisName?: String;
   @Input() private yAxisName?: String;
+  @Input() private element: any;
   private margin: any = { top: 20, bottom: 40, left: 60, right: 20 };
   private chart: any;
 
-  constructor() { }
+  constructor(@Inject(DOCUMENT) document) { }
 
   ngOnInit() {
-    this.createChart();
+    const self = this;
+    setTimeout(() => {
+      self.createChart();
+    });
   }
 
   createChart() {
-    const element = this.chartContainer.nativeElement;
+    let isEmpty = false;
+    const element: any = this.element;
+    // const element = chartContainer.nativeElement;
     let width = element.offsetWidth - this.margin.left - this.margin.right;
     let height = element.offsetHeight - this.margin.top - this.margin.bottom;
     let xAxisName = this.xAxisName || "X-Axis";
     let yAxisName = this.yAxisName || "Y-Axis";
     let data = this.data || [];
 
-    let svg = d3.select("#piechart")
+    if (data[0].value === 0 && data[1].value === 0 && data[2].value === 0) {
+      isEmpty = true;
+      data[0].value = 1;
+      data[1].value = 1;
+      data[2].value = 1;
+    }
+
+    let svg = d3.select(element)
       .append("svg")
       .attr("width", width)
       .attr("height", height)
@@ -78,18 +91,22 @@ export class PiechartComponent implements OnInit {
       .style("fill", (d, i) => colors(i))
       .attr("class", "slice")
       .on("mouseover", function (d) {
+        let v;
+        isEmpty ? v = 0 : v = d.data.value;
         div.transition()
           .duration(200)
           .style("opacity", .9);
-        div.html((`<strong>${yAxisName}:</strong> ${d.data.key}`) + "<br/>" + `<strong>${xAxisName}:</strong> ${d.data.value}`)
+        div.html((`<strong>${yAxisName}:</strong> ${d.data.key}`) + "<br/>" + `<strong>${xAxisName}:</strong> ${v}`)
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");
       })
       .on("mousemove", function (d) {
+        let v;
+        isEmpty ? v = 0 : v = d.data.value;
         div.transition()
           .duration(100)
           .style("opacity", .9);
-        div.html((`<strong>${yAxisName}:</strong> ${d.data.key}`) + "<br/>" + `<strong>${xAxisName}:</strong> ${d.data.value}`)
+        div.html((`<strong>${yAxisName}:</strong> ${d.data.key}`) + "<br/>" + `<strong>${xAxisName}:</strong> ${v}`)
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY - 28) + "px");
       })
@@ -116,7 +133,9 @@ export class PiechartComponent implements OnInit {
       .append("text")
       .attr("dy", ".35em")
       .text(function (d) {
-        return `${d.data.key}: ${d.data.value}`;
+        let v;
+        isEmpty ? v = 0 : v = d.data.value;
+        return `${d.data.key}: ${v}`;
       })
       .transition().duration(1000)
       .attrTween("transform", function (d) {

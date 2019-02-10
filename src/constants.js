@@ -15,6 +15,7 @@ export const GET_TRACKING = 'track';
 export const CALENDAR = 'calendar';
 export const TEAM = 'team';
 export const TEAM_CHART = 'team/chart/';
+export const CHART = 'chart';
 
 export const COLORS = ["#ff6283", "#36a1eb", "#5cc6c6", "#ffcd56", "#a071ff"];
 

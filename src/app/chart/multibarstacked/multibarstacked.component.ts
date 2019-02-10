@@ -9,10 +9,10 @@ declare let d3: any;
   styleUrls: ['./multibarstacked.component.css']
 })
 export class MultibarstackedComponent implements OnInit {
-  @ViewChild("multibarchart") private chartContainer: ElementRef;
   @Input() private data: any = {};
   @Input() private xAxisName?: String;
   @Input() private yAxisName?: String;
+  @Input() private element: any;
   private margin: any = { top: 20, bottom: 40, left: 60, right: 20 };
   private chart: any;
   private width: number;
@@ -32,16 +32,20 @@ export class MultibarstackedComponent implements OnInit {
 
   createChart() {
     const data = this.data.data;
-    const element = this.chartContainer.nativeElement;
+    this.element = Array.prototype.slice.call(this.element)[0];
+    const element: any = this.element;
+
     this.width = element.offsetWidth - this.margin.left - this.margin.right;
     this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
     const xAxisName = this.xAxisName || "X-Axis";
     const yAxisName = this.yAxisName || "Y-Axis";
 
-    let svg = d3.select("#multibarchart").append("svg"),
-      margin = this.margin,
+    let margin = this.margin,
       width = this.width,
-      height = this.height,
+      height = this.height;
+    let svg = d3.select(element).append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom),
       g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     let x0 = d3.scaleBand()
@@ -143,7 +147,6 @@ export class MultibarstackedComponent implements OnInit {
     };
 
     let drawAxis = () => {
-      console.log(d3.axisLeft(y));
       g.append("g")
         .attr("class", "axis")
         .style("font", "12px times")

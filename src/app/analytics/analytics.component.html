@@ -1,9 +1,9 @@
 <div>
   <header title="Protocol Analytics"></header>
   <br>
-  <div class="container">
+  <div class="container" *ngIf="profile.employee.type !== 'manager'">
     <div class="row">
-      <div class="col-12 col-grid" id="dailyChart">
+      <div class="col-12 col-grid">
         <div class="col-sm-12 whiteBox">
           <div>
             <div ngbDropdown class="headRow">
@@ -19,10 +19,11 @@
               </div>
             </div>
           </div>
-          <div *ngIf="dailyChart">
-            <app-piechart [data]="dailyChart" [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
+          <div *ngIf="dailyChartData">
+            <div id="dailyChart" class="d3-chart" #dailyChart></div>
+            <app-piechart [element]="dailyChart" [data]="dailyChartData" [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
           </div>
-          <div *ngIf="!dailyChart">
+          <div *ngIf="!dailyChartData">
             <p class="notAvailable">Not Available</p>
           </div>
         </div>
@@ -34,7 +35,7 @@
           <div>
             <div ngbDropdown class="headRow">
               <p class="col-sm-6 textLeft bold">My Weekly Update <i class="fa fa-question-circle-o" aria-hidden="true"
-                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed today."></i>
+                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed this week."></i>
               </p>
               <div class="col-sm-6 textRight" *ngIf="weeklyChart">
                 <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle></i>
@@ -45,39 +46,83 @@
               </div>
             </div>
           </div>
-          <div *ngIf="weeklyChart">
-            <app-barchart [data]="weeklyChart" [yAxisName]="'Activity'" [xAxisName]="'Count'"></app-barchart>
+          <div *ngIf="weeklyChartData">
+            <div id="weeklyChart" class="d3-chart" #weeklyChart></div>
+            <app-barchart [element]="weeklyChart" [data]="weeklyChartData" [yAxisName]="'Activity'" [xAxisName]="'Count'"></app-barchart>
           </div>
-          <div *ngIf="!weeklyChart" class="notAvailable">
+          <div *ngIf="!weeklyChartData" class="notAvailable">
             <p>Not Available</p>
           </div>
         </div>
       </div>
     </div>
-    <br>
-    <div class="container" *ngIf="teamData">
-      <h5>My Teams Data</h5>
-      <div class="row" *ngFor="let team of teamData">
-        <div class="col-12 col-12-grid" style="padding: 0px !important;">
-          <div class="col-sm-12 whiteBox">
-            <div>
-              <div class="headRow">
-                <p class="col-sm-6 textLeft bold">{{team.title}}<i class="fa fa-question-circle-o" aria-hidden="true"
-                    placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed in this team."></i>
-                </p>
+    <div class="row">
+      <div class="col-12 col-grid" id="monthlyChart">
+        <div class="col-sm-12 whiteBox">
+          <div>
+            <div ngbDropdown class="headRow">
+              <p class="col-sm-6 textLeft bold">My Monthly Update <i class="fa fa-question-circle-o" aria-hidden="true"
+                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed this month."></i>
+              </p>
+              <div class="col-sm-6 textRight" *ngIf="monthlyChart">
+                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle></i>
+                  &nbsp; &nbsp;</button>
+                <div ngbDropdownMenu>
+                  <button class="dropdown-item" (click)="downloadImage('monthlyChart')">Download Image</button>
+                </div>
               </div>
-              <div *ngIf="teamData">
-                <app-multibarstacked [data]="team" [yAxisName]="'Activity'" [xAxisName]="'Count'"></app-multibarstacked>
-              </div>
-              <div class="notAvailable" *ngIf="!teamData">
-                <p>Not Available</p>
-              </div>
+            </div>
+          </div>
+          <div *ngIf="monthlyChartData">
+            <div id="monthlyChart" class="d3-chart" #monthlyChart></div>
+            <app-barchart [element]="monthlyChart" [data]="monthlyChartData" [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-barchart>
+          </div>
+          <div *ngIf="!monthlyChartData">
+            <p class="notAvailable">Not Available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="container" *ngIf="profile.employee.type === 'manager'">
+    <div class="row">
+      <div class="col-12 col-grid">
+        <div class="col-sm-12">
+          <h5>My Teams Data</h5>
+          <p>{{ fromDate | date: 'mediumDate' }} - {{toDate | date: 'mediumDate' }}</p>
+          <div *ngFor="let item of filters; let i = index">
+            <button class="btn btn-secondary btn-sm float-left filerItem" [class.active]="item.selected" (click)="selected(item.label)"
+              title={{item.label}}>{{item.label}}</button>
+            <div *ngIf="item.name === 'Custom' && show" #datepicker id="datepicker" style="color: #000000">
+              <datepicker (change)="calendarData($event)"></datepicker>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
+  </div>
+  <div class="container" *ngIf="teamData">
+    <div class="row" *ngFor="let team of teamData; let i = index;">
+      <div class="col-12 col-12-grid" style="padding: 0px !important;">
+        <div class="col-sm-12 whiteBox">
+          <div>
+            <div class="headRow">
+              <p class="col-sm-6 textLeft bold">{{team.title}} <i class="fa fa-question-circle-o" aria-hidden="true"
+                  placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed in this team."></i>
+              </p>
+            </div>
+            <div *ngIf="team">
+              <div class="d3-chart" [ngClass]="'mychart' + i"></div>
+              <app-multibarstacked [element]="getElement('mychart' + i)" [data]="team" [yAxisName]="'Activity'"
+                [xAxisName]="'Count'"></app-multibarstacked>
+            </div>
+            <div class="notAvailable" *ngIf="!team">
+              <p>Not Available</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

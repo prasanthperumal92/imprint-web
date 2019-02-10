@@ -10,10 +10,10 @@ declare let d3: any;
   encapsulation: ViewEncapsulation.None
 })
 export class BarchartComponent implements OnInit, OnChanges {
-  @ViewChild("chart") private chartContainer: ElementRef;
   @Input() private data: Array<any>;
   @Input() private xAxisName?: String;
   @Input() private yAxisName?: String;
+  @Input() private element: any;
   private margin: any = { top: 20, bottom: 40, left: 60, right: 20 };
   private chart: any;
   private width: number;
@@ -44,7 +44,7 @@ export class BarchartComponent implements OnInit, OnChanges {
     let data = this.data;
     let xAxisName = this.xAxisName || "X-Axis";
     let yAxisName = this.yAxisName || "Y-Axis";
-    const element = this.chartContainer.nativeElement;
+    const element: any = this.element;
     this.width = element.offsetWidth - this.margin.left - this.margin.right;
     this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
 
@@ -59,7 +59,7 @@ export class BarchartComponent implements OnInit, OnChanges {
     // append the svg object to the body of the page
     // append a "group" element to "svg"
     // moves the "group" element to the top left margin
-    let svg = d3.select("#chart").append("svg")
+    let svg = d3.select(element).append("svg")
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
