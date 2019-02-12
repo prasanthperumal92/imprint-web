@@ -31,6 +31,7 @@ export class ClientComponent implements OnInit {
   public title;
   public type;
   public reference;
+  public profile;
 
   search = (text: Observable<string>) => {
     console.log(JSON.stringify(text));
@@ -45,6 +46,7 @@ export class ClientComponent implements OnInit {
   constructor(public http: Httpservice, public alert: AlertService, public route: ActivatedRoute, public modalService: NgbModal,
     public store: StoreService, public common: CommonService) {
     this.employees = this.common.getAllEmpData();
+    this.profile = this.store.get("profile");
   }
 
   ngOnInit() {

@@ -14,7 +14,8 @@
     </div>
     <div>
       <div style="float: left">
-        <button class="customBtn activeBtn" (click)="createTask(newTask, 'create', '')" style="margin-right:20px;height: 36px;">
+        <button *ngIf="profile.employee.type !== 'employee'" class="customBtn activeBtn" (click)="createTask(newTask, 'create', '')"
+          style="margin-right:20px;height: 36px;">
           <i class="fa fa-plus" aria-hidden="true"></i>
           New Task
         </button>

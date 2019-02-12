@@ -91,6 +91,7 @@ export class MultibarstackedComponent implements OnInit {
 
     let symbolList = dataByYear[0].values.map(d => d.type);
     let yearList = dataByYear.map(d => d.name);
+    // d3.max(dataByYear, d => d3.max(d.values, el => el.sum_value))
 
     x0.domain(yearList);
     x1.domain(symbolList).rangeRound([0, x0.bandwidth()]);
@@ -98,7 +99,7 @@ export class MultibarstackedComponent implements OnInit {
     z.domain(symbolList);
 
     let div = d3.select("body").append("div")
-      .attr("class", "tooltip")
+      .attr("class", "tooltipBox")
       .style("opacity", 0);
 
     let year = g.append("g")
@@ -156,7 +157,8 @@ export class MultibarstackedComponent implements OnInit {
       g.append("g")
         .attr("class", "axis")
         .style("font", "12px times")
-        .call(d3.axisLeft(y))
+        .call(d3.axisLeft(y).ticks(5))
+        .style("font", "12px times")
         .append("text")
         .attr("x", 1)
         .attr("y", y(y.ticks().pop()) + 0)

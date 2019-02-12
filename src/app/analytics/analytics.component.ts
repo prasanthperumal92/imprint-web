@@ -28,6 +28,8 @@ export class AnalyticsComponent implements OnInit {
   public fromDate;
   public toDate;
   public show = false;
+  public details = {};
+  public selectedFilter;
 
   constructor(public store: StoreService, public router: Router, public alert: AlertService, public http: Httpservice,
     public resources: ResourcesService, public common: CommonService) {
@@ -35,10 +37,16 @@ export class AnalyticsComponent implements OnInit {
       this.router.navigate(["login"]);
     }
     this.profile = this.store.get("profile");
+    const tmp = this.store.get("config");
+    for (let i = 0; i < tmp.details.length; i++) {
+      this.details[tmp.details[i].key] = tmp.details[i].value;
+    }
     this.employees = this.common.getAllEmpData();
-    this.getMyChart("Today");
-    this.getMyChart("Current Week");
-    this.getMyChart("Current Month");
+    if (this.profile.employee.type === "employee" || this.profile.employee.type === "leader") {
+      this.getMyChart("Today");
+      this.getMyChart("Current Week");
+      this.getMyChart("Current Month");
+    }
     this.filters.pop();
     this.getTeams();
   }
@@ -69,12 +77,13 @@ export class AnalyticsComponent implements OnInit {
     const end = filter.to.format("YYYY-MM-DD");
     this.http.GET(`${CHART}/${type}/${start}/${end}`).subscribe(res => {
       console.log(res);
+      const tmp = this.getLabels(this.checkEmpty(res));
       if (type === "Today") {
-        this.dailyChartData = res;
+        tmp.length > 0 ? this.dailyChartData = tmp : '';
       } else if (type === "Current Week") {
-        this.weeklyChartData = res;
+        tmp.length > 0 ? this.weeklyChartData = tmp : '';
       } else {
-        this.monthlyChartData = res;
+        tmp.length > 0 ? this.monthlyChartData = tmp : '';
       }
       this.alert.showLoader(false);
     });
@@ -94,12 +103,18 @@ export class AnalyticsComponent implements OnInit {
     this.alert.showLoader(true);
     const start = moment(this.fromDate).format("YYYY-MM-DD");
     const end = moment(this.toDate).format("YYYY-MM-DD");
-    this.http.GET(`${TEAM_CHART}${team._id}/${start}/${end}`).subscribe(res => {
-      res.data = this.getNames(res.data);
-      this.teamData.push(res);
-      console.log(res);
-      this.alert.showLoader(false);
-    });
+    const self = this;
+    setTimeout(() => {
+      self.http.GET(`${TEAM_CHART}${team._id}/${start}/${end}`).subscribe(res => {
+        res.data = this.getNames(res.data);
+        const data = this.checkEmpty(res.data);
+        if (data.length > 0) {
+          this.teamData.push(res);
+        }
+        console.log(res);
+        self.alert.showLoader(false);
+      });
+    }, 1000);
   }
 
   getNames(data) {
@@ -107,8 +122,16 @@ export class AnalyticsComponent implements OnInit {
       for (let j = 0; j < this.employees.length; j++) {
         if (data[i].name === this.employees[j].id) {
           data[i].name = this.employees[j].name;
+          data[i].type = this.details[data[i].type];
         }
       }
+    }
+    return data;
+  }
+
+  getLabels(data) {
+    for (let j = 0; j < data.length; j++) {
+      data[j].key = this.details[data[j].key];
     }
     return data;
   }
@@ -118,6 +141,7 @@ export class AnalyticsComponent implements OnInit {
   }
 
   selected(filter: string, open?: any) {
+    this.selectedFilter = filter;
     this.selectButton(filter);
     if (filter === "Custom Date") {
       if (!open) {
@@ -132,6 +156,20 @@ export class AnalyticsComponent implements OnInit {
 
   toggle() {
     this.show = !this.show;
+  }
+
+  checkEmpty(arr) {
+    let count = 0;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].value === 0) {
+        count++;
+      }
+    }
+    if (count === arr.length) {
+      return [];
+    } else {
+      return arr;
+    }
   }
 
   dateFilter(filter) {
@@ -157,6 +195,7 @@ export class AnalyticsComponent implements OnInit {
         .endOf("day")
         .toDate();
     }
+    this.teamData = [];
     this.teams.forEach(team => {
       this.getTeamChart(team);
     });

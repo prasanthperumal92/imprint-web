@@ -66,6 +66,7 @@ export class TaskComponent implements OnInit {
   public type;
   public selectedStatus;
   public modalRef: NgbModalRef;
+  public profile;
 
   search = (text: Observable<string>) => {
     console.log(JSON.stringify(text));
@@ -90,6 +91,7 @@ export class TaskComponent implements OnInit {
     this.query = this.store.get("taskquery");
     this.employees = this.common.getAllEmpData();
     this.clients = this.store.get("clients") ? _.map(this.store.get("clients"), "name") : [];
+    this.profile = this.store.get("profile");
     if (this.query) {
       this.selected(this.query.label, true);
       this.fromDate = this.query.fromDate;

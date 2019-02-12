@@ -126,15 +126,15 @@
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Assigned By</strong></span>
                 <div style="display: inline-flex">
-                  <img src={{selectedEvent.assignedBy.photo}} class="roundImg" />
-                  <p class="imgText">{{selectedEvent.assignedBy.name}}</p>
+                  <img src={{photos[selectedEvent.assignedBy].photo}} class="roundImg" />
+                  <p class="imgText">{{photos[selectedEvent.assignedBy].name}}</p>
                 </div>
               </div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Assigned To</strong></span>
                 <div style="display: inline-flex">
-                  <img src={{selectedEvent.assignedTo.photo}} class="roundImg" />
-                  <p class="imgText">{{selectedEvent.assignedTo.name}}</p>
+                  <img src={{photos[selectedEvent.assignedTo].photo}} class="roundImg" />
+                  <p class="imgText">{{photos[selectedEvent.assignedTo].name}}</p>
                 </div>
               </div>
             </div>
@@ -184,8 +184,8 @@
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Applied By</strong></span>
                 <div style="display: inline-flex">
-                  <img src={{selectedEvent.appliedBy.photo}} class="roundImg" />
-                  <p class="imgText">{{selectedEvent.appliedBy.name}}</p>
+                  <img src={{photos[selectedEvent.appliedBy].photo}} class="roundImg" />
+                  <p class="imgText">{{photos[selectedEvent.appliedBy].name}}</p>
                 </div>
               </div>
               <div class="col-6 col-6-grid" *ngIf="selectedEvent.comments">

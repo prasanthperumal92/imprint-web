@@ -173,7 +173,6 @@ tr td:last-child {
 }
 
 .whiteBox:hover {
-  background-color: #3fb0e630 !important;
   box-shadow: -9px 11px 26px -6px #ccc;
   transform: scale(1.05);
 }

@@ -21,41 +21,50 @@ export class MyCalendarComponent implements OnInit {
   public date: Date;
   public selectedEvent: any = {};
   public eventType: String = "";
+  public photos = {};
 
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
   constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal, public common: CommonService) {
-
+    const tmp = this.common.getAllEmpData();
+    for (let i = 0; i < tmp.length; i++) {
+      this.photos[tmp[i].id] = {
+        name: tmp[i].name, photo: tmp[i].photo
+      };
+    }
   }
 
   ngOnInit() {
     const d = new Date();
     this.date = d;
     this.getCalendar();
+  }
+
+  renderCalendar(events) {
     const self = this;
     this.calendarOptions = {
       header: {
         left: "",
         center: "title",
-        right: "customLeft,customRight"
+        right: ""   // customLeft,customRight
       },
-      customButtons: {
-        customLeft: {
-          text: "Prev",
-          click: function () {
-            self.date = moment(self.date).subtract(1, "month").toDate();
-            self.ucCalendar.fullCalendar("prev");
-            self.getCalendar();
-          }
-        },
-        customRight: {
-          text: "Next",
-          click: function () {
-            self.date = moment(self.date).add(1, "month").toDate();
-            self.ucCalendar.fullCalendar("next");
-            self.getCalendar();
-          }
-        },
-      },
+      // customButtons: {
+      //   customLeft: {
+      //     text: "Prev",
+      //     click: function () {
+      //       self.date = moment(self.date).subtract(1, "month").toDate();
+      //       self.ucCalendar.fullCalendar("prev");
+      //       self.getCalendar();
+      //     }
+      //   },
+      //   customRight: {
+      //     text: "Next",
+      //     click: function () {
+      //       self.date = moment(self.date).add(1, "month").toDate();
+      //       self.ucCalendar.fullCalendar("next");
+      //       self.getCalendar();
+      //     }
+      //   },
+      // },
       defaultView: "month",
       editable: true,
       events: this.events,
@@ -70,6 +79,7 @@ export class MyCalendarComponent implements OnInit {
 
       }
     };
+    // this.ucCalendar.fullCalendar("refetchEvents");
   }
 
   public getCalendar() {
@@ -82,8 +92,6 @@ export class MyCalendarComponent implements OnInit {
       if (res) {
         this.data = [...res.dsr, ...res.task, ...res.leave];
         for (let i = 0; i < this.data.length; i++) {
-          this.data[i].appliedBy = this.common.getEmpData(this.data[i].appliedBy);
-          this.data[i].assignedTo = this.common.getEmpData(this.data[i].assignedTo);
           const item = this.data[i];
           let tmp: any = {};
           if (item.effort) {
@@ -98,7 +106,7 @@ export class MyCalendarComponent implements OnInit {
             if (item.status) {
               tmp.id = item._id;
               tmp.allDay = true;
-              tmp.title = `Leave: ${item.appliedBy.name}, ${item.type}`;
+              tmp.title = `Leave: ${this.photos[item.appliedBy].name}, ${item.type}`;
               tmp.start = moment(item.start, "YYYY-MM-DD");
               tmp.end = moment(item.end, "YYYY-MM-DD").add(1, "days");
               tmp.color = "purple";
@@ -106,7 +114,7 @@ export class MyCalendarComponent implements OnInit {
           } else {
             tmp.id = item._id;
             tmp.allDay = true;
-            tmp.title = `Task: ${item.assignedTo.name}, ${item.client}`;
+            tmp.title = `Task: ${this.photos[item.assignedTo].name}, ${item.status}`;
             tmp.start = moment(item.created, "YYYY-MM-DD");
             tmp.end = moment(item.created, "YYYY-MM-DD").add(1, "days");
             tmp.color = "blue";
@@ -114,7 +122,7 @@ export class MyCalendarComponent implements OnInit {
           this.events.push(tmp);
         }
       }
-      this.ucCalendar.fullCalendar("refetchEvents", this.events);
+      this.renderCalendar(this.events);
       // setTimeout(() => {
       //   self.alert.hideLoader();
       // }, 2000);

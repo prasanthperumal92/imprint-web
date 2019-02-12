@@ -33,3 +33,14 @@ input[type="checkbox"]:focus {
   outline: 0 none;
   box-shadow: none;
 }
+
+.tooltipBox {
+  position: absolute !important;
+  text-align: left !important;
+  padding: 6px !important;
+  font: 12px sans-serif !important;
+  background: #ffffff !important;
+  border: 0px !important;
+  border-radius: 8px !important;
+  pointer-events: none !important;
+}

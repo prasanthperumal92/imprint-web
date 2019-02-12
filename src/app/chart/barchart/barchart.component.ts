@@ -27,8 +27,8 @@ export class BarchartComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    this.createChart();
-    if (this.data) {
+    if (this.data && this.data.length > 0) {
+      this.createChart();
       // this.updateChart();
     }
   }
@@ -73,11 +73,12 @@ export class BarchartComponent implements OnInit, OnChanges {
 
     // Define the div for the tooltip
     let div = d3.select("body").append("div")
-      .attr("class", "tooltip")
+      .attr("class", "tooltipBox")
       .style("opacity", 0);
 
     // bar colors
-    let colors = d3.scaleLinear().domain([0, data.length]).range(<any[]>COLORS);
+    let colors = d3.scaleOrdinal()
+      .range(COLORS);
 
     // Scale the range of the data in the domains
     x.domain([0, d3.max(data, function (d) { return d.value; })]);
@@ -119,7 +120,7 @@ export class BarchartComponent implements OnInit, OnChanges {
     svg.append("g")
       .style("font", "12px times")
       .attr("transform", "translate(0," + this.height + ")")
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x).ticks(5));
 
     if (this.xAxisName) {
       svg.append("text")

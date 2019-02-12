@@ -183,8 +183,8 @@ export class AttendanceComponent implements OnInit {
     this.apply.type = this.selectedStatus;
     let from = this.apply.start;
     let to = this.apply.end;
-    from = new Date(from.year, from.month, from.day);
-    to = new Date(to.year, to.month, to.day);
+    from = new Date(from.year, from.month - 1, from.day);
+    to = new Date(to.year, to.month - 1, to.day);
     if (from.valueOf() > to.valueOf()) {
       this.alert.showAlert("Wrong Start date and End date selected", "warning");
       return false;

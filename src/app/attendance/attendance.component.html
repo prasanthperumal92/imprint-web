@@ -144,8 +144,10 @@
           </div>
           <hr>
           <div class="modalPopup" style="text-align: center">
-            <button class="customBtn sameLine activeBtn" *ngIf="profile.employee.type === 'manager'" (click)="modal.dismiss('Cross click'); updateLeave('Approved')">Approve</button>
-            <button class="customBtn sameLine activeBtn" *ngIf="profile.employee.type === 'manager'" (click)="modal.dismiss('Cross click'); updateLeave('Declined')">Decline</button>
+            <button class="customBtn sameLine activeBtn" *ngIf="(profile.employee.type === 'manager' && selectedItem.status === 'Declined') || (profile.employee.type === 'manager'  && !selectedItem.status )"
+              (click)="modal.dismiss('Cross click'); updateLeave('Approved')">Approve</button>
+            <button class="customBtn sameLine activeBtn" *ngIf="(profile.employee.type === 'manager' && selectedItem.status === 'Approved') || (profile.employee.type==='manager' && !selectedItem.status)"
+              (click)="modal.dismiss('Cross click'); updateLeave('Declined')">Decline</button>
             <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
           </div>
         </div>

@@ -21,9 +21,11 @@ export class PiechartComponent implements OnInit {
 
   ngOnInit() {
     const self = this;
-    setTimeout(() => {
-      self.createChart();
-    });
+    if (this.data && this.data.length > 0) {
+      setTimeout(() => {
+        self.createChart();
+      });
+    }
   }
 
   createChart() {
@@ -35,12 +37,18 @@ export class PiechartComponent implements OnInit {
     let xAxisName = this.xAxisName || "X-Axis";
     let yAxisName = this.yAxisName || "Y-Axis";
     let data = this.data || [];
+    let lineData = [];  // To remove the no data text label and polylines
 
-    if (data[0].value === 0 && data[1].value === 0 && data[2].value === 0) {
+    if (data.length > 0 && data[0].value === 0 && data[1].value === 0 && data[2].value === 0) {
       isEmpty = true;
       data[0].value = 1;
       data[1].value = 1;
       data[2].value = 1;
+    }
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].value !== 0) {
+        lineData.push(data[i]);
+      }
     }
 
     let svg = d3.select(element)
@@ -75,13 +83,13 @@ export class PiechartComponent implements OnInit {
 
     // Define the div for the tooltip
     let div = d3.select("body").append("div")
-      .attr("class", "tooltip")
+      .attr("class", "tooltipBox")
       .style("opacity", 0);
 
     let key = function (d) { return d.data.key; };
 
-    let colors = d3.scaleLinear().domain([0, data.length]).range(<any[]>COLORS);
-    colors.domain([0, data.length]);
+    let colors = d3.scaleOrdinal()
+      .range(COLORS);
 
     /* ------- PIE SLICES -------*/
     svg.select(".slices").selectAll("path.slice")
@@ -128,7 +136,7 @@ export class PiechartComponent implements OnInit {
     /* ------- TEXT LABELS -------*/
 
     svg.select(".labels").selectAll("text")
-      .data(pie(data), key)
+      .data(pie(lineData), key)
       .enter()
       .append("text")
       .attr("dy", ".35em")
@@ -167,7 +175,7 @@ export class PiechartComponent implements OnInit {
 
     svg.select(".lines")
       .selectAll("polyline")
-      .data(pie(data), key)
+      .data(pie(lineData), key)
       .enter()
       .append("polyline")
       .style("opacity", ".3")
