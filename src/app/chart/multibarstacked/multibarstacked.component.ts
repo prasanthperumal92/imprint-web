@@ -166,7 +166,7 @@ export class MultibarstackedComponent implements OnInit {
         .attr("fill", "#000")
         .attr("font-weight", "bold")
         .attr("text-anchor", "start")
-        .text("Count");
+        .text("");
     };
 
     let drawLegend = (data) => {

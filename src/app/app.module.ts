@@ -37,6 +37,8 @@ import { PiechartComponent } from './chart/piechart/piechart.component';
 import { TeamComponent } from './team/team.component';
 import { CommonService } from './services/common.service';
 import { MultibarstackedComponent } from './chart/multibarstacked/multibarstacked.component';
+import { SearchComponent } from './search/search.component';
+import { CustomPipe } from './pipes/custom.pipe';
 
 export const cloudinary = {
   Cloudinary: CloudinaryCore
@@ -70,7 +72,9 @@ export const config: CloudinaryConfiguration = {
     BarchartComponent,
     PiechartComponent,
     TeamComponent,
-    MultibarstackedComponent
+    MultibarstackedComponent,
+    SearchComponent,
+    CustomPipe
   ],
   imports: [
     BrowserModule,

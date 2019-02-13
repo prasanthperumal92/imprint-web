@@ -6,7 +6,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Chart } from "chart.js";
 import * as html2canvas from "html2canvas";
 import { Router } from "@angular/router";
-import { TEAM, TEAM_CHART, CHART } from "../../constants";
+import { TEAM, TEAM_CHART, CHART, DOWNLOAD } from "../../constants";
 import * as moment from "moment";
 import { ResourcesService } from "../config/resources.service";
 
@@ -104,17 +104,15 @@ export class AnalyticsComponent implements OnInit {
     const start = moment(this.fromDate).format("YYYY-MM-DD");
     const end = moment(this.toDate).format("YYYY-MM-DD");
     const self = this;
-    setTimeout(() => {
-      self.http.GET(`${TEAM_CHART}${team._id}/${start}/${end}`).subscribe(res => {
-        res.data = this.getNames(res.data);
-        const data = this.checkEmpty(res.data);
-        if (data.length > 0) {
-          this.teamData.push(res);
-        }
-        console.log(res);
-        self.alert.showLoader(false);
-      });
-    }, 1000);
+    this.http.GET(`${TEAM_CHART}${team._id}/${start}/${end}`).subscribe(res => {
+      res.data = this.getNames(res.data);
+      const data = this.checkEmpty(res.data);
+      if (data.length > 0) {
+        this.teamData.push(res);
+      }
+      console.log(res);
+      this.alert.showLoader(false);
+    });
   }
 
   getNames(data) {
@@ -221,6 +219,26 @@ export class AnalyticsComponent implements OnInit {
     this.toDate = moment(choosen.to)
       .endOf("day")
       .toDate();
+  }
+
+  showData(type, id?) {
+    this.alert.showLoader(true);
+    let query;
+    if (type === 'team') {
+      const start = moment(this.fromDate).format("YYYY-MM-DD");
+      const end = moment(this.toDate).format("YYYY-MM-DD");
+      query = `${DOWNLOAD}/${type}/${start}/${end}/${id}`;
+    } else {
+      const choosen = this.resources.getFilter(type);
+      const start = moment(choosen.from).format("YYYY-MM-DD");
+      const end = moment(choosen.to).format("YYYY-MM-DD");
+      query = `${DOWNLOAD}/${type}/${start}/${end}`;
+    }
+    this.http.GET(query).subscribe(res => {
+      console.log(res);
+      this.router.navigate(["dashboard/search", { type: type, data: JSON.stringify(res) }]);
+      this.alert.showLoader(false);
+    });
   }
 
 }

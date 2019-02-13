@@ -207,4 +207,5 @@ export class ClientComponent implements OnInit {
       });
     }
   }
+
 }

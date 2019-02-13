@@ -1,0 +1,67 @@
+<div>
+  <header title="Search Tool"></header>
+  <br>
+  <div>
+    <div class="tableRow">
+      <button type="button" class="btn btn-secondary btn-sm float-left filerItem" (click)="download()">
+        <i class="fa fa-download" aria-hidden="true"></i> Export to Excel</button>
+    </div>
+    <br>
+    <div class="tableRow" *ngIf="type === 'team'">
+      <h5>{{data.title}}</h5>
+      <p style="margin-bottom: 5px;"><strong>Manager: </strong> <span>{{employees[data.leaderId]}}</span></p>
+      <p><strong>Members: </strong> <span *ngFor="let item of data.members">{{employees[item.userId]}}, </span></p>
+    </div>
+    <div class="tableRow" *ngIf="jobData.length > 0 && jobColumn.length > 0">
+      <h5>{{details['Aterm']}} Details</h5>
+      <div id="taskData">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="thead" scope="col" *ngFor="let column of jobColumn" sortable="name">{{column | uppercase }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of jobData; index as i">
+              <td *ngFor="let column of jobColumn">{{ item[column] | custom }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tableRow" *ngIf="taskData.length > 0 && taskColumn.length > 0">
+      <h5>{{details['Bterm']}} Details</h5>
+      <div id="taskData">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="thead" scope="col" *ngFor="let column of taskColumn" sortable="name">{{column | uppercase }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of taskData; index as i">
+              <td *ngFor="let column of taskColumn">{{ item[column] | custom }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tableRow" *ngIf="clientData.length > 0 && clientColumn.length > 0">
+      <h5>{{details['Cterm']}} Details</h5>
+      <div id="taskData">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="thead" scope="col" *ngFor="let column of clientColumn" sortable="name">{{column | uppercase }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of clientData; index as i">
+              <td *ngFor="let column of clientColumn">{{ item[column] | custom }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

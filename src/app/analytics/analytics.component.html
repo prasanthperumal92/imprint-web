@@ -11,10 +11,11 @@
                   placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed today."></i>
               </p>
               <div class="col-sm-6 textRight" *ngIf="dailyChartData">
-                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle></i>
-                  &nbsp; &nbsp;</button>
+                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle>&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                </button>
                 <div ngbDropdownMenu>
                   <button class="dropdown-item" (click)="downloadImage('dailyChartBox')">Download Image</button>
+                  <button class="dropdown-item" (click)="showData('Today')">Show Data</button>
                 </div>
               </div>
             </div>
@@ -38,10 +39,11 @@
                   placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed this week."></i>
               </p>
               <div class="col-sm-6 textRight" *ngIf="weeklyChartData">
-                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle></i>
-                  &nbsp; &nbsp;</button>
+                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle>&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                </button>
                 <div ngbDropdownMenu>
                   <button class="dropdown-item" (click)="downloadImage('weeklyChartBox')">Download Image</button>
+                  <button class="dropdown-item" (click)="showData('Current Week')">Show Data</button>
                 </div>
               </div>
             </div>
@@ -65,10 +67,11 @@
                   placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="Number of various activities you have completed this month."></i>
               </p>
               <div class="col-sm-6 textRight" *ngIf="monthlyChartData">
-                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle></i>
-                  &nbsp; &nbsp;</button>
+                <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle>&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                </button>
                 <div ngbDropdownMenu>
                   <button class="dropdown-item" (click)="downloadImage('monthlyChartBox')">Download Image</button>
+                  <button class="dropdown-item" (click)="showData('Current Month')">Show Data</button>
                 </div>
               </div>
             </div>
@@ -136,10 +139,11 @@
                   team for {{selectedFilter}}."></i>
                 </p>
                 <div class="col-sm-6 textRight">
-                  <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle></i>
-                    &nbsp; &nbsp;</button>
+                  <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle>&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                  </button>
                   <div ngbDropdownMenu>
                     <button class="dropdown-item" (click)="downloadImage('mychart' + i)">Download Image</button>
+                    <button class="dropdown-item" (click)="showData('team', team.id)">Show Data</button>
                   </div>
                 </div>
               </div>

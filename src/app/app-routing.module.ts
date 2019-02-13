@@ -12,6 +12,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./login/login.component";
 import { TrackComponent } from './track/track.component';
 import { TeamComponent } from './team/team.component';
+import { SearchComponent } from './search/search.component';
 
 const routes: Routes = [
   {
@@ -70,6 +71,10 @@ const routes: Routes = [
   {
     path: "dashboard/team",
     component: TeamComponent
+  },
+  {
+    path: "dashboard/search",
+    component: SearchComponent
   }
 ];
 
