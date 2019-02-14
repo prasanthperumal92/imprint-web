@@ -6,7 +6,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Chart } from "chart.js";
 import * as html2canvas from "html2canvas";
 import { Router } from "@angular/router";
-import { TEAM, TEAM_CHART, CHART, DOWNLOAD } from "../../constants";
+import { TEAM, TEAM_CHART, CHART, DOWNLOAD, LEAD } from "../../constants";
 import * as moment from "moment";
 import { ResourcesService } from "../config/resources.service";
 
@@ -17,6 +17,7 @@ import { ResourcesService } from "../config/resources.service";
 })
 export class AnalyticsComponent implements OnInit {
 
+  public monthlyLeadData: Array<any>;
   public dailyChartData: Array<any>;
   public weeklyChartData: Array<any>;
   public monthlyChartData: Array<any>;
@@ -29,6 +30,7 @@ export class AnalyticsComponent implements OnInit {
   public toDate;
   public show = false;
   public details = {};
+  public leads = {};
   public selectedFilter;
 
   constructor(public store: StoreService, public router: Router, public alert: AlertService, public http: Httpservice,
@@ -41,6 +43,9 @@ export class AnalyticsComponent implements OnInit {
     for (let i = 0; i < tmp.details.length; i++) {
       this.details[tmp.details[i].key] = tmp.details[i].value;
     }
+    for (let i = 0; i < tmp.leads.length; i++) {
+      this.leads[tmp.leads[i].key] = tmp.leads[i].value;
+    }
     this.employees = this.common.getAllEmpData();
     if (this.profile.employee.type === "employee" || this.profile.employee.type === "leader") {
       this.getMyChart("Today");
@@ -48,6 +53,7 @@ export class AnalyticsComponent implements OnInit {
       this.getMyChart("Current Month");
     }
     this.filters.pop();
+    this.getMyLead("Current Month");
     this.getTeams();
   }
 
@@ -85,6 +91,19 @@ export class AnalyticsComponent implements OnInit {
       } else {
         tmp.length > 0 ? this.monthlyChartData = tmp : '';
       }
+      this.alert.showLoader(false);
+    });
+  }
+
+  getMyLead(type) {
+    this.alert.showLoader(true);
+    const filter = this.resources.getFilter(type);
+    const start = filter.from.format("YYYY-MM-DD");
+    const end = filter.to.format("YYYY-MM-DD");
+    this.http.GET(`${LEAD}/${start}/${end}`).subscribe(res => {
+      console.log(res);
+      const tmp = this.getLeadLabels(this.checkEmpty(res));
+      tmp.length > 0 ? this.monthlyLeadData = tmp : '';
       this.alert.showLoader(false);
     });
   }
@@ -130,6 +149,13 @@ export class AnalyticsComponent implements OnInit {
   getLabels(data) {
     for (let j = 0; j < data.length; j++) {
       data[j].key = this.details[data[j].key];
+    }
+    return data;
+  }
+
+  getLeadLabels(data) {
+    for (let j = 0; j < data.length; j++) {
+      data[j].key = this.leads[data[j].key];
     }
     return data;
   }

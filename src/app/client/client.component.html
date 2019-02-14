@@ -2,7 +2,7 @@
   <header title="Client Management"></header>
   <br>
   <div *ngIf="available && !client.clientId">
-    <div class="container filterHeader" *ngIf="profile.employee.type !== 'employee'">
+    <div class="container filterHeader">
       <div style="float: left">
         <button class="customBtn activeBtn" (click)="newClient(modal, 'create', '')" style="margin-right:20px;height: 36px;">
           <i class="fa fa-plus" aria-hidden="true"></i>
