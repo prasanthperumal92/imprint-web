@@ -63,3 +63,57 @@
 h5 span {
   font-size: 16px;
 }
+
+.badgeIcon {
+  width: auto;
+  height: 20px;
+  background-color: red;
+  border-radius: 2px;
+  position: relative;
+  left: 7px;
+  padding: 0px 5px;
+  top: 10px;
+  font-size: 12px;
+}
+
+.notDropDown {
+  position: absolute;
+  background-color: #ffffff;
+  width: 400px;
+  left: 57%;
+  top: 54px;
+  z-index: 1008;
+  border: 1px solid #ccc;
+  box-shadow: 1px 0px 0px 0px #ccc;
+}
+
+/* .notDropDown:after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 63%;
+  margin-left: -50px;
+  width: 0;
+  height: 0;
+  border-bottom: solid 10px #ffffff;
+  border-left: solid 10px transparent;
+  border-right: solid 10px transparent;
+} */
+
+.zero {
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 0px;
+}
+
+.notRow {
+  border-bottom: 1px solid #ccc;
+}
+
+.read {
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+  font-size: 13px;
+  background-color: #fff;
+  cursor: pointer;
+}

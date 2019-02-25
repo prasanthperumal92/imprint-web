@@ -12,6 +12,10 @@ export class HeaderComponent implements OnInit {
   public name: string;
   public photo: string;
   @Input() title: string;
+
+  public showNotification = false;
+  public count = 1;
+
   constructor(
     public router: Router,
     public store: StoreService,
@@ -34,5 +38,9 @@ export class HeaderComponent implements OnInit {
       this.goto("login");
       this.alert.showAlert("Logged Out Successfully", "success");
     }, 1000);
+  }
+
+  show() {
+    this.showNotification = !this.showNotification;
   }
 }

@@ -26,7 +26,7 @@ export class DsrComponent implements OnInit {
   public filters = this.resources.filter;
   public fromDate;
   public toDate;
-  public sort = "created";
+  public sort = "effort.followup";
   public skip = 0;
   public limit = 20;
   public label;

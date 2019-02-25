@@ -6,7 +6,13 @@
       <h5 style="display: inline"> Performance <strong>Bridge</strong> | <span>{{title}}</span></h5>
       <!-- <i class="fa fa-th fa-2x" aria-hidden="true"></i> -->
     </a>
-    <form class="form-inline my-2 my-lg-0">
+    <form class="form-inline">
+      <ul class="navbar-nav mr-auto" style="margin-right: 20px !important">
+        <li class="nav-item" (click)="show()" style="cursor: pointer">
+          <div *ngIf="count > 0" class="badgeIcon">{{count}}</div>
+          <i class="fa fa-lg fa-bell" aria-hidden="true"></i>
+        </li>
+      </ul>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <div ngbDropdown class="d-inline-block sameRow" style="padding-top: 5px;">
@@ -26,3 +32,12 @@
   </div>
 </nav>
 <br><br>
+<!--  -->
+<div *ngIf="showNotification" class="notDropDown" (mouseleave)="show()">
+  <p class="zero" *ngIf="count === 0">No Notifications</p>
+  <div *ngIf="count > 0">
+    <div class="notRow read" (click)="show()">
+      Your Leave Request Has Been Approved by Sathya Nadella
+    </div>
+  </div>
+</div>
