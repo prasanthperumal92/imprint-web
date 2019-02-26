@@ -112,8 +112,15 @@ h5 span {
 
 .read {
   border-bottom: 1px solid #ccc;
-  padding: 5px;
-  font-size: 13px;
   background-color: #fff;
   cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+  font-style: italic;
+  border-left: 3px solid #1474a4;
+}
+
+.read p {
+  margin-bottom: 0px;
+  font-size: 11px;
 }

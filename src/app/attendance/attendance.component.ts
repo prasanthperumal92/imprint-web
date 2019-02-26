@@ -174,8 +174,7 @@ export class AttendanceComponent implements OnInit {
     this.alert.showLoader(true);
     this.http.PUT(GET_ATTENDANCE, tmp).subscribe(res => {
       this.alert.showLoader(false);
-      this.clearAll();
-      this.getCalendar();
+      location.reload();
     });
   }
 

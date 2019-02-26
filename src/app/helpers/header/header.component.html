@@ -36,8 +36,9 @@
 <div *ngIf="showNotification" class="notDropDown" (mouseleave)="show()">
   <p class="zero" *ngIf="count === 0">No Notifications</p>
   <div *ngIf="count > 0">
-    <div class="notRow read" (click)="show()">
-      Your Leave Request Has Been Approved by Sathya Nadella
+    <div *ngFor="let item of nots" class="notRow read" (click)="openNot(item)">
+      {{item.text}}
+      <p>{{item.created | date: 'medium'}}</p>
     </div>
   </div>
 </div>

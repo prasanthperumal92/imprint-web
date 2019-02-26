@@ -18,6 +18,7 @@ export const TEAM_CHART = 'team/chart/';
 export const CHART = 'chart';
 export const DOWNLOAD = 'download';
 export const LEAD = 'lead/status';
+export const NOTIFICATION = 'notification';
 
 export const COLORS = ["#ff6283", "#36a1eb", "#5cc6c6", "#ffcd56", "#a071ff"];
 
