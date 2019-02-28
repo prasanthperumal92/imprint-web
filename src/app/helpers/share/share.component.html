@@ -74,99 +74,90 @@
     </div>
   </div>
 
-<div class="container" *ngIf="data && data.title">
-  <div class="row">
-    <div class="col-12 modalPopup">
-      <div id="task">
-        <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; Task Information</h5>
-        <hr>
-        <div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Title</strong></span>
-            <span>{{data.title}}</span>
-          </div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Status</strong></span>
-            <span>{{data.status}}</span>
-          </div>
-        </div>
-        <div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Created Date</strong></span>
-            <span>{{data.created | date: 'mediumDate'}}</span>
-          </div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Last Visited</strong></span>
-            <span>{{data.modified | date: 'mediumDate'}}</span>
-          </div>
-        </div>
-        <div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Due Date</strong></span>
-            <span>{{data.due | date: 'mediumDate'}}</span>
-          </div>
-        </div>
-        <hr>
-        <div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Client Name</strong></span>
-            <span>{{data.client}}</span>
-          </div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Description</strong></span>
-            <span>{{data.description}}</span>
-          </div>
-        </div>
-        <div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Contact Person</strong></span>
-            <span>{{data.person}}</span>
-          </div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Contact Number</strong></span>
-            <span>{{data.contact}}</span>
-          </div>
-        </div>
-        <div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Location</strong></span>
-            <span>{{data.location}}</span>
-          </div>
-        </div>
-        <hr>
-        <div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Assigned By</strong></span>
-            <div style="display: inline-flex">
-              <img src={{data.assignedBy.photo}} class="roundImg" />
-              <p class="imgText">{{data.assignedBy.name}}</p>
+  <div class="container" *ngIf="data && data.title">
+    <div class="row">
+      <div class="col-12 modalPopup">
+        <div id="task">
+          <h5 class="popTitle"><i class="fa fa-bookmark" aria-hidden="true"></i> &nbsp; Task Information</h5>
+          <hr>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Title</strong></span>
+              <span>{{data.title}}</span>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Status</strong></span>
+              <span>{{data.status}}</span>
             </div>
           </div>
-          <div class="col-6 col-6-grid">
-            <span class="primary"><strong>Assigned To</strong></span>
-            <div style="display: inline-flex">
-              <img src={{data.assignedTo.photo}} class="roundImg" />
-              <p class="imgText">{{data.assignedTo.name}}</p>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Created Date</strong></span>
+              <span>{{data.created | date: 'mediumDate'}}</span>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Last Visited</strong></span>
+              <span>{{data.modified | date: 'mediumDate'}}</span>
+            </div>
+          </div>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Due Date</strong></span>
+              <span>{{data.due | date: 'mediumDate'}}</span>
+            </div>
+          </div>
+          <hr>
+          <div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Assigned By</strong></span>
+              <div style="display: inline-flex">
+                <img src={{data.assignedBy.photo}} class="roundImg" />
+                <p class="imgText">{{data.assignedBy.name}}</p>
+              </div>
+            </div>
+            <div class="col-6 col-6-grid">
+              <span class="primary"><strong>Assigned To</strong></span>
+              <div style="display: inline-flex">
+                <img src={{data.assignedTo.photo}} class="roundImg" />
+                <p class="imgText">{{data.assignedTo.name}}</p>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div>
+            <span class="primary"><strong>Comments</strong></span>
+            <div *ngIf="data.comments && data.comments.length === 0">
+              <p>No Comments</p>
+            </div>
+            <div *ngIf="data.comments && data.comments.length > 0">
+              <div class="logRow commentBox" *ngFor="let item of data.comments">
+                <div class="col-12" style="display: inline-flex">
+                  <p class="col-8 logHead" style="text-align: left;">{{item.name}}</p>
+                  <p class="col-4 logHead" style="text-align: right;">{{item.created | date: 'medium'}}</p>
+                </div>
+                <div class="col-12">
+                  <p style="margin-bottom: 5px;"> {{item.comment}}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <hr>
-      <div class="modalPopup" style="text-align: center" *ngIf="data.showMenu">
-        <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); delete(data)"><i
-            class="fa fa-trash" aria-hidden="true"></i>
-          &nbsp; Delete</button>
-        <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); share(data)"><i
-            class="fa fa-share-alt" aria-hidden="true">
-          </i>
-          &nbsp; Share</button>
-        <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+        <hr>
+        <div class="modalPopup" style="text-align: center" *ngIf="data.showMenu">
+          <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); delete(data)"><i class="fa fa-trash"
+              aria-hidden="true"></i>
+            &nbsp; Delete</button>
+          <button class="customBtn sameLine activeBtn" (click)="modal.dismiss('Cross click'); share(data)"><i class="fa fa-share-alt"
+              aria-hidden="true">
+            </i>
+            &nbsp; Share</button>
+          <button class="customBtn sameLine activeBtn" id="open" (click)="modal.dismiss('Cross click')">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div *ngIf="data.nothing" style="text-align: center; margin-top: 20%">
+  <div *ngIf="data.nothing" style="text-align: center; margin-top: 20%">
     <h1 class="popTitle">Not Found</h1>
   </div>
 </div>

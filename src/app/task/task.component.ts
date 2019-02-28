@@ -372,6 +372,15 @@ export class TaskComponent implements OnInit {
     this.alert.showLoader(true);
     let tmp = JSON.parse(JSON.stringify(this.model));
     tmp.assignedTo = tmp.assignedTo.id;
+    if (this.model._id) { // When Update
+      delete tmp.comments;
+      delete tmp.assignedBy;
+      delete tmp.due;
+      delete tmp.title;
+      delete tmp.description;
+      delete tmp.created;
+      delete tmp.modified;
+    }
     this.http.POST(CREATE_TASK, tmp).subscribe(res => {
       console.log(res);
       if (!this.model._id) {

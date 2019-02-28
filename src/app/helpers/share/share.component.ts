@@ -1,3 +1,4 @@
+import { CommonService } from './../../services/common.service';
 import { Httpservice } from './../../services/httpservice.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +15,7 @@ export class ShareComponent implements OnInit {
   private sub: any;
   public data: any = {};
   public task;
-  constructor(public http: Httpservice, public route: ActivatedRoute) {}
+  constructor(public http: Httpservice, public route: ActivatedRoute, public common: CommonService) { }
 
   ngOnInit() {
     let url;
@@ -30,6 +31,8 @@ export class ShareComponent implements OnInit {
       this.http.GET(`${url}${this.id}`).subscribe((res) => {
         if (res) {
           this.data = res;
+          this.data.assignedBy = this.common.getEmpData(this.data.assignedBy);
+          this.data.assignedTo = this.common.getEmpData(this.data.assignedTo);
         }
         if (Object.keys(this.data).length === 0) {
           this.data = {};

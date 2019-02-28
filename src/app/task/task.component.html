@@ -61,7 +61,8 @@
           <th scope="col">STATUS</th>
           <th scope="col">DUE DATE</th>
           <th scope="col">LAST UPDATE</th>
-          <th scope="col">EMPLOYEE</th>
+          <th scope="col">ASSIGNED BY</th>
+          <th scope="col">ASSIGNED TO</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -72,6 +73,12 @@
           <td style="font-weight: 600">{{item.status}}</td>
           <td>{{item.due | date: 'mediumDate'}}</td>
           <td>{{item.modified | date: 'mediumDate'}}</td>
+          <td>
+            <div style="display: inline-flex">
+              <img src={{item.assignedBy.photo}} class="roundImg" />
+              <p class="imgText">{{item.assignedBy.name}}</p>
+            </div>
+          </td>
           <td>
             <div style="display: inline-flex">
               <img src={{item.assignedTo.photo}} class="roundImg" />
@@ -196,6 +203,25 @@
                 </div>
               </div>
             </div>
+            <div>
+              <div>
+                <span class="primary"><strong>Comments</strong></span>
+                <div *ngIf="selectedItem.comments && selectedItem.comments.length === 0">
+                  <p>No Comments</p>
+                </div>
+                <div *ngIf="selectedItem.comments && selectedItem.comments.length > 0">
+                  <div class="logRow commentBox" *ngFor="let item of selectedItem.comments">
+                    <div class="col-12" style="display: inline-flex">
+                      <p class="col-8 logHead" style="text-align: left;">{{item.name}}</p>
+                      <p class="col-4 logHead" style="text-align: right;">{{item.created | date: 'medium'}}</p>
+                    </div>
+                    <div class="col-12">
+                      <p style="margin-bottom: 5px;"> {{item.comment}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <hr>
           <div class="modalPopup" style="text-align: center" *ngIf="selectedItem.showMenu">
@@ -227,14 +253,14 @@
                 <span class="primary"><strong>Title</strong></span>
                 <div class="form-group">
                   <input type="text" class="form-control form-control-sm" name="title" [(ngModel)]="model.title"
-                    placeholder="Title" required>
+                    placeholder="Title" required [readonly]="type === 'edit'">
                 </div>
               </div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Description</strong></span>
                 <div class="form-group">
                   <textarea class="form-control" rows="3" cols="20" name="description" id="description" [(ngModel)]="model.description"
-                    required placeholder="Description..."></textarea>
+                    required placeholder="Description..." [readonly]="type === 'edit'"></textarea>
                 </div>
               </div>
               <!-- <div class="col-6 col-6-grid">
@@ -287,11 +313,11 @@
                 <span class="primary"><strong>Due Date</strong></span>
                 <div class="form-group">
                   <div class="input-group">
-                    <input class="form-control form-control-sm" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="selectedDate"
-                      ngbDatepicker #d="ngbDatepicker">
+                    <input class="form-control form-control-sm" [readonly]="type === 'edit'" placeholder="yyyy-mm-dd"
+                      name="dp" [(ngModel)]="selectedDate" ngbDatepicker #d="ngbDatepicker">
                     <div class="input-group-append">
-                      <button class="empDropBtn" style="border: 1px solid #ccc;" (click)="d.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i></button>
+                      <button class="empDropBtn" style="border: 1px solid #ccc;" [disabled]="type === 'edit'" (click)="d.toggle()"
+                        type="button"><i class="fa fa-calendar" aria-hidden="true"></i></button>
                     </div>
                   </div>
                 </div>
@@ -299,7 +325,8 @@
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Assign To</strong></span>
                 <div ngbDropdown class="d-inline-block sameRow">
-                  <button type="button" class=" empDropBtn" id="actions" ngbDropdownToggle>
+                  <button type="button" class=" empDropBtn" id="actions" [disabled]="type === 'edit' && model.assignedTo.id === profile.employee._id"
+                    ngbDropdownToggle>
                     <div style="display: inline-flex">
                       <img src={{selectedEmployee.photo}} class="roundImg" />
                       <p class="imgText">{{selectedEmployee.name}}</p>
@@ -315,6 +342,13 @@
               </div>
             </div>
             <div>
+              <div>
+                <span class="primary"><strong>Comment</strong></span>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" cols="20" name="comment" id="comment" [(ngModel)]="model.comment"
+                    required placeholder="Enter Comments/Remarks..."></textarea>
+                </div>
+              </div>
             </div>
             <div>
               <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!taskForm.form.valid">{{taskModalBtn}}</button>

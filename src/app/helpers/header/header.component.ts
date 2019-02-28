@@ -48,6 +48,7 @@ export class HeaderComponent implements OnInit {
           this.nots.push(res[i]);
         }
       }
+      this.nots.reverse();
     });
   }
 
