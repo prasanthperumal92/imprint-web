@@ -1,9 +1,9 @@
-import { CommonService } from './../services/common.service';
+import { CommonService } from "./../services/common.service";
 import { Httpservice } from "./../services/httpservice.service";
 import { StoreService } from "./../store/store.service";
 import { AlertService } from "./../services/alert.service";
 import { Component, OnInit, ViewChild, NgZone } from "@angular/core";
-import { EMPLOYEE_PROFILE, CLOUDINARY_NAME, CLOUDINARY_PRESET } from "../../constants";
+import { EMPLOYEE_PROFILE, CLOUDINARY } from "../../constants";
 import * as _ from "lodash";
 import { NgbTabset } from "@ng-bootstrap/ng-bootstrap";
 import { HttpClient } from "@angular/common/http";
@@ -32,6 +32,7 @@ export class ProfileComponent implements OnInit {
   public uploader: FileUploader;
   public title: string;
   public responses: any;
+  public CLOUDINARY;
 
   constructor(public alert: AlertService, public store: StoreService, public http: Httpservice,
     public cloudinary: Cloudinary, public zone: NgZone, public common: CommonService) {
@@ -39,7 +40,6 @@ export class ProfileComponent implements OnInit {
     this.getProfile();
     this.employees = this.common.getAllEmpData();
     this.manager = _.find(this.employees, { id: this.profile.employee.reportingTo }) || this.employees[0];
-
     this.responses = [];
     this.title = "";
   }
@@ -114,70 +114,77 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Create the file uploader, wire it to upload to your account
-    const uploaderOptions: FileUploaderOptions = {
-      url: `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/upload`,
-      // Upload files automatically upon addition to upload queue
-      autoUpload: true,
-      // Use xhrTransport in favor of iframeTransport
-      isHTML5: true,
-      // Calculate progress independently for each uploaded file
-      removeAfterUpload: true,
-      // XHR request headers
-      headers: [
-        {
-          name: "X-Requested-With",
-          value: "XMLHttpRequest"
+    this.alert.showLoader(true);
+    this.http.GET(CLOUDINARY).subscribe((res) => {
+      this.CLOUDINARY = res;
+      this.alert.showLoader(false);
+
+      // Create the file uploader, wire it to upload to your account
+      const uploaderOptions: FileUploaderOptions = {
+        url: this.CLOUDINARY.uploadUrl,
+        // Upload files automatically upon addition to upload queue
+        autoUpload: true,
+        // Use xhrTransport in favor of iframeTransport
+        isHTML5: true,
+        // Calculate progress independently for each uploaded file
+        removeAfterUpload: true,
+        // XHR request headers
+        headers: [
+          {
+            name: "X-Requested-With",
+            value: "XMLHttpRequest"
+          }
+        ]
+      };
+      this.uploader = new FileUploader(uploaderOptions);
+
+      this.uploader.onBuildItemForm = (fileItem: any, form: FormData): any => {
+
+        this.alert.showLoader(true);
+
+        // Add Cloudinary"s unsigned upload preset to the upload form
+        form.append("upload_preset", this.CLOUDINARY.preset);
+        // Add built-in and custom tags for displaying the uploaded photo in the list
+        let tags = this.CLOUDINARY.tags;
+        if (this.title) {
+          form.append("context", `photo=${this.title}`);
+          tags = `${tags},${this.title}`;
         }
-      ]
-    };
-    this.uploader = new FileUploader(uploaderOptions);
+        // Upload to a custom folder
+        // Note that by default, when uploading via the API, folders are not automatically created in your Media Library.
+        // In order to automatically create the folders based on the API requests,
+        // please go to your account upload settings and set the "Auto-create folders" option to enabled.
+        form.append("folder", this.CLOUDINARY.folder);
+        // Add custom tags
+        form.append("tags", tags);
+        // Add file to upload
+        form.append("file", fileItem);
 
-    this.uploader.onBuildItemForm = (fileItem: any, form: FormData): any => {
+        // Use default "withCredentials" value for CORS requests
+        fileItem.withCredentials = false;
+        return { fileItem, form };
+      };
 
-      this.alert.showLoader(true);
-
-      // Add Cloudinary"s unsigned upload preset to the upload form
-      form.append("upload_preset", CLOUDINARY_PRESET);
-      // Add built-in and custom tags for displaying the uploaded photo in the list
-      let tags = "imprint_album";
-      if (this.title) {
-        form.append("context", `photo=${this.title}`);
-        tags = `imprint_album,${this.title}`;
-      }
-      // Upload to a custom folder
-      // Note that by default, when uploading via the API, folders are not automatically created in your Media Library.
-      // In order to automatically create the folders based on the API requests,
-      // please go to your account upload settings and set the "Auto-create folders" option to enabled.
-      form.append("folder", "imprint");
-      // Add custom tags
-      form.append("tags", tags);
-      // Add file to upload
-      form.append("file", fileItem);
-
-      // Use default "withCredentials" value for CORS requests
-      fileItem.withCredentials = false;
-      return { fileItem, form };
-    };
-
-    // Update model on completion of uploading a file
-    this.uploader.onCompleteItem = (item: any, response: string, status: number, headers: ParsedResponseHeaders) => {
-      console.log("Successfully uploaded the picture");
-      const tmp = JSON.parse(response);
-      this.http.POST(EMPLOYEE_PROFILE, { photo: tmp.secure_url }).subscribe((res) => {
-        this.alert.showAlert("Successfully uploaded Profile picture", "success");
-        this.profile.employee.photo = tmp.secure_url;
-        this.store.set("profile", this.profile);
-        this.alert.showLoader(false);
-        setTimeout(() => {
-          window.location.reload(true);
+      // Update model on completion of uploading a file
+      this.uploader.onCompleteItem = (item: any, response: string, status: number, headers: ParsedResponseHeaders) => {
+        console.log("Successfully uploaded the picture");
+        const tmp = JSON.parse(response);
+        this.http.POST(EMPLOYEE_PROFILE, { photo: tmp.secure_url }).subscribe((res) => {
+          this.alert.showAlert("Successfully uploaded Profile picture", "success");
+          this.profile.employee.photo = tmp.secure_url;
+          this.store.set("profile", this.profile);
+          this.alert.showLoader(false);
+          setTimeout(() => {
+            window.location.reload(true);
+          });
         });
-      });
-    };
+      };
 
-    // Update model on upload progress event
-    this.uploader.onProgressItem = (fileItem: any, progress: any) =>
-      console.log("Uploading", progress + "%");
+      // Update model on upload progress event
+      this.uploader.onProgressItem = (fileItem: any, progress: any) =>
+        console.log("Uploading", progress + "%");
+
+    });
   }
 
   updateTitle(value: string) {
