@@ -39,13 +39,8 @@ export class AnalyticsComponent implements OnInit {
       this.router.navigate(["login"]);
     }
     this.profile = this.store.get("profile");
-    const tmp = this.store.get("config");
-    for (let i = 0; i < tmp.details.length; i++) {
-      this.details[tmp.details[i].key] = tmp.details[i].value;
-    }
-    for (let i = 0; i < tmp.leads.length; i++) {
-      this.leads[tmp.leads[i].key] = tmp.leads[i].value;
-    }
+    this.details = this.store.get("details");
+    this.leads = this.store.get("leads");
     this.employees = this.common.getAllEmpData();
     if (this.profile.employee.type === "employee" || this.profile.employee.type === "leader") {
       this.getMyChart("Today");
@@ -154,8 +149,19 @@ export class AnalyticsComponent implements OnInit {
   }
 
   getLeadLabels(data) {
-    for (let j = 0; j < data.length; j++) {
-      data[j].key = this.leads[data[j].key];
+    for (const prop in this.leads) {
+      if (this.leads.hasOwnProperty(prop)) {
+        let found = false;
+        for (let j = 0; j < data.length; j++) {
+          if (data[j].key === prop) {
+            data[j].key = this.leads[data[j].key];
+            found = true;
+          }
+        }
+        if (!found) {
+          data.push({ key: this.leads[prop], value: 0 });
+        }
+      }
     }
     return data;
   }

@@ -60,6 +60,7 @@ export class DsrComponent implements OnInit {
   public modalBtnText;
   public selectedItem;
   public photos = [];
+  public leads;
 
   toggle() {
     this.show = !this.show;
@@ -96,6 +97,7 @@ export class DsrComponent implements OnInit {
     for (let i = 0; i < tmp.length; i++) {
       this.photos[tmp[i].name] = tmp[i].photo;
     }
+    this.leads = this.store.get("leads");
     if (this.query) {
       this.selected(this.query.label, true);
       this.fromDate = this.query.fromDate;

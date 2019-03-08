@@ -149,6 +149,16 @@
                 <span>{{selectedItem.effort.followup | date: 'mediumDate'}}</span>
               </div>
             </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Lead Status</strong></span>
+                <span>{{leads[selectedItem.effort.lead] || 'Not Available'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Remarks</strong></span>
+                <span>{{selectedItem.effort.remarks}}</span>
+              </div>
+            </div>
           </div>
           <hr>
           <div>
@@ -171,12 +181,6 @@
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Contact Number</strong></span>
                 <span>{{selectedItem.effort.contact}}</span>
-              </div>
-            </div>
-            <div>
-              <div class="col-12 col-6-grid">
-                <span class="primary"><strong>Remarks</strong></span>
-                <span>{{selectedItem.effort.remarks}}</span>
               </div>
             </div>
             <div>
