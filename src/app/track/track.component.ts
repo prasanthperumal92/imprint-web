@@ -34,6 +34,8 @@ export class TrackComponent implements OnInit {
   public distance: any = 0;
   public maxDate;
   public selectedDate;
+  public sortedData = {};
+  public position = 0;
 
   constructor(public store: StoreService, public http: Httpservice, public alert: AlertService, public resources: ResourcesService,
     public common: CommonService) {
@@ -45,7 +47,6 @@ export class TrackComponent implements OnInit {
       this.employees = tmp;
     }
     this.selectedEmployee = this.employees[0];
-    this.getCoords(this.selectedEmployee);
     this.selected(this.filters[0]);
     tmp = moment(this.filters[0].from).startOf("day").toDate();
     this.maxDate = this.convert(tmp);
@@ -66,9 +67,62 @@ export class TrackComponent implements OnInit {
     google.maps.event.addListener(google.maps.Marker, "click", function () {
       alert("Hi");
     });
+
+    // Google Direction Service allows only 23 waypoints maximum per request so if we have more waypoints we have to make multiple calls
+    const slice = 23;
     if (this.coords && this.coords.length > 0) {
-      this.draw(this.coords);
+      this.alert.showLoader(true);
+      const length = this.coords.length;
+      if (length > 23) {
+        const counter = Math.ceil(length / slice);
+        const self = this;
+        this.asyncLoop(counter, function (loop) {
+          const tmp = self.coords.splice(0, slice);
+          self.draw(tmp);
+          setTimeout(() => {
+            loop.next();
+          }, 1000);
+        }, function (final) {
+          // do nothing
+          self.alert.showLoader(false);
+        });
+      } else {
+        this.draw(this.coords); // less than 23 points
+        this.alert.showLoader(false);
+      }
     }
+  }
+
+  asyncLoop(iterations, func, callback) {
+    let index = 0;
+    let done = false;
+    let loop = {
+      next: function () {
+        if (done) {
+          return;
+        }
+
+        if (index < iterations) {
+          index++;
+          func(loop);
+
+        } else {
+          done = true;
+          callback();
+        }
+      },
+
+      iteration: function () {
+        return index - 1;
+      },
+
+      break: function () {
+        done = true;
+        callback();
+      }
+    };
+    loop.next();
+    return loop;
   }
 
   draw(location) {
@@ -77,24 +131,17 @@ export class TrackComponent implements OnInit {
     for (let i = 0; i < location.length; i++) {
       console.log(location[i].coordinates[0], location[i].coordinates[1]);
       coords.push({ location: new google.maps.LatLng(location[i].coordinates[0], location[i].coordinates[1]), stopover: true });
-      // let co = new google.maps.Marker({
-      //   position: { lat: location[i].coordinates[0], lng: location[i].coordinates[1] },
-      //   map: this.map
-      // });
-      // co.addListener("click", function () {
-      //   alert("hi");
-      // });
-      // coords.push(co);
     }
 
     const directionsService = new google.maps.DirectionsService;
     const directionsDisplay = new google.maps.DirectionsRenderer;
     directionsDisplay.setMap(this.map);
+    directionsDisplay.setOptions({ suppressMarkers: true });
 
     const start = coords[0].location;
     const end = coords[coords.length - 1].location;
     coords.splice(0, 1);
-    coords.splice(coords.length - 1, 1);
+    // coords.splice(coords.length - 1, 1);
     this.drawPath(directionsService, directionsDisplay, start, end, coords);
   }
 
@@ -102,14 +149,41 @@ export class TrackComponent implements OnInit {
     // For each step, place a marker, and add the text to the marker's infowindow.
     // Also attach the marker to an array so we can keep track of it and remove it
     // when calculating new routes.
-    const myRoute = directionResult.routes[0].legs[0];
-    for (let i = 0; i < myRoute.steps.length; i++) {
-      const marker = this.markerArray[i] = this.markerArray[i] || new google.maps.Marker;
-      marker.addListener("click", function () {
-        alert("hi");
+
+    const myRoute = directionResult.routes[0].legs;
+    for (let j = 0; j < myRoute.length; j++) {
+      const route = myRoute[j].start_location.toJSON();
+      const address = myRoute[j].start_address;
+      const loc = new google.maps.LatLng(route.lat, route.lng);
+      const content = `<div>
+          <p> <strong>Address: </strong> <span>${address || "Not Available"}</span></p>
+          <p> <strong>Battery (%): </strong> <span>${this.sortedData[this.position].battery || "Not Available"}</span></p>
+          <p> <strong>Updated Time: </strong> <span>${this.sortedData[this.position].datetime ?
+          moment(this.sortedData[this.position].datetime).format("lll") : "Not Available"}</span></p>
+        </div>`;
+      this.position++;
+      let infowindow = new google.maps.InfoWindow({
+        content: content,
+        position: loc,
+        maxWidth: 250
+      });
+      let marker = new google.maps.Marker({
+        position: loc,
+        icon: "https://i.imgur.com/bEejbiY.png",
+        map: map,
+        visible: true
+      });
+      marker.addListener("click", function (e) {
+        infowindow.open(map, marker);
+        setTimeout(() => {
+          infowindow.close();
+        }, 3000);
       });
       marker.setMap(map);
-      marker.setPosition(myRoute.steps[i].start_location);
+      // for (let i = 0; i < myRoute[j].steps.length; i++) {
+      // const route = myRoute[j].steps[i].start_location.toJSON();
+      // const address = myRoute[j].steps[i].start_address;
+      // }
     }
   }
 
@@ -119,21 +193,21 @@ export class TrackComponent implements OnInit {
       origin: start,
       destination: end,
       waypoints: waypoints,
-      travelMode: "DRIVING"
+      travelMode: google.maps.TravelMode.WALKING
     }, function (response, status) {
       if (status === "OK") {
-        console.log(response);
         const tmp = response.routes[0].legs;
         let dis = 0;
         for (let i = 0; i < tmp.length; i++) {
-          dis += parseFloat((tmp[i].distance.value / 1000).toFixed(1));
+          dis += tmp[i].distance.value;
         }
-        self.distance = dis || 0;
-        self.data.distance = self.distance;
+        dis = parseFloat((dis / 1000).toFixed(1));
+        self.distance += dis || 0;
+        self.data.distance = self.distance.toFixed(2);
         directionsDisplay.setDirections(response);
-        self.showSteps(response, this.map);
+        self.showSteps(response, self.map);
       } else {
-        window.alert("Problem in showing direction due to " + status);
+        console.log("Problem in showing direction due to " + status);
       }
     });
   }
@@ -156,6 +230,9 @@ export class TrackComponent implements OnInit {
         this.coords = res.location;
         this.data = res;
         this.data.distance = 0;
+        this.distance = 0;
+        this.position = 0;
+        this.sortData(res);
         setTimeout(function () {
           self.initMap();
         }, 0);
@@ -205,6 +282,16 @@ export class TrackComponent implements OnInit {
 
   convert(d) {
     return { day: d.getDate(), month: d.getMonth() + 1, year: d.getFullYear() };
+  }
+
+  sortData(data) {
+    this.sortedData = {};
+    if (Object.keys(data).length > 0) {
+      const tmp = data.location;
+      for (let i = 0; i < tmp.length; i++) {
+        this.sortedData[i] = tmp[i];
+      }
+    }
   }
 
 }
