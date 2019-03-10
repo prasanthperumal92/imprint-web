@@ -226,7 +226,7 @@ export class TrackComponent implements OnInit {
       console.log(res);
       this.alert.showLoader(false);
       this.done = true;
-      if (res) {
+      if (Object.keys(res).length > 0) {
         this.coords = res.location;
         this.data = res;
         this.data.distance = 0;
@@ -286,7 +286,7 @@ export class TrackComponent implements OnInit {
 
   sortData(data) {
     this.sortedData = {};
-    if (Object.keys(data).length > 0) {
+    if (Object.keys(data).length > 0 && data.location) {
       const tmp = data.location;
       for (let i = 0; i < tmp.length; i++) {
         this.sortedData[i] = tmp[i];

@@ -291,10 +291,10 @@ export class AnalyticsComponent implements OnInit {
     const end = filter.to.format("YYYY-MM-DD");
     this.http.GET(`${LEAD_DATA}/${start}/${end}/${data.other}`).subscribe(res => {
       console.log(res);
+      this.alert.showLoader(false);
       if (res && res[0]) {
         this.columnNames = this.getColumnNames(res[0]);
         this.selectedData = this.getTableData(res);
-        this.alert.showLoader(false);
         this.modalRef = this.modalService.open(elem, { centered: true, size: "lg", backdrop: "static" });
         this.modalRef.result.then(
           result => {
