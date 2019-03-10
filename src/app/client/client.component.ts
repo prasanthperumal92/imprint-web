@@ -32,6 +32,8 @@ export class ClientComponent implements OnInit {
   public type;
   public reference;
   public profile;
+  public leadStatus = [];
+  public selectedStatus;
 
   search = (text: Observable<string>) => {
     console.log(JSON.stringify(text));
@@ -47,6 +49,12 @@ export class ClientComponent implements OnInit {
     public store: StoreService, public common: CommonService) {
     this.employees = this.common.getAllEmpData();
     this.profile = this.store.get("profile");
+    const tmp = this.store.get("leads");
+    for (const prop in tmp) {
+      if (tmp.hasOwnProperty(prop)) {
+        this.leadStatus.push({ key: prop, value: tmp[prop] });
+      }
+    }
   }
 
   ngOnInit() {
@@ -95,6 +103,8 @@ export class ClientComponent implements OnInit {
         tmp = _.sortBy(tmp, "created");
         tmp = _.without(tmp, null);
         res[0].logs = tmp.reverse();
+        const tmp2 = this.store.get("leads");
+        res[0].status = tmp2[res[0].status];
         this.client = res[0];
       } else {
         // this.alert.showAlert("Client Information is wrong!!!!", "warning");
@@ -107,6 +117,12 @@ export class ClientComponent implements OnInit {
   goBack() {
     this.client = {};
     this.getClients();
+  }
+
+  applyLead(item) {
+    this.model.status = item.key;
+    this.selectedStatus = item.value;
+    return false;
   }
 
   newClient(elem, type, model) {
@@ -126,6 +142,7 @@ export class ClientComponent implements OnInit {
         this.model.number2 = parseInt(model.contact.split("+91")[1]);
       }
       this.selectedEmployee = model.assignedTo;
+      this.selectedStatus = model.status;
     }
     this.modalRef = this.modalService.open(elem, { centered: true, size: "lg" });
     this.modalRef.result.then(

@@ -91,18 +91,25 @@
                   <span class="primary"><strong>Account Date</strong></span>
                   <span>{{client.created | date: 'mediumDate'}}</span>
                 </div>
-                <div class="col-6 col-6-grid">
-                  <span class="primary"><strong>Client Address</strong></span>
-                  <span>{{client.address}}</span>
+                <div *ngIf="client.status" class="col-6 col-6-grid">
+                  <span class="primary"><strong>Client Status</strong></span>
+                  <span>{{client.status || 'Not Available'}}</span>
                 </div>
               </div>
-              <div>
-                <div class="col-6 col-6-grid">
+              <div class="row3">
+                <div class="col-4 col-4-grid">
+                  <span class="primary"><strong>Client Address</strong></span>
+                  <br>
+                  <span>{{client.address}}</span>
+                </div>
+                <div class="col-4 col-4-grid">
                   <span class="primary"><strong>City</strong></span>
+                  <br>
                   <span>{{client.city || 'Not Available'}}</span>
                 </div>
-                <div class="col-6 col-6-grid">
+                <div class="col-4 col-4-grid">
                   <span class="primary"><strong>State</strong></span>
+                  <br>
                   <span>{{client.state || 'Not Available'}}</span>
                 </div>
               </div>
@@ -209,6 +216,20 @@
                 <div class="form-group">
                   <textarea class="form-control" rows="3" cols="20" name="address" id="address" [(ngModel)]="model.description"
                     placeholder="Client Description..."></textarea>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div ngbDropdown class="col-6 col-6-grid">
+                <span class="primary"><strong>Lead Status</strong></span>
+                <div class="form-group">
+                  <div class="d-inline-block sameLine">
+                    <button type="button" class="customBtn" id="dropdownBasic1" ngbDropdownToggle>{{ selectedStatus ||
+                      'Not Available'}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button type="button" class="dropdown-item" (click)="applyLead(item)" *ngFor="let item of leadStatus; let i = index">{{item.value}}</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

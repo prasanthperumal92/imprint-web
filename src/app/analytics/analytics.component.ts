@@ -6,9 +6,10 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { Chart } from "chart.js";
 import * as html2canvas from "html2canvas";
 import { Router } from "@angular/router";
-import { TEAM, TEAM_CHART, CHART, DOWNLOAD, LEAD } from "../../constants";
+import { TEAM, TEAM_CHART, CHART, DOWNLOAD, LEAD, LEAD_DATA } from "../../constants";
 import * as moment from "moment";
 import { ResourcesService } from "../config/resources.service";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-analytics",
@@ -23,6 +24,7 @@ export class AnalyticsComponent implements OnInit {
   public monthlyChartData: Array<any>;
   public teamData: Array<any> = [];
   public filters = this.resources.filter;
+  public modalRef: NgbModalRef;
   public profile;
   public employees = [];
   public teams = [];
@@ -32,9 +34,12 @@ export class AnalyticsComponent implements OnInit {
   public details = {};
   public leads = {};
   public selectedFilter;
+  public columnNames;
+  public selectedData;
+  public user = {};
 
   constructor(public store: StoreService, public router: Router, public alert: AlertService, public http: Httpservice,
-    public resources: ResourcesService, public common: CommonService) {
+    public resources: ResourcesService, public common: CommonService, public modalService: NgbModal, ) {
     if (!this.store.get("isLoggedIn")) {
       this.router.navigate(["login"]);
     }
@@ -42,6 +47,11 @@ export class AnalyticsComponent implements OnInit {
     this.details = this.store.get("details");
     this.leads = this.store.get("leads");
     this.employees = this.common.getAllEmpData();
+    let tmp: any;
+    tmp = this.common.getAllEmpData();
+    for (let i = 0; i < tmp.length; i++) {
+      this.user[tmp[i].id] = tmp[i].name;
+    }
     if (this.profile.employee.type === "employee" || this.profile.employee.type === "leader") {
       this.getMyChart("Today");
       this.getMyChart("Current Week");
@@ -155,11 +165,12 @@ export class AnalyticsComponent implements OnInit {
         for (let j = 0; j < data.length; j++) {
           if (data[j].key === prop) {
             data[j].key = this.leads[data[j].key];
+            data[j].other = prop;
             found = true;
           }
         }
         if (!found) {
-          data.push({ key: this.leads[prop], value: 0 });
+          data.push({ key: this.leads[prop], value: 0, other: prop });
         }
       }
     }
@@ -273,4 +284,61 @@ export class AnalyticsComponent implements OnInit {
     });
   }
 
+  openModal(elem, data) {
+    this.alert.showLoader(true);
+    const filter = this.resources.getFilter("Current Month");
+    const start = filter.from.format("YYYY-MM-DD");
+    const end = filter.to.format("YYYY-MM-DD");
+    this.http.GET(`${LEAD_DATA}/${start}/${end}/${data.other}`).subscribe(res => {
+      console.log(res);
+      if (res && res[0]) {
+        this.columnNames = this.getColumnNames(res[0]);
+        this.selectedData = this.getTableData(res);
+        this.alert.showLoader(false);
+        this.modalRef = this.modalService.open(elem, { centered: true, size: "lg", backdrop: "static" });
+        this.modalRef.result.then(
+          result => {
+            console.log(result);
+          },
+          reason => {
+            console.log(reason);
+          }
+        );
+      }
+    });
+  }
+
+  getColumnNames(obj) {
+    let names = [];
+    let key: any;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key !== "__v" && key !== "_id" && key !== "logs" && key !== "reference" && key !== "employeeId") {
+          if (key === "status") {
+            const tmp = names[1];
+            names[1] = key;
+            names.push(tmp);
+          } else {
+            names.push(key);
+          }
+        }
+      }
+    }
+    return names;
+  }
+
+  getTableData(data) {
+    for (let j = 0; j < data.length; j++) {
+      for (let key in data[j]) {
+        if (key === "assignedTo" || key === "assignedBy" || key === "createdBy" || key === "status") {
+          if (key === "status") {
+            data[j][key] = this.leads[data[j][key]];
+          } else {
+            data[j][key] = this.user[data[j][key]];
+          }
+        }
+      }
+    }
+    return data;
+  }
 }

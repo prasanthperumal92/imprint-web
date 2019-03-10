@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, OnInit, Input, Output, Inject, EventEmitter } from "@angular/core";
 import { COLORS } from "../../../constants";
 import { DOCUMENT } from "@angular/common";
 
@@ -10,6 +10,7 @@ declare let d3: any;
   styleUrls: ["./piechart.component.css"]
 })
 export class PiechartComponent implements OnInit {
+  @Output() valueClicked: EventEmitter<any> = new EventEmitter<string>();
   @Input() private data: Array<any>;
   @Input() private xAxisName?: String;
   @Input() private yAxisName?: String;
@@ -50,6 +51,8 @@ export class PiechartComponent implements OnInit {
         lineData.push(data[i]);
       }
     }
+
+    const that = this;
 
     let svg = d3.select(element)
       .append("svg")
@@ -122,6 +125,12 @@ export class PiechartComponent implements OnInit {
         div.transition()
           .duration(500)
           .style("opacity", 0);
+      })
+      .on("click", function (d) {
+        console.log(d);
+        if (d && d.data.value > 0) {
+          that.valueClicked.emit(d.data);
+        }
       })
       .transition().duration(1000)
       .attrTween("d", function (d) {

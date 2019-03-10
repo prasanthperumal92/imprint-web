@@ -113,3 +113,16 @@ svg {
 .active {
   background-color: #1474a4 !important;
 }
+
+table {
+  font-size: 12px;
+}
+
+.modal-content {
+  width: auto !important;
+}
+
+.table td,
+.table th {
+  padding: 5px;
+}

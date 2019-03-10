@@ -23,6 +23,7 @@ export class SearchComponent implements OnInit {
   public type;
   public details = {};
   public profile;
+  public leads = [];
 
   constructor(public route: ActivatedRoute, public common: CommonService, public store: StoreService) {
     this.profile = this.store.get("profile");
@@ -35,6 +36,7 @@ export class SearchComponent implements OnInit {
     for (let i = 0; i < tmp.details.length; i++) {
       this.details[tmp.details[i].key] = tmp.details[i].value;
     }
+    this.leads = this.store.get("leads");
   }
 
   ngOnInit() {
@@ -71,7 +73,13 @@ export class SearchComponent implements OnInit {
     for (key in obj) {
       if (obj.hasOwnProperty(key)) {
         if (key !== "__v" && key !== "_id" && key !== "logs" && key !== "reference" && key !== "employeeId") {
-          names.push(key);
+          if (key === "status" || key === "lead") {
+            const tmp = names[1];
+            names[1] = key;
+            names.push(tmp);
+          } else {
+            names.push(key);
+          }
         }
       }
     }
@@ -81,8 +89,12 @@ export class SearchComponent implements OnInit {
   getLabels(data) {
     for (let j = 0; j < data.length; j++) {
       for (let key in data[j]) {
-        if (key === "assignedTo" || key === "assignedBy" || key === "createdBy") {
-          data[j][key] = this.employees[data[j][key]];
+        if (key === "assignedTo" || key === "assignedBy" || key === "createdBy" || key === "status") {
+          if (key === "status") {
+            data[j][key] = this.leads[data[j][key]];
+          } else {
+            data[j][key] = this.employees[data[j][key]];
+          }
         }
       }
     }

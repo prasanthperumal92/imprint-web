@@ -18,6 +18,7 @@ export const TEAM_CHART = 'team/chart/';
 export const CHART = 'chart';
 export const DOWNLOAD = 'download';
 export const LEAD = 'lead/status';
+export const LEAD_DATA = 'lead/data';
 export const NOTIFICATION = 'notification';
 export const CLOUDINARY = 'cloudinary';
 

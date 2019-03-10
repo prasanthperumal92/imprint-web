@@ -22,7 +22,8 @@
           </div>
           <div *ngIf="monthlyLeadData">
             <div id="montlyLead" class="d3-chart" #montlyLead></div>
-            <app-piechart [element]="montlyLead" [data]="monthlyLeadData" [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
+            <app-piechart (valueClicked)="openModal(modal, $event)" [element]="montlyLead" [data]="monthlyLeadData"
+              [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
           </div>
           <div *ngIf="!monthlyLeadData">
             <p class="notAvailable">Not Available</p>
@@ -52,7 +53,8 @@
           </div>
           <div *ngIf="dailyChartData">
             <div id="dailyChart" class="d3-chart" #dailyChart></div>
-            <app-piechart [element]="dailyChart" [data]="dailyChartData" [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
+            <app-piechart (valueClicked)="openModal(modal, $event)" [element]="dailyChart" [data]="dailyChartData"
+              [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
           </div>
           <div *ngIf="!dailyChartData">
             <p class="notAvailable">Not Available</p>
@@ -192,3 +194,20 @@
     </div>
   </div>
 </div>
+
+<ng-template #modal let-modal>
+  <h5>Details</h5>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="thead" scope="col" *ngFor="let column of columnNames" sortable="name">{{column | uppercase }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of selectedData; index as i">
+        <td *ngFor="let column of columnNames">{{ item[column] | custom }}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>
