@@ -167,13 +167,8 @@ export class AttendanceComponent implements OnInit {
     };
     const today = new Date();
     const from = new Date(this.selectedItem.start);
-    if (today.valueOf() > from.valueOf()) {
-      this.alert.showAlert("Sorry, You cannot" + status + " Now!!!, Time has Elapsed", "warning");
-      return false;
-    }
     this.alert.showLoader(true);
     this.http.PUT(GET_ATTENDANCE, tmp).subscribe(res => {
-      this.alert.showLoader(false);
       location.reload();
     });
   }

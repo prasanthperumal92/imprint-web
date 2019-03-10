@@ -74,6 +74,8 @@
             </div>
             <br><br>
             <div style="background-color: #ffffff; padding: 10px;">
+              <p style="font-size: 12px;float:right">Last Updated: {{client.modified | date: 'medium'}}</p>
+              <br>
               <div>
                 <div class="col-6 col-6-grid">
                   <span class="primary"><strong>Client ID</strong></span>
@@ -86,20 +88,25 @@
               </div>
               <div>
                 <div class="col-6 col-6-grid">
-                  <span class="primary"><strong>Created Date</strong></span>
+                  <span class="primary"><strong>Account Date</strong></span>
                   <span>{{client.created | date: 'mediumDate'}}</span>
                 </div>
-                <div class="col-6 col-6-grid">
-                  <span class="primary"><strong>Last Updated</strong></span>
-                  <span>{{client.modified | date: 'mediumDate'}}</span>
-                </div>
-              </div>
-              <div>
                 <div class="col-6 col-6-grid">
                   <span class="primary"><strong>Client Address</strong></span>
                   <span>{{client.address}}</span>
                 </div>
               </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>City</strong></span>
+                  <span>{{client.city || 'Not Available'}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>State</strong></span>
+                  <span>{{client.state || 'Not Available'}}</span>
+                </div>
+              </div>
+              <hr>
               <div>
                 <div class="col-6 col-6-grid">
                   <span class="primary"><strong>Contact Person</strong></span>
@@ -110,6 +117,33 @@
                   <span>{{client.contact}}</span>
                 </div>
               </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Designation</strong></span>
+                  <span>{{client.designation || 'Not Available'}}</span>
+                </div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Email Address</strong></span>
+                  <span>{{client.mail || 'Not Available'}}</span>
+                </div>
+              </div>
+              <div>
+                <div *ngIf="client.person2" class="col-6 col-6-grid">
+                  <span class="primary"><strong>Contact Person 2</strong></span>
+                  <span>{{client.person2}}</span>
+                </div>
+                <div *ngIf="client.contact2" class="col-6 col-6-grid">
+                  <span class="primary"><strong>Contact Number 2</strong></span>
+                  <span>{{client.contact2}}</span>
+                </div>
+              </div>
+              <div>
+                <div *ngIf="client.mail2" class="col-6 col-6-grid">
+                  <span class="primary"><strong>Email Address 2</strong></span>
+                  <span>{{client.mail2}}</span>
+                </div>
+              </div>
+              <hr>
               <div>
                 <div class="col-6 col-6-grid">
                   <span class="primary"><strong>Created By</strong></span>
@@ -164,39 +198,101 @@
           <form name="clientForm" (ngSubmit)="onSubmit()" #taskForm="ngForm">
             <div>
               <div class="col-6 col-6-grid">
-                <span class="primary"><strong>Client Name</strong></span>
+                <span class="primary"><strong>Client Name</strong><span class="aterstick">*</span></span>
                 <div class="form-group">
                   <input id="typeahead-focus" type="text" class="form-control form-control-sm" [(ngModel)]="model.name"
                     [ngbTypeahead]="search" name="client" placeholder="Client Name" required />
                 </div>
               </div>
               <div class="col-6 col-6-grid">
-                <span class="primary"><strong>Address</strong></span>
+                <span class="primary"><strong>Description</strong></span>
                 <div class="form-group">
-                  <textarea class="form-control" rows="3" cols="20" name="address" id="address" [(ngModel)]="model.address"
-                    required placeholder="Address..."></textarea>
+                  <textarea class="form-control" rows="3" cols="20" name="address" id="address" [(ngModel)]="model.description"
+                    placeholder="Client Description..."></textarea>
                 </div>
               </div>
             </div>
             <div>
               <div class="col-6 col-6-grid">
-                <span class="primary"><strong>Contact Person</strong></span>
+                <span class="primary"><strong>Contact Person</strong><span class="aterstick">*</span></span>
                 <div class="form-group">
                   <input type="text" class="form-control form-control-sm" name="person" [(ngModel)]="model.person"
-                    placeholder="Contact Person">
+                    required placeholder="Contact Person">
                 </div>
               </div>
               <div class="col-6 col-6-grid">
-                <span class="primary"><strong>Contact Number</strong></span>
+                <span class="primary"><strong>Contact Number</strong><span class="aterstick">*</span></span>
                 <div class="form-group">
                   <input type="number" class="form-control form-control-sm" name="number" [(ngModel)]="model.number"
-                    placeholder="Contact Number">
+                    required placeholder="Contact Number">
                 </div>
               </div>
             </div>
             <div>
               <div class="col-6 col-6-grid">
-                <span class="primary"><strong>Assign To</strong></span>
+                <span class="primary"><strong>Designation</strong><span class="aterstick">*</span></span>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" name="designation" [(ngModel)]="model.designation"
+                    required placeholder="Designation">
+                </div>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Email Address</strong></span>
+                <div class="form-group">
+                  <input type="email" class="form-control form-control-sm" name="mail" [(ngModel)]="model.mail"
+                    placeholder="Email Address">
+                </div>
+              </div>
+            </div>
+            <div class="row3">
+              <div class="col-4 col-4-grid">
+                <span class="primary"><strong>Contact Person 2</strong></span>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" name="person2" [(ngModel)]="model.person2"
+                    placeholder="Contact Person 2">
+                </div>
+              </div>
+              <div class="col-4 col-4-grid">
+                <span class="primary"><strong>Contact Number 2</strong></span>
+                <div class="form-group">
+                  <input type="number" class="form-control form-control-sm" name="number2" [(ngModel)]="model.number2"
+                    placeholder="Contact Number 2">
+                </div>
+              </div>
+              <div class="col-4 col-4-grid">
+                <span class="primary"><strong>Email Address 2</strong></span>
+                <div class="form-group">
+                  <input type="email" class="form-control form-control-sm" name="mail2" [(ngModel)]="model.mail2"
+                    placeholder="Email Address 2">
+                </div>
+              </div>
+            </div>
+            <div class="row3">
+              <div class="col-4 col-6-grid">
+                <span class="primary"><strong>Address</strong><span class="aterstick">*</span></span>
+                <div class="form-group">
+                  <textarea class="form-control" rows="3" cols="20" name="address" id="address" [(ngModel)]="model.address"
+                    required placeholder="Client Address..."></textarea>
+                </div>
+              </div>
+              <div class="col-4 col-4-grid">
+                <span class="primary"><strong>City</strong><span class="aterstick">*</span></span>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" name="city" [(ngModel)]="model.city" required
+                    placeholder="City">
+                </div>
+              </div>
+              <div class="col-4 col-4-grid">
+                <span class="primary"><strong>State</strong><span class="aterstick">*</span></span>
+                <div class="form-group">
+                  <input type="text" class="form-control form-control-sm" name="state" [(ngModel)]="model.state"
+                    required placeholder="State">
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Assign To</strong><span class="aterstick">*</span></span>
                 <div ngbDropdown class="d-inline-block sameRow">
                   <p *ngIf="!selectedEmployee.name" id="actions" style="cursor: pointer" ngbDropdownToggle>Select an
                     Employee</p>

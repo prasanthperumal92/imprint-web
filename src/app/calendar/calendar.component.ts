@@ -53,7 +53,6 @@ export class MyCalendarComponent implements OnInit {
           click: function () {
             self.date = moment(self.date).subtract(1, "month").toDate();
             self.ucCalendar.fullCalendar("prev");
-            self.getCalendar();
           }
         },
         customRight: {
@@ -61,7 +60,6 @@ export class MyCalendarComponent implements OnInit {
           click: function () {
             self.date = moment(self.date).add(1, "month").toDate();
             self.ucCalendar.fullCalendar("next");
-            self.getCalendar();
           }
         },
       },

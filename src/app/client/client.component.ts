@@ -85,17 +85,17 @@ export class ClientComponent implements OnInit {
 
   openClient(item) {
     this.alert.showLoader(true);
-    this.client = item;
     this.http.GET(`${GET_CLIENTS}/${item.clientId}`).subscribe(res => {
       this.alert.showLoader(false);
       if (res && res[0]) {
         this.available = true;
         res[0].assignedTo = this.common.getEmpData(res[0].assignedTo);
         res[0].createdBy = this.common.getEmpData(res[0].createdBy);
-        this.client = res[0];
-        let tmp = [...this.client.logs, ...this.client.reference];
+        let tmp = [...res[0].logs, ...res[0].reference];
         tmp = _.sortBy(tmp, "created");
-        this.client.logs = tmp.reverse();
+        tmp = _.without(tmp, null);
+        res[0].logs = tmp.reverse();
+        this.client = res[0];
       } else {
         // this.alert.showAlert("Client Information is wrong!!!!", "warning");
         this.available = false;
@@ -116,12 +116,15 @@ export class ClientComponent implements OnInit {
       this.model = {};
       this.type = "create";
     } else {
+      this.model = model;
       this.btn = "Update";
       this.title = "Edit Client";
       this.type = "edit";
-      this.model = model;
-      const tmp = model.contact.split("+91")[1];
+      const tmp = parseInt(model.contact.split("+91")[1]);
       this.model.number = Number(tmp);
+      if (model.contact2) {
+        this.model.number2 = parseInt(model.contact.split("+91")[1]);
+      }
       this.selectedEmployee = model.assignedTo;
     }
     this.modalRef = this.modalService.open(elem, { centered: true, size: "lg" });
@@ -175,18 +178,48 @@ export class ClientComponent implements OnInit {
     }
   }
 
+  validateEmail(email) {
+    let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
   onSubmit() {
     if (!this.model.address || !this.model.name || !this.model.person) {
       this.alert.showAlert("Fill all the details!", "warning");
-      return false;
-    } else if (!this.model.number || this.model.number.toString().length !== 10) {
-      this.alert.showAlert("Contact Number cannot be empty or less than 10 digits!", "warning");
       return false;
     } else if (!this.selectedEmployee.name) {
       this.alert.showAlert("Please select an employee to assign the client!", "warning");
       return false;
     }
+
+    if (!this.model.number || this.model.number.toString().length !== 10) {
+      this.alert.showAlert("Contact Number cannot be empty or less than 10 digits!", "warning");
+      return false;
+    }
+
+    if (this.model.number2) {
+      if (this.model.number2.toString().length !== 10) {
+        this.alert.showAlert("Contact Number 2 cannot be less than 10 digits!", "warning");
+        return false;
+      }
+    }
+
+    if (this.model.mail) {
+      if (!this.validateEmail(this.model.mail)) {
+        this.alert.showAlert("Email Address is not a valid email address", "warning");
+        return false;
+      }
+    }
+
+    if (this.model.mail2) {
+      if (!this.validateEmail(this.model.mail2)) {
+        this.alert.showAlert("Email Address 2 is not a valid email address", "warning");
+        return false;
+      }
+    }
+
     this.model.contact = "+91" + this.model.number;
+    if (this.model.number2) { this.model.contact2 = "+91" + this.model.number2; }
     this.model.assignedTo = this.selectedEmployee.id;
     console.log(this.model);
     if (this.type === "create") {
