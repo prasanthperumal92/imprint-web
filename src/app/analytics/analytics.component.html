@@ -196,7 +196,10 @@
 </div>
 
 <ng-template #modal let-modal>
-  <h5>Details</h5>
+  <div style="width:100%; display: inline-flex; padding: 5px;" (click)="closeModal()">
+    <h5>Details</h5>
+    <span class="closeBtn">X</span>
+  </div>
 
   <table class="table table-bordered">
     <thead>

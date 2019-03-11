@@ -308,6 +308,10 @@ export class AnalyticsComponent implements OnInit {
     });
   }
 
+  closeModal() {
+    this.modalRef.close();
+  }
+
   getColumnNames(obj) {
     let names = [];
     let key: any;

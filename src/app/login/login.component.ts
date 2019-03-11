@@ -46,15 +46,23 @@ export class LoginComponent implements OnInit {
           this.store.set("apps", res.appList);
           this.store.set("config", res.keys);
           const tmp = res.keys;
-          let details = {}, leads = {};
+          let details = {}, leads = {}, sales = {}, products = {};
           for (let i = 0; i < tmp.details.length; i++) {
             details[tmp.details[i].key] = tmp.details[i].value;
           }
           for (let i = 0; i < tmp.leads.length; i++) {
             leads[tmp.leads[i].key] = tmp.leads[i].value;
           }
+          for (let i = 0; i < tmp.sales.length; i++) {
+            sales[tmp.sales[i].key] = tmp.sales[i].value;
+          }
+          for (let i = 0; i < tmp.products.length; i++) {
+            products[tmp.products[i].key] = tmp.products[i].value;
+          }
           this.store.set("details", details);
           this.store.set("leads", leads);
+          this.store.set("sales", sales);
+          this.store.set("products", products);
           this.router.navigate(["dashboard"]);
           this.alert.showAlert("Success", "success");
         } else {

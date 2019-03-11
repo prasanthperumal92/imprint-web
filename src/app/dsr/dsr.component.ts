@@ -61,6 +61,9 @@ export class DsrComponent implements OnInit {
   public selectedItem;
   public photos = [];
   public leads;
+  public sales;
+  public products;
+  public salesStatus = [];
 
   toggle() {
     this.show = !this.show;
@@ -98,6 +101,14 @@ export class DsrComponent implements OnInit {
       this.photos[tmp[i].name] = tmp[i].photo;
     }
     this.leads = this.store.get("leads");
+    this.sales = this.store.get("sales");
+    this.products = this.store.get("products");
+    // for (const prop in sales) {
+    //   if (sales.hasOwnProperty(prop)) {
+    //     this.salesStatus.push({key: prop, value: sales[prop]});
+    //   }
+    // }
+
     if (this.query) {
       this.selected(this.query.label, true);
       this.fromDate = this.query.fromDate;
@@ -127,9 +138,13 @@ export class DsrComponent implements OnInit {
     });
   }
 
-  public applyFilters(type, key, value) {
+  public applyFilters(type, key, value, value2?) {
     this.clearFils();
-    this.filterSelected[type] = value;
+    if (key === "effort.sales") {
+      this.filterSelected[type] = value2;
+    } else {
+      this.filterSelected[type] = value;
+    }
     this.query.filter = this.filter = {};
     this.filter = { key: key, value: value };
     this.query.filter = this.filter;

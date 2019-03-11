@@ -32,8 +32,15 @@ export class ClientComponent implements OnInit {
   public type;
   public reference;
   public profile;
+  public leads;
+  public sales;
+  public products;
   public leadStatus = [];
+  public salesStatus = [];
+  public productStatus = [];
   public selectedStatus;
+  public selectedSales;
+  public selectedProduct;
 
   search = (text: Observable<string>) => {
     console.log(JSON.stringify(text));
@@ -49,10 +56,22 @@ export class ClientComponent implements OnInit {
     public store: StoreService, public common: CommonService) {
     this.employees = this.common.getAllEmpData();
     this.profile = this.store.get("profile");
-    const tmp = this.store.get("leads");
-    for (const prop in tmp) {
-      if (tmp.hasOwnProperty(prop)) {
-        this.leadStatus.push({ key: prop, value: tmp[prop] });
+    const lead = this.leads = this.store.get("leads");
+    for (const prop in lead) {
+      if (lead.hasOwnProperty(prop)) {
+        this.leadStatus.push({ key: prop, value: lead[prop] });
+      }
+    }
+    const sales = this.sales = this.store.get("sales");
+    for (const prop in sales) {
+      if (sales.hasOwnProperty(prop)) {
+        this.salesStatus.push({ key: prop, value: sales[prop] });
+      }
+    }
+    const products = this.products = this.store.get("products");
+    for (const prop in products) {
+      if (products.hasOwnProperty(prop)) {
+        this.productStatus.push({ key: prop, value: products[prop] });
       }
     }
   }
@@ -103,8 +122,6 @@ export class ClientComponent implements OnInit {
         tmp = _.sortBy(tmp, "created");
         tmp = _.without(tmp, null);
         res[0].logs = tmp.reverse();
-        const tmp2 = this.store.get("leads");
-        res[0].status = tmp2[res[0].status];
         this.client = res[0];
       } else {
         // this.alert.showAlert("Client Information is wrong!!!!", "warning");
@@ -120,8 +137,17 @@ export class ClientComponent implements OnInit {
   }
 
   applyLead(item) {
-    this.model.status = item.key;
-    this.selectedStatus = item.value;
+    this.model.status = this.selectedStatus = item.key;
+    return false;
+  }
+
+  applySales(item) {
+    this.model.activity = this.selectedSales = item.key;
+    return false;
+  }
+
+  applyProduct(item) {
+    this.model.product = this.selectedProduct = item.key;
     return false;
   }
 
@@ -143,6 +169,8 @@ export class ClientComponent implements OnInit {
       }
       this.selectedEmployee = model.assignedTo;
       this.selectedStatus = model.status;
+      this.selectedSales = model.activity;
+      this.selectedProduct = model.product;
     }
     this.modalRef = this.modalService.open(elem, { centered: true, size: "lg" });
     this.modalRef.result.then(
@@ -156,6 +184,16 @@ export class ClientComponent implements OnInit {
         this.type = "";
       }
     );
+  }
+
+  getKey(obj, value) {
+    for (const prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        if (obj[prop] === value) {
+          return prop;
+        }
+      }
+    }
   }
 
   selectEmp(item) {

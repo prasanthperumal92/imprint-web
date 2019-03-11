@@ -48,7 +48,7 @@
           <button class="customBtn" id="dropdownBasic1" [class.selectedFilter]="filterSelected.Status != 'Status'"
             ngbDropdownToggle>{{filterSelected.Status}}</button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item" (click)="applyFilters('Status', 'effort.sales', item)" *ngFor="let item of filterBy.status; let i = index">{{item}}</button>
+            <button class="dropdown-item" (click)="applyFilters('Status', 'effort.sales', item.key, item.value)" *ngFor="let item of filterBy.status; let i = index">{{item.value}}</button>
           </div>
         </div>
         <div ngbDropdown class="d-inline-block sameLine">
@@ -77,7 +77,7 @@
       <tbody *ngIf="dsrList.length > 0">
         <tr class="whiteBox" *ngFor="let item of dsrList; let i = index">
           <td>{{item.effort.client | truncate}}</td>
-          <td>{{item.effort.sales}}</td>
+          <td>{{sales[item.effort.sales] || 'Not Available'}}</td>
           <td>{{item.effort.followup | date: 'mediumDate'}}</td>
           <td>{{item.created | date: 'mediumDate'}}</td>
           <td>
@@ -128,10 +128,6 @@
             <hr>
             <div>
               <div class="col-6 col-6-grid">
-                <span class="primary"><strong>Status</strong></span>
-                <span>{{selectedItem.effort.sales}}</span>
-              </div>
-              <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Employee Name</strong></span>
                 <div style="display: inline-flex">
                   <img src={{photos[selectedItem.name]}} class="roundImg" />
@@ -153,6 +149,16 @@
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Lead Status</strong></span>
                 <span>{{leads[selectedItem.effort.lead] || 'Not Available'}}</span>
+              </div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Sales Status</strong></span>
+                <span>{{sales[selectedItem.effort.sales] || 'Not Available'}}</span>
+              </div>
+            </div>
+            <div>
+              <div class="col-6 col-6-grid">
+                <span class="primary"><strong>Product</strong></span>
+                <span>{{products[selectedItem.effort.product] || 'Not Available'}}</span>
               </div>
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Remarks</strong></span>
@@ -182,9 +188,9 @@
                 <span class="primary"><strong>Name</strong></span>
                 <span>{{selectedItem.effort.client}}</span>
               </div>
-              <div class="col-6 col-6-grid">
+              <div *ngIf="selectedItem.effort.address" class="col-6 col-6-grid">
                 <span class="primary"><strong>Address</strong></span>
-                <span>{{selectedItem.effort.address}}</span>
+                <span>{{selectedItem.effort.address || 'Not Available'}}</span>
               </div>
             </div>
             <div>

@@ -92,25 +92,24 @@
                   <span>{{client.created | date: 'mediumDate'}}</span>
                 </div>
                 <div *ngIf="client.status" class="col-6 col-6-grid">
-                  <span class="primary"><strong>Client Status</strong></span>
-                  <span>{{client.status || 'Not Available'}}</span>
+                  <span class="primary"><strong>Client Description</strong></span>
+                  <span>{{client.description || 'Not Available'}}</span>
                 </div>
               </div>
-              <div class="row3">
-                <div class="col-4 col-4-grid">
-                  <span class="primary"><strong>Client Address</strong></span>
-                  <br>
-                  <span>{{client.address}}</span>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Sales Status</strong></span>
+                  <span>{{sales[client.activity] || 'Not Available'}}</span>
                 </div>
-                <div class="col-4 col-4-grid">
-                  <span class="primary"><strong>City</strong></span>
-                  <br>
-                  <span>{{client.city || 'Not Available'}}</span>
+                <div *ngIf="client.status" class="col-6 col-6-grid">
+                  <span class="primary"><strong>Client Status</strong></span>
+                  <span>{{leads[client.status] || 'Not Available'}}</span>
                 </div>
-                <div class="col-4 col-4-grid">
-                  <span class="primary"><strong>State</strong></span>
-                  <br>
-                  <span>{{client.state || 'Not Available'}}</span>
+              </div>
+              <div>
+                <div class="col-6 col-6-grid">
+                  <span class="primary"><strong>Product</strong></span>
+                  <span>{{products[client.product] || 'Not Available'}}</span>
                 </div>
               </div>
               <hr>
@@ -148,6 +147,23 @@
                 <div *ngIf="client.mail2" class="col-6 col-6-grid">
                   <span class="primary"><strong>Email Address 2</strong></span>
                   <span>{{client.mail2}}</span>
+                </div>
+              </div>
+              <div class="row3">
+                <div class="col-4 col-4-grid">
+                  <span class="primary"><strong>Client Address</strong></span>
+                  <br>
+                  <span>{{client.address}}</span>
+                </div>
+                <div class="col-4 col-4-grid">
+                  <span class="primary"><strong>City</strong></span>
+                  <br>
+                  <span>{{client.city || 'Not Available'}}</span>
+                </div>
+                <div class="col-4 col-4-grid">
+                  <span class="primary"><strong>State</strong></span>
+                  <br>
+                  <span>{{client.state || 'Not Available'}}</span>
                 </div>
               </div>
               <hr>
@@ -214,20 +230,52 @@
               <div class="col-6 col-6-grid">
                 <span class="primary"><strong>Description</strong></span>
                 <div class="form-group">
-                  <textarea class="form-control" rows="3" cols="20" name="address" id="address" [(ngModel)]="model.description"
+                  <textarea class="form-control" rows="3" cols="20" name="description" id="description" [(ngModel)]="model.description"
                     placeholder="Client Description..."></textarea>
                 </div>
               </div>
             </div>
-            <div>
-              <div ngbDropdown class="col-6 col-6-grid">
+            <div class="row3">
+              <div ngbDropdown class="col-4 col-4-grid">
                 <span class="primary"><strong>Lead Status</strong></span>
                 <div class="form-group">
                   <div class="d-inline-block sameLine">
-                    <button type="button" class="customBtn" id="dropdownBasic1" ngbDropdownToggle>{{ selectedStatus ||
-                      'Not Available'}}</button>
+                    <button type="button" class="customBtn" *ngIf="leadStatus.length === 0" id="dropdownBasic1">{{
+                      leads[selectedStatus] || 'Not Available'}}</button>
+                    <button type="button" class="customBtn" *ngIf="leadStatus.length > 0" id="dropdownBasic1"
+                      ngbDropdownToggle>{{
+                      leads[selectedStatus] || 'Not Available'}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                       <button type="button" class="dropdown-item" (click)="applyLead(item)" *ngFor="let item of leadStatus; let i = index">{{item.value}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div ngbDropdown class="col-4 col-4-grid">
+                <span class="primary"><strong>Sales Status</strong></span>
+                <div class="form-group">
+                  <div class="d-inline-block sameLine">
+                    <button type="button" class="customBtn" id="dropdownBasic2" *ngIf="salesStatus.length === 0">{{
+                      sales[selectedSales] || 'Not Available'}}</button>
+                    <button type="button" class="customBtn" id="dropdownBasic2" *ngIf="salesStatus.length > 0"
+                      ngbDropdownToggle>{{
+                      sales[selectedSales] || 'Not Available'}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                      <button type="button" class="dropdown-item" (click)="applySales(item)" *ngFor="let item of salesStatus; let i = index">{{item.value}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div ngbDropdown class="col-4 col-4-grid">
+                <span class="primary"><strong>Product</strong></span>
+                <div class="form-group">
+                  <div class="d-inline-block sameLine">
+                    <button type="button" class="customBtn" id="dropdownBasic2" *ngIf="productStatus.length === 0">{{products[selectedProduct]
+                      ||'Not Available'}}</button>
+                    <button type="button" class="customBtn" id="dropdownBasic2" *ngIf="productStatus.length > 0"
+                      ngbDropdownToggle>{{products[selectedProduct] ||'Not Available'}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                      <button type="button" class="dropdown-item" (click)="applyProduct(item)" *ngFor="let item of productStatus; let i = index">{{item.value}}</button>
                     </div>
                   </div>
                 </div>

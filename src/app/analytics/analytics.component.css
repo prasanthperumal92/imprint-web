@@ -126,3 +126,10 @@ table {
 .table th {
   padding: 5px;
 }
+
+.closeBtn {
+  text-align: right;
+  width: 100%;
+  margin-bottom: 0px;
+  cursor: pointer;
+}
