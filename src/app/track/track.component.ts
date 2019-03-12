@@ -36,6 +36,10 @@ export class TrackComponent implements OnInit {
   public selectedDate;
   public sortedData = {};
   public position = 0;
+  public defaultPosition = {
+    lat: 11.0448,
+    lng: 76.91613
+  };
 
   constructor(public store: StoreService, public http: Httpservice, public alert: AlertService, public resources: ResourcesService,
     public common: CommonService) {
@@ -57,16 +61,15 @@ export class TrackComponent implements OnInit {
   }
 
   initMap() {
+    const lat = this.coords.length > 0 ? this.coords[0].coordinates[0] : this.defaultPosition.lat;
+    const lng = this.coords.length > 0 ? this.coords[0].coordinates[1] : this.defaultPosition.lng;
     const mapProp: any = {
-      center: new google.maps.LatLng(11.0448, 76.91613),
+      center: new google.maps.LatLng(lat, lng),
       zoom: 15,
       gestureHandling: "cooperative",
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-    google.maps.event.addListener(google.maps.Marker, "click", function () {
-      alert("Hi");
-    });
 
     // Google Direction Service allows only 23 waypoints maximum per request so if we have more waypoints we have to make multiple calls
     const slice = 23;
@@ -185,6 +188,7 @@ export class TrackComponent implements OnInit {
       // const address = myRoute[j].steps[i].start_address;
       // }
     }
+    map.setZoom(15);
   }
 
   drawPath(directionsService, directionsDisplay, start, end, waypoints) {
@@ -193,7 +197,7 @@ export class TrackComponent implements OnInit {
       origin: start,
       destination: end,
       waypoints: waypoints,
-      travelMode: google.maps.TravelMode.WALKING
+      travelMode: google.maps.TravelMode.DRIVING
     }, function (response, status) {
       if (status === "OK") {
         const tmp = response.routes[0].legs;

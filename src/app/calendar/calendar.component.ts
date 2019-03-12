@@ -105,8 +105,8 @@ export class MyCalendarComponent implements OnInit {
               tmp.id = item._id;
               tmp.allDay = true;
               tmp.title = `Leave: ${this.photos[item.appliedBy].name}, ${item.type}`;
-              tmp.start = moment(item.start, "YYYY-MM-DD").toDate();
-              tmp.end = moment(item.end, "YYYY-MM-DD").add(1, "days").toDate();
+              tmp.start = moment(item.start, "YYYY-MM-DD").add(1, "days").toDate();
+              tmp.end = moment(item.end, "YYYY-MM-DD").add(item.days, "days").toDate();
               tmp.color = "purple";
             }
           } else {

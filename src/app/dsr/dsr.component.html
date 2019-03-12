@@ -116,6 +116,7 @@
     </div>
   </div>
   <modal #modal title={{modalTitle}} content={{modalContent}} btnText={{modalBtnText}} (btnFn)="deleteDSR()"></modal>
+  <modal #sharemodal title={{modalTitle}} content={{modalContent}} btnText={{modalBtnText}} (btnFn)="copyToClipboard()"></modal>
 </div>
 
 <ng-template #popup let-modal>

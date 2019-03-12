@@ -54,6 +54,7 @@ export class DsrComponent implements OnInit {
   public query: any = {};
   public filter: any = null;
   @ViewChild("modal") modal: ModalComponent;
+  @ViewChild("sharemodal") sharemodal: ModalComponent;
   @ViewChild("popup") popup;
   public modalTitle;
   public modalContent;
@@ -64,6 +65,7 @@ export class DsrComponent implements OnInit {
   public sales;
   public products;
   public salesStatus = [];
+  public shareUrl;
 
   toggle() {
     this.show = !this.show;
@@ -277,7 +279,7 @@ export class DsrComponent implements OnInit {
   }
 
   share(item) {
-    let shareURL =
+    this.shareUrl =
       location.protocol +
       "//" +
       location.hostname +
@@ -286,13 +288,23 @@ export class DsrComponent implements OnInit {
       item._id;
     this.selectedItem = item;
     this.modalTitle = "Share";
+    this.modalBtnText = "Copy To Clipboard";
     this.modalContent =
       "Copy the URL to share it!" +
       "\n" +
       "<span><strong>" +
-      shareURL +
-      "</strong></span>";
-    this.modal.open();
+      this.shareUrl +
+      "</strong></span><br>";
+    this.sharemodal.open();
+  }
+
+  copyToClipboard() {
+    let dummy = document.createElement("input");
+    document.body.appendChild(dummy);
+    dummy.setAttribute("value", this.shareUrl);
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
   }
 
   openDSR(elem, item) {

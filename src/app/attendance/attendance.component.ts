@@ -9,6 +9,8 @@ import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstr
 import { GET_ATTENDANCE } from "../../constants";
 import * as moment from "moment";
 import * as _ from "lodash";
+import * as Excel from "exceljs/dist/exceljs.min.js";
+import * as ExcelProper from "exceljs";
 
 @Component({
   selector: "app-attendance",
@@ -37,6 +39,7 @@ export class AttendanceComponent implements OnInit {
   public selectedStatus = "Casual Leave";
   public minDate;
   public profile;
+  public leaveColumn;
 
   constructor(public http: Httpservice, public alert: AlertService, public modalService: NgbModal, public common: CommonService,
     public store: StoreService) {
@@ -69,6 +72,7 @@ export class AttendanceComponent implements OnInit {
       this.alert.showLoader(false);
       if (res) {
         this.data = res;
+        this.leaveColumn = this.getColumnNames(this.data[0]);
         for (let i = 0; i < res.length; i++) {
           res[i].appliedBy = this.common.getEmpData(res[i].appliedBy);
           res[i].approvedBy = this.common.getEmpData(res[i].approvedBy);
@@ -78,8 +82,8 @@ export class AttendanceComponent implements OnInit {
             tmp.id = res[i]._id;
             tmp.allDay = true;
             tmp.title = `${res[i].appliedBy.name}: ${res[i].title}`;
-            tmp.start = moment(res[i].start, "YYYY-MM-DD");
-            tmp.end = moment(res[i].end, "YYYY-MM-DD").add(1, "days");
+            tmp.start = moment(res[i].start, "YYYY-MM-DD").add(1, "days");
+            tmp.end = moment(res[i].end, "YYYY-MM-DD").add(res[i].days, "days");
             this.events.push(tmp);
           } else if (res[i].status === "Declined") {
             this.declinedLeaves.push(res[i]);
@@ -199,5 +203,81 @@ export class AttendanceComponent implements OnInit {
 
   applyType(item) {
     this.selectedStatus = item;
+  }
+
+  download() {
+    let workbook: ExcelProper.Workbook = new Excel.Workbook();
+    let fileName = `Leaves_${this.profile.employee.name}_${new Date().getTime()}.xlsx`;
+    if (this.data.length > 0 && this.leaveColumn.length > 0) {
+      let data = JSON.parse(JSON.stringify(this.data));
+      let jobSheet = workbook.addWorksheet("Leaves");
+      jobSheet.columns = this.prepareColumns(this.leaveColumn);
+      this.addRowData(jobSheet, this.data);
+      this.downloadFile(workbook, fileName);
+    } else {
+      this.alert.showAlert("No data to download!!! Please Refresh and Try again!!", "warning");
+    }
+  }
+
+  downloadFile(workbook, fileName) {
+    workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      let downloadLink = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = fileName;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
+
+  getColumnNames(obj) {
+    let names = [];
+    let key: any;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key !== "__v" && key !== "_id") {
+          names.push(key);
+        }
+      }
+    }
+    return names;
+  }
+
+  addRowData(sheet, data) {
+    for (let i = 0; i < data.length; i++) {
+      let obj = {};
+      const item = data[i];
+      for (const key in item) {
+        if (item.hasOwnProperty(key)) {
+          if (this.isDate(item[key])) {
+            obj[key] = moment(item[key]).format("lll");
+          } else if (typeof item[key] === "object") {
+            obj[key] = item[key].name;
+          } else {
+            obj[key] = item[key].toString();
+          }
+        }
+      }
+      sheet.addRow(obj);
+    }
+  }
+
+  prepareColumns(arr) {
+    let tmp = [];
+    arr.forEach(e => {
+      tmp.push({
+        header: e.toUpperCase(),
+        key: e,
+        width: 20
+      });
+    });
+    return tmp;
+  }
+
+  isDate(_date) {
+    const _regExp = new RegExp('^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(.[0-9]+)?(Z)?$');
+    return _regExp.test(_date);
   }
 }

@@ -22,6 +22,10 @@
         <div *ngIf="selectedMenu === 'Calendar'">
           <p *ngIf="!calendarOptions">Calendar is Loading...</p>
           <div *ngIf="calendarOptions">
+            <div class="tableRow" *ngIf="data.length > 0">
+              <button type="button" class="btn btn-secondary btn-sm float-right filerItem" (click)="download()">
+                <i class="fa fa-download" aria-hidden="true"></i> Export to Excel</button>
+            </div>
             <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick(popup, $event.detail)"></ng-fullcalendar>
           </div>
         </div>
