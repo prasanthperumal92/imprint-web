@@ -21,6 +21,9 @@ export const LEAD = 'lead/status';
 export const LEAD_DATA = 'lead/data';
 export const NOTIFICATION = 'notification';
 export const CLOUDINARY = 'cloudinary';
+export const CHART_TYPE_DATA = 'chart/general';
+export const CHART_TABLE_DATA = 'chart/table';
+export const CHART_DOWNLOAD_DATA = 'chart/download'
 
 export const COLORS = ["#ff6283", "#36a1eb", "#5cc6c6", "#ffcd56", "#a071ff"];
 

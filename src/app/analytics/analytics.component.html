@@ -1,6 +1,11 @@
 <div>
   <header title="Protocol Analytics"></header>
   <br>
+  <app-status *ngIf="leadChart" [id]="leadChart.id" [title]="leadChart.title" [description]="leadChart.description"
+    [xAxisName]="leadChart.xAxisName" [yAxisName]="leadChart.yAxisName" [type]="leadChart.type"></app-status>
+  <br>
+  <br>
+  <!--
   <div class="container">
     <div class="row">
       <div class="col-12 col-grid" id="monthlyLeadBox">
@@ -213,4 +218,4 @@
       </tr>
     </tbody>
   </table>
-</ng-template>
+</ng-template> -->

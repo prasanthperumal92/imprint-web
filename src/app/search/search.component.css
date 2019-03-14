@@ -35,3 +35,8 @@ h5 span {
   border: 1px solid #dee2e6;
   padding: 5px !important;
 }
+
+.tableCon {
+  margin-right: 20px;
+  margin-left: 20px;
+}

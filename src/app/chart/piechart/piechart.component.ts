@@ -11,33 +11,45 @@ declare let d3: any;
 })
 export class PiechartComponent implements OnInit {
   @Output() valueClicked: EventEmitter<any> = new EventEmitter<string>();
-  @Input() private data: Array<any>;
   @Input() private xAxisName?: String;
   @Input() private yAxisName?: String;
   @Input() private element: any;
   private margin: any = { top: 20, bottom: 40, left: 60, right: 20 };
   private chart: any;
+  public chartData = [];
+
+  private _data: string;
+
+  @Input() set data(value: any) {
+    this.chartData = value;
+    this.createChart();
+  }
+
+  get data(): any {
+    return this._data;
+  }
 
   constructor(@Inject(DOCUMENT) document) { }
 
   ngOnInit() {
-    const self = this;
-    if (this.data && this.data.length > 0) {
-      setTimeout(() => {
-        self.createChart();
-      });
-    }
+    // const self = this;
+    // if (this.chartData && this.chartData.length > 0) {
+    //   setTimeout(() => {
+    //     self.createChart();
+    //   });
+    // }
   }
 
   createChart() {
     let isEmpty = false;
-    const element: any = this.element;
+    let element: any = this.element;
+    element.innerHTML = "";
     // const element = chartContainer.nativeElement;
     let width = element.offsetWidth - this.margin.left - this.margin.right;
     let height = element.offsetHeight - this.margin.top - this.margin.bottom;
     let xAxisName = this.xAxisName || "X-Axis";
     let yAxisName = this.yAxisName || "Y-Axis";
-    let data = this.data || [];
+    let data = this.chartData || [];
     let lineData = [];  // To remove the no data text label and polylines
 
     if (data.length > 0 && data[0].value === 0 && data[1].value === 0 && data[2].value === 0) {

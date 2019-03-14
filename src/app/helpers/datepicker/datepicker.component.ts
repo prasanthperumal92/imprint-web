@@ -9,6 +9,7 @@ import { NgbDate, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 export class DatepickerComponent implements OnInit {
 
   @Output() change = new EventEmitter<any>();
+  @Output() closeIt = new EventEmitter<any>();
   @Input() displayMonths = "2";
 
   hoveredDate: NgbDate;
@@ -31,7 +32,8 @@ export class DatepickerComponent implements OnInit {
   }
 
   close() {
-    this.change.emit({ from: this.fromDate, to: this.toDate });
+    // this.change.emit({ from: this.fromDate, to: this.toDate });
+    this.closeIt.emit(true);
   }
 
   onDateSelection(date: NgbDate) {
@@ -39,7 +41,7 @@ export class DatepickerComponent implements OnInit {
       this.fromDate = date;
     } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
       this.toDate = date;
-      this.close();
+      this.change.emit({ from: this.fromDate, to: this.toDate });
     } else {
       this.toDate = null;
       this.fromDate = date;

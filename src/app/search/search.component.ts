@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import * as Excel from "exceljs/dist/exceljs.min.js";
 import * as ExcelProper from "exceljs";
 import * as moment from "moment";
+import { Location } from '@angular/common';
 
 @Component({
   selector: "app-search",
@@ -24,8 +25,11 @@ export class SearchComponent implements OnInit {
   public details = {};
   public profile;
   public leads = [];
+  public sales = [];
+  public products = [];
+  public currentLabel;
 
-  constructor(public route: ActivatedRoute, public common: CommonService, public store: StoreService) {
+  constructor(public route: ActivatedRoute, public common: CommonService, public store: StoreService, public _location: Location) {
     this.profile = this.store.get("profile");
     let tmp: any;
     tmp = this.common.getAllEmpData();
@@ -37,6 +41,8 @@ export class SearchComponent implements OnInit {
       this.details[tmp.details[i].key] = tmp.details[i].value;
     }
     this.leads = this.store.get("leads");
+    this.sales = this.store.get("sales");
+    this.products = this.store.get("products");
   }
 
   ngOnInit() {
@@ -44,16 +50,12 @@ export class SearchComponent implements OnInit {
       const data: any = JSON.parse(params["data"]);
       this.type = params["type"];
       this.data = data;
-      if (this.type === "team") {
-        this.taskData = this.getLabels(this.data.data.task);
-        this.jobData = this.getLabels(this.data.data.job);
-        this.clientData = this.getLabels(this.data.data.client);
-      } else if (this.type === "Today" || this.type === "Current Month" || this.type === "Current Week") {
+      if (this.data.task) {
         this.taskData = this.getLabels(this.data.task);
-        this.jobData = this.getLabels(this.data.job);
-        this.clientData = this.getLabels(this.data.client);
+        this.taskColumn = this.getColumnNames(this.taskData[0]);
       }
-      this.taskColumn = this.getColumnNames(this.taskData[0]);
+      this.jobData = this.getLabels(this.data.job);
+      this.clientData = this.getLabels(this.data.client);
       this.jobColumn = this.getColumnNames(this.jobData[0]);
       this.clientColumn = this.getColumnNames(this.clientData[0]);
       this.removeItem(this.jobColumn, "clientId");
@@ -73,10 +75,14 @@ export class SearchComponent implements OnInit {
     for (key in obj) {
       if (obj.hasOwnProperty(key)) {
         if (key !== "__v" && key !== "_id" && key !== "logs" && key !== "reference" && key !== "employeeId") {
-          if (key === "status" || key === "lead") {
-            const tmp = names[1];
-            names[1] = key;
-            names.push(tmp);
+          if (key === "status" || key === "activity" || key === "product") {
+            const tmp = names[2];
+            if (tmp) {
+              names[2] = key;
+              names.push(tmp);
+            } else {
+              names.push(key);
+            }
           } else {
             names.push(key);
           }
@@ -89,12 +95,14 @@ export class SearchComponent implements OnInit {
   getLabels(data) {
     for (let j = 0; j < data.length; j++) {
       for (let key in data[j]) {
-        if (key === "assignedTo" || key === "assignedBy" || key === "createdBy" || key === "status") {
-          if (key === "status") {
-            data[j][key] = this.leads[data[j][key]];
-          } else {
-            data[j][key] = this.employees[data[j][key]];
-          }
+        if (key === "status" || key === "lead") {
+          data[j][key] = this.leads[data[j][key]];
+        } else if (key === "activity" || key === "sales") {
+          data[j][key] = this.sales[data[j][key]];
+        } else if (key === "product") {
+          data[j][key] = this.products[data[j][key]];
+        } else if (key === "assignedTo" || key === "assignedBy" || key === "createdBy") {
+          data[j][key] = this.employees[data[j][key]];
         }
       }
     }
@@ -177,4 +185,7 @@ export class SearchComponent implements OnInit {
     return _regExp.test(_date);
   }
 
+  goBack() {
+    this._location.back();
+  }
 }

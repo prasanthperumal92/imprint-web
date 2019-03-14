@@ -37,6 +37,7 @@ export class AnalyticsComponent implements OnInit {
   public columnNames;
   public selectedData;
   public user = {};
+  public leadChart;
 
   constructor(public store: StoreService, public router: Router, public alert: AlertService, public http: Httpservice,
     public resources: ResourcesService, public common: CommonService, public modalService: NgbModal, ) {
@@ -52,14 +53,22 @@ export class AnalyticsComponent implements OnInit {
     for (let i = 0; i < tmp.length; i++) {
       this.user[tmp[i].id] = tmp[i].name;
     }
-    if (this.profile.employee.type === "employee" || this.profile.employee.type === "leader") {
-      this.getMyChart("Today");
-      this.getMyChart("Current Week");
-      this.getMyChart("Current Month");
-    }
-    this.filters.pop();
-    this.getMyLead("Current Month");
-    this.getTeams();
+    // if (this.profile.employee.type === "employee" || this.profile.employee.type === "leader") {
+    //   this.getMyChart("Today");
+    //   this.getMyChart("Current Week");
+    //   this.getMyChart("Current Month");
+    // }
+    // // this.filters.pop();
+    // this.getMyLead("Current Month");
+    // this.getTeams();
+    this.leadChart = {
+      id: "leadChart",
+      title: "Lead Status",
+      description: "Number of leads completed in the selected time period.",
+      xAxisName: "Count",
+      yAxisName: "Activity",
+      type: "lead"
+    };
   }
 
   ngOnInit() {

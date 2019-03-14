@@ -39,6 +39,7 @@ import { CommonService } from './services/common.service';
 import { MultibarstackedComponent } from './chart/multibarstacked/multibarstacked.component';
 import { SearchComponent } from './search/search.component';
 import { CustomPipe } from './pipes/custom.pipe';
+import { StatusComponent } from './analytics/status/status.component';
 
 export const cloudinary = {
   Cloudinary: CloudinaryCore
@@ -74,7 +75,8 @@ export const config: CloudinaryConfiguration = {
     TeamComponent,
     MultibarstackedComponent,
     SearchComponent,
-    CustomPipe
+    CustomPipe,
+    StatusComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-grid pickerBox" id="{{id}}">
+      <div class="col-sm-12" style="min-height: 300px;">
+        <div>
+          <div ngbDropdown class="headRow">
+            <p class="col-sm-6 textLeft kpiHead bold">{{title}} <i class="fa fa-question-circle-o" aria-hidden="true"
+                placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="{{description}}"></i>
+            </p>
+            <div class="col-sm-6 textRight" *ngIf="chartData">
+              <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle>&nbsp;&nbsp;&nbsp;&nbsp;</i>
+              </button>
+              <div ngbDropdownMenu>
+                <button class="dropdown-item" (click)="downloadImage()">Download Image</button>
+                <button class="dropdown-item" (click)="showData()">Show Data</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="pickerLabel">{{ start | date: 'mediumDate' }} - {{ end | date: 'mediumDate' }}</p>
+        <div style="width: 100%; display: inline-flex;">
+          <div class="col-9 col-9-grid noPadding">
+            <div *ngFor="let item of filters; let i = index">
+              <button class="btn btn-secondary btn-sm float-left filerItem" [class.active]="item.selected" (click)="selected(item.label)"
+                title={{item.label}}>{{item.label}}</button>
+            </div>
+          </div>
+          <div class="col-3 col-3-grid noPadding">
+            <div ngbDropdown class="d-inline-block sameRow">
+              <button type="button" class="empDropBtn" ngbDropdownToggle>
+                <div style="display: inline-flex">
+                  <img src={{selectedEmployee.photo}} class="roundImg" />
+                  <p style="margin: 6px;" class="imgText">{{selectedEmployee.name | custom:25}}</p>
+                </div>
+              </button>
+              <div ngbDropdownMenu class="empDropDown">
+                <div *ngFor="let item of employees" style="display: inline-flex" (click)="selectEmp(item, $event)">
+                  <img src={{item.photo}} class="roundImg" />
+                  <p class="imgText">{{item.name | custom:25}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedFilter === 'Custom Date' && show" #datepicker id="datepicker" style="color: #000000">
+          <datepicker (change)="calendarData($event)" (closeIt)="toggle()"></datepicker>
+        </div>
+        <div *ngIf="chartData.length > 0">
+          <div id="pieChart" class="d3-chart" #pieChart></div>
+          <app-piechart (valueClicked)="openModal(modal, $event)" [element]="pieChart" [data]="chartData" [xAxisName]="xAxisName"
+            [yAxisName]="yAxisName"></app-piechart>
+        </div>
+        <div *ngIf="chartData.length == 0">
+          <p class="notAvailable">Not Available</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modal let-modal>
+  <div style="width:100%; display: inline-flex; padding: 5px;" (click)="closeModal()">
+    <h5 class="col-sm-11" style="padding-left: 0px">Details</h5>
+    <div class="col-sm-1"><span class="closeBtn">X</span></div>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="thead" scope="col" *ngFor="let column of columnNames" sortable="name">{{column | uppercase }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of selectedData; index as i">
+        <td *ngFor="let column of columnNames">{{ item[column] | custom }}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>

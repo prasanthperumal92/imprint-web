@@ -197,18 +197,18 @@ export class TrackComponent implements OnInit {
       origin: start,
       destination: end,
       waypoints: waypoints,
-      travelMode: google.maps.TravelMode.DRIVING
+      travelMode: google.maps.TravelMode.WALKING
     }, function (response, status) {
       if (status === "OK") {
-        const tmp = response.routes[0].legs;
-        let dis = 0;
-        for (let i = 0; i < tmp.length; i++) {
-          dis += tmp[i].distance.value;
-        }
-        dis = parseFloat((dis / 1000).toFixed(1));
-        self.distance += dis || 0;
-        self.data.distance = self.distance.toFixed(2);
-        directionsDisplay.setDirections(response);
+        // const tmp = response.routes[0].legs;
+        // let dis = 0;
+        // for (let i = 0; i < tmp.length; i++) {
+        //   dis += tmp[i].distance.value;
+        // }
+        // dis = parseFloat((dis / 1000).toFixed(1));
+        // self.distance += dis || 0;
+        // self.data.distance = self.distance.toFixed(2);
+        // directionsDisplay.setDirections(response);
         self.showSteps(response, self.map);
       } else {
         console.log("Problem in showing direction due to " + status);
