@@ -50,14 +50,14 @@ export class LoginComponent implements OnInit {
           for (let i = 0; i < tmp.details.length; i++) {
             details[tmp.details[i].key] = tmp.details[i].value;
           }
-          for (let i = 0; i < tmp.leads.length; i++) {
-            leads[tmp.leads[i].key] = tmp.leads[i].value;
+          for (let i = 0; i < tmp.lead.length; i++) {
+            leads[tmp.lead[i].key] = tmp.lead[i].value;
           }
           for (let i = 0; i < tmp.sales.length; i++) {
             sales[tmp.sales[i].key] = tmp.sales[i].value;
           }
-          for (let i = 0; i < tmp.products.length; i++) {
-            products[tmp.products[i].key] = tmp.products[i].value;
+          for (let i = 0; i < tmp.product.length; i++) {
+            products[tmp.product[i].key] = tmp.product[i].value;
           }
           this.store.set("details", details);
           this.store.set("leads", leads);
