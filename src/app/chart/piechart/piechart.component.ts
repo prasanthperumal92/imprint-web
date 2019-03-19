@@ -52,12 +52,6 @@ export class PiechartComponent implements OnInit {
     let data = this.chartData || [];
     let lineData = [];  // To remove the no data text label and polylines
 
-    if (data.length > 0 && data[0].value === 0 && data[1].value === 0 && data[2].value === 0) {
-      isEmpty = true;
-      data[0].value = 1;
-      data[1].value = 1;
-      data[2].value = 1;
-    }
     for (let i = 0; i < data.length; i++) {
       if (data[i].value !== 0) {
         lineData.push(data[i]);

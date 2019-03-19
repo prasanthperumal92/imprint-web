@@ -44,9 +44,9 @@ export class TrackComponent implements OnInit {
   constructor(public store: StoreService, public http: Httpservice, public alert: AlertService, public resources: ResourcesService,
     public common: CommonService) {
     const pro = this.store.get("profile");
-    let tmp: any = this.common.getAllEmpData();
+    let tmp: any = this.common.getOnlyMyEmpData();
     if (pro.employee.type === "employee") {
-      this.employees = _.filter(this.common.getAllEmpData(), function (o) { return o.name === pro.employee.name; });
+      this.employees = _.filter(this.common.getOnlyMyEmpData(), function (o) { return o.name === pro.employee.name; });
     } else {
       this.employees = tmp;
     }

@@ -89,7 +89,7 @@ export class TaskComponent implements OnInit {
     public common: CommonService
   ) {
     this.query = this.store.get("taskquery");
-    this.employees = this.common.getAllEmpData();
+    this.employees = this.common.getOnlyMyEmpData();
     this.clients = this.store.get("clients") ? _.map(this.store.get("clients"), "name") : [];
     this.profile = this.store.get("profile");
     if (this.query) {

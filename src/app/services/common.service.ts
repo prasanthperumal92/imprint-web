@@ -19,6 +19,20 @@ export class CommonService {
     return this.empData;
   }
 
+  getOnlyMyEmpData() {
+    let result = [];
+    this.empData = this.store.get("photos");
+    for (let i = 0; i < this.empData.length; i++) {
+      if (this.empData[i].show) {
+        if (!this.empData[i].photo) {
+          this.empData[i].photo = "/assets/images/default_user.png";
+        }
+        result.push(this.empData[i]);
+      }
+    }
+    return result;
+  }
+
   getEmpData(id) {
     this.empData = this.store.get("photos");
     let found = false;

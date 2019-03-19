@@ -105,11 +105,11 @@ export class DsrComponent implements OnInit {
     this.leads = this.store.get("leads");
     this.sales = this.store.get("sales");
     this.products = this.store.get("products");
-    // for (const prop in sales) {
-    //   if (sales.hasOwnProperty(prop)) {
-    //     this.salesStatus.push({key: prop, value: sales[prop]});
-    //   }
-    // }
+    for (const prop in this.sales) {
+      if (this.sales.hasOwnProperty(prop)) {
+        this.salesStatus.push({ key: prop, value: this.sales[prop] });
+      }
+    }
 
     if (this.query) {
       this.selected(this.query.label, true);
@@ -127,7 +127,7 @@ export class DsrComponent implements OnInit {
       console.log(res);
       this.filterBy.employee = res.name.sort();
       this.filterBy.client = res.client.sort();
-      this.filterBy.status = res.sales.sort();
+      this.filterBy.status = this.salesStatus;
     });
   }
 

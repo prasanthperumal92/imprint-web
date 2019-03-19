@@ -45,12 +45,12 @@
         <div *ngIf="selectedFilter === 'Custom Date' && show" #datepicker id="datepicker" style="color: #000000">
           <datepicker (change)="calendarData($event)" (closeIt)="toggle()"></datepicker>
         </div>
-        <div *ngIf="chartData.length > 0">
+        <div *ngIf="dataForChart">
           <div id="pieChart" class="d3-chart" #pieChart></div>
           <app-piechart (valueClicked)="openModal(modal, $event)" [element]="pieChart" [data]="chartData" [xAxisName]="xAxisName"
             [yAxisName]="yAxisName"></app-piechart>
         </div>
-        <div *ngIf="chartData.length == 0">
+        <div *ngIf="!dataForChart">
           <p class="notAvailable">Not Available</p>
         </div>
       </div>

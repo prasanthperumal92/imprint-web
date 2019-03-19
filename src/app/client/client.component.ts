@@ -54,7 +54,7 @@ export class ClientComponent implements OnInit {
 
   constructor(public http: Httpservice, public alert: AlertService, public route: ActivatedRoute, public modalService: NgbModal,
     public store: StoreService, public common: CommonService) {
-    this.employees = this.common.getAllEmpData();
+    this.employees = this.common.getOnlyMyEmpData();
     this.profile = this.store.get("profile");
     const lead = this.leads = this.store.get("leads");
     for (const prop in lead) {

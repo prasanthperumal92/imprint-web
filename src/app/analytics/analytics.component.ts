@@ -47,9 +47,9 @@ export class AnalyticsComponent implements OnInit {
     this.profile = this.store.get("profile");
     this.details = this.store.get("details");
     this.leads = this.store.get("leads");
-    this.employees = this.common.getAllEmpData();
+    this.employees = this.common.getOnlyMyEmpData();
     let tmp: any;
-    tmp = this.common.getAllEmpData();
+    tmp = this.common.getOnlyMyEmpData();
     for (let i = 0; i < tmp.length; i++) {
       this.user[tmp[i].id] = tmp[i].name;
     }

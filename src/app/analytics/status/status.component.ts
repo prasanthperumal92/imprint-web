@@ -45,6 +45,7 @@ export class StatusComponent implements OnInit {
   public filter;
   public filterType;
   public currentLabel;
+  public dataForChart = false;
 
   constructor(public store: StoreService, public router: Router, public alert: AlertService, public http: Httpservice,
     public resources: ResourcesService, public common: CommonService, public modalService: NgbModal) {
@@ -56,7 +57,7 @@ export class StatusComponent implements OnInit {
     this.leads = this.store.get("leads");
     this.sales = this.store.get("sales");
     this.products = this.store.get("products");
-    this.employees = this.common.getAllEmpData();
+    this.employees = this.common.getOnlyMyEmpData();
     let all: any;
     if (this.profile.employee.type !== "employee") {
       all = {
@@ -71,7 +72,7 @@ export class StatusComponent implements OnInit {
       all = _.find(this.employees, { "id": this.profile.employee._id });
       this.selectEmp(all);
     }
-    tmp = this.common.getAllEmpData();
+    tmp = this.common.getOnlyMyEmpData();
     for (let i = 0; i < tmp.length; i++) {
       this.user[tmp[i].id] = tmp[i].name;
     }
@@ -82,6 +83,7 @@ export class StatusComponent implements OnInit {
   }
 
   getMyChart(type) {
+    this.dataForChart = false;
     this.alert.showLoader(true);
     this.filterType = type;
     if (this.filterType !== "Custom Date") {
@@ -95,6 +97,15 @@ export class StatusComponent implements OnInit {
       console.log(res);
       const tmp = this.getLabels(this.checkEmpty(res));
       this.chartData = tmp;
+      let counter = 0;
+      for (let i = 0; i < this.chartData.length; i++) {
+        if (this.chartData[i].value === 0) {
+          counter++;
+        }
+      }
+      if (counter !== this.chartData.length) {
+        this.dataForChart = true;
+      }
       this.alert.showLoader(false);
     });
   }
