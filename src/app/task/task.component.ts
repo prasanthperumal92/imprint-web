@@ -100,7 +100,10 @@ export class TaskComponent implements OnInit {
       this.query = {};
       this.selected("Today", false); // By default choose Today
     }
-    this.getFilter();
+    const tmp = this.common.getOnlyMyEmpData();
+    for (let i = 0; i < tmp.length; i++) {
+      this.filterBy.employee.push({ key: tmp[i].name, value: tmp[i].id });
+    }
     this.getClients();
   }
 
@@ -138,13 +141,6 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  getFilter() {
-    this.http.GET(DSR_FILTER).subscribe(res => {
-      console.log(res);
-      this.filterBy.employee = res.name.sort();
-    });
-  }
-
   selected(filter: string, open?: any) {
     this.selectButton(filter);
     if (filter === "Custom Date") {
@@ -158,9 +154,12 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  public applyFilters(type, key, value) {
+  public applyFilters(type, key, value, value2?) {
     this.clearFils();
     this.filterSelected[type] = value;
+    if (value2) {
+      value = value2;
+    }
     this.query.filter = this.filter = {};
     this.filter = { key: key, value: value };
     this.query.filter = this.filter;

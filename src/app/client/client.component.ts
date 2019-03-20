@@ -4,11 +4,13 @@ import { ActivatedRoute } from "@angular/router";
 import { AlertService } from "./../services/alert.service";
 import { Httpservice } from "./../services/httpservice.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { GET_CLIENTS, REFERENCE } from "../../constants";
+import { GET_CLIENTS, REFERENCE, SEARCH_CLIENT } from "../../constants";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { Observable, Subject, merge } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, map } from "rxjs/operators";
 import * as moment from "moment";
+import * as Excel from "exceljs/dist/exceljs.min.js";
+import * as ExcelProper from "exceljs";
 import * as _ from "lodash";
 import { StoreService } from "../store/store.service";
 
@@ -41,6 +43,8 @@ export class ClientComponent implements OnInit {
   public selectedStatus;
   public selectedSales;
   public selectedProduct;
+  public searchText;
+  public details = {};
 
   search = (text: Observable<string>) => {
     console.log(JSON.stringify(text));
@@ -74,6 +78,10 @@ export class ClientComponent implements OnInit {
         this.productStatus.push({ key: prop, value: products[prop] });
       }
     }
+    const details = this.store.get("config");
+    for (let i = 0; i < details.length; i++) {
+      this.details[details[i].key] = details[i].value;
+    }
   }
 
   ngOnInit() {
@@ -105,9 +113,113 @@ export class ClientComponent implements OnInit {
         res[i].createdBy = this.common.getEmpData(res[i].createdBy);
       }
       this.clientList = res;
-      this.clients = res ? _.map(res, "name") : [];
       this.store.set("clients", res);
     });
+  }
+
+  clearFilter() {
+    this.searchText = "";
+    this.getClients();
+  }
+
+  download() {
+    let workbook: ExcelProper.Workbook = new Excel.Workbook();
+    let fileName;
+    if (this.clientList.length > 0) {
+      const tmp = JSON.parse(JSON.stringify(this.clientList));
+      tmp.forEach((elem) => {
+        elem.assignedTo = elem.assignedTo.name;
+        elem.createdBy = elem.createdBy.name;
+        elem.activity = this.sales[elem.activity];
+        elem.status = this.leads[elem.status];
+        elem.product = this.products[elem.product];
+        elem["Sales status"] = elem.activity;
+        elem["Client status"] = elem.status;
+        delete elem.activity;
+        delete elem.status;
+      });
+      let columns = this.getColumnNames(tmp[0]);
+      let clientSheet = workbook.addWorksheet(this.details["Cterm"]);
+      clientSheet.columns = this.prepareColumns(columns);
+      this.addRowData(clientSheet, tmp);
+    }
+    fileName = `${this.profile.employee.type}_${this.profile.employee.name}_${new Date().getTime()}.xlsx`;
+    this.downloadFile(workbook, fileName);
+  }
+
+  prepareColumns(arr) {
+    let tmp = [];
+    arr.forEach(e => {
+      tmp.push({
+        header: e.toUpperCase(),
+        key: e,
+        width: 20
+      });
+    });
+    return tmp;
+  }
+
+  addRowData(sheet, data) {
+    for (let i = 0; i < data.length; i++) {
+      let obj = {};
+      const item = data[i];
+      for (const key in item) {
+        if (item.hasOwnProperty(key)) {
+          if (this.isDate(item[key])) {
+            obj[key] = moment(item[key]).format("lll");
+          } else {
+            obj[key] = item[key] ? item[key].toString() : item[key];
+          }
+        }
+      }
+      sheet.addRow(obj);
+    }
+  }
+
+  downloadFile(workbook, fileName) {
+    workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      let downloadLink = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = fileName;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
+
+
+  getColumnNames(obj) {
+    let names = [];
+    let key: any;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key !== "__v" && key !== "_id" && key !== "logs" && key !== "reference" && key !== "employeeId") {
+          names.push(key);
+        }
+      }
+    }
+    return names;
+  }
+
+
+  searchClient() {
+    if (this.searchText && this.searchText.length > 3) {
+      this.alert.showLoader(true);
+      this.http.GET(`${SEARCH_CLIENT}/${this.searchText}`).subscribe(res => {
+        this.alert.showLoader(false);
+        this.available = true;
+        this.clientList = res;
+        for (let i = 0; i < res.length; i++) {
+          res[i].assignedTo = this.common.getEmpData(res[i].assignedTo);
+          res[i].createdBy = this.common.getEmpData(res[i].createdBy);
+        }
+        this.clientList = res;
+      });
+    } else {
+      this.alert.showAlert("Client name should be minimum 3 chars length", "warning");
+    }
   }
 
   openClient(item) {
@@ -296,4 +408,8 @@ export class ClientComponent implements OnInit {
     }
   }
 
+  isDate(_date) {
+    const _regExp = new RegExp('^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(.[0-9]+)?(Z)?$');
+    return _regExp.test(_date);
+  }
 }

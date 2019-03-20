@@ -3,11 +3,25 @@
   <br>
   <div *ngIf="available && !client.clientId">
     <div class="container filterHeader">
-      <div style="float: left">
-        <button class="customBtn activeBtn" (click)="newClient(modal, 'create', '')" style="margin-right:20px;height: 36px;">
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          New Client
-        </button>
+      <div style="display: inline-flex" class="col-12">
+        <div style="float: left" class="col-3">
+          <button class="customBtn activeBtn" (click)="newClient(modal, 'create', '')" style="margin-right:20px;height: 36px;">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            New Client
+          </button>
+        </div>
+        <div class="col-9 col-9-grid" style="text-align: right">
+          <div class="form-group col-6 col-6-grid">
+            <input id="typeahead-focus" type="text" class="form-control form-control-sm" [(ngModel)]="searchText"
+              [ngbTypeahead]="search" name="search" placeholder="Search Client with Name" />
+          </div>
+          <button class="customBtn activeBtn" (click)="searchClient(searchText)" style="margin-right:20px;">
+            Search
+          </button>
+          <button class="customBtn" style="text-align: right; margin-right:20px;" (click)="clearFilter()">Clear</button>
+          <button type="button" class="customBtn" (click)="download()">
+            <i class="fa fa-download" aria-hidden="true"></i> Export to Excel</button>
+        </div>
       </div>
     </div>
     <div class="container">
