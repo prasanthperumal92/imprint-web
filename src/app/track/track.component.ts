@@ -40,6 +40,12 @@ export class TrackComponent implements OnInit {
     lat: 11.0448,
     lng: 76.91613
   };
+  public counter = 0;
+  public mapIcons = {
+    start: "https://i.imgur.com/AOFp7p7.png",
+    end: "https://i.imgur.com/N6XrXFs.png",
+    other: "https://i.imgur.com/fDqUDzo.png"
+  };
 
   constructor(public store: StoreService, public http: Httpservice, public alert: AlertService, public resources: ResourcesService,
     public common: CommonService) {
@@ -77,11 +83,11 @@ export class TrackComponent implements OnInit {
       this.alert.showLoader(true);
       const length = this.coords.length;
       if (length > 23) {
-        const counter = Math.ceil(length / slice);
+        const counter = this.counter = Math.ceil(length / slice);
         const self = this;
         this.asyncLoop(counter, function (loop) {
           const tmp = self.coords.splice(0, slice);
-          self.draw(tmp);
+          self.draw(tmp, loop.iteration() + 1);
           setTimeout(() => {
             loop.next();
           }, 1000);
@@ -90,7 +96,8 @@ export class TrackComponent implements OnInit {
           self.alert.showLoader(false);
         });
       } else {
-        this.draw(this.coords); // less than 23 points
+        this.counter = 1;
+        this.draw(this.coords, 1); // less than 23 points
         this.alert.showLoader(false);
       }
     }
@@ -128,7 +135,7 @@ export class TrackComponent implements OnInit {
     return loop;
   }
 
-  draw(location) {
+  draw(location, loop) {
     const coords = [];
 
     for (let i = 0; i < location.length; i++) {
@@ -145,16 +152,43 @@ export class TrackComponent implements OnInit {
     const end = coords[coords.length - 1].location;
     coords.splice(0, 1);
     // coords.splice(coords.length - 1, 1);
-    this.drawPath(directionsService, directionsDisplay, start, end, coords);
+    this.drawPath(directionsService, directionsDisplay, start, end, coords, loop);
   }
 
-  showSteps(directionResult, map) {
+  showSteps(directionResult, map, loop) {
     // For each step, place a marker, and add the text to the marker's infowindow.
     // Also attach the marker to an array so we can keep track of it and remove it
     // when calculating new routes.
-
+    let start = false;
+    let end = false;
+    let other = false;
+    let icon = "other";
     const myRoute = directionResult.routes[0].legs;
+
+    if (loop === 1 && loop === this.counter) {
+      start = true;
+      end = true;
+    } else {
+      if (loop === 1) {
+        start = true;
+        end = false;
+      } else if (loop < this.counter || loop > this.counter) {
+        start = false;
+        end = false;
+      } else if (loop === this.counter) {
+        start = false;
+        end = true;
+      }
+    }
+
     for (let j = 0; j < myRoute.length; j++) {
+      if (start && j === 0) {
+        icon = "start";
+      } else if (end && j === myRoute.length - 1) {
+        icon = "end";
+      } else {
+        icon = "other";
+      }
       const route = myRoute[j].start_location.toJSON();
       const address = myRoute[j].start_address;
       const loc = new google.maps.LatLng(route.lat, route.lng);
@@ -172,7 +206,7 @@ export class TrackComponent implements OnInit {
       });
       let marker = new google.maps.Marker({
         position: loc,
-        icon: "https://i.imgur.com/bEejbiY.png",
+        icon: this.mapIcons[icon],
         map: map,
         visible: true
       });
@@ -191,7 +225,7 @@ export class TrackComponent implements OnInit {
     map.setZoom(15);
   }
 
-  drawPath(directionsService, directionsDisplay, start, end, waypoints) {
+  drawPath(directionsService, directionsDisplay, start, end, waypoints, loop) {
     let self = this;
     directionsService.route({
       origin: start,
@@ -200,16 +234,16 @@ export class TrackComponent implements OnInit {
       travelMode: google.maps.TravelMode.WALKING
     }, function (response, status) {
       if (status === "OK") {
-        // const tmp = response.routes[0].legs;
-        // let dis = 0;
-        // for (let i = 0; i < tmp.length; i++) {
-        //   dis += tmp[i].distance.value;
-        // }
-        // dis = parseFloat((dis / 1000).toFixed(1));
-        // self.distance += dis || 0;
-        // self.data.distance = self.distance.toFixed(2);
-        // directionsDisplay.setDirections(response);
-        self.showSteps(response, self.map);
+        const tmp = response.routes[0].legs;
+        let dis = 0;
+        for (let i = 0; i < tmp.length; i++) {
+          dis += tmp[i].distance.value;
+        }
+        dis = parseFloat((dis / 1000).toFixed(1));
+        self.distance += dis || 0;
+        self.data.distance = self.distance.toFixed(2);
+        directionsDisplay.setDirections(response);
+        self.showSteps(response, self.map, loop);
       } else {
         console.log("Problem in showing direction due to " + status);
       }

@@ -1,4 +1,4 @@
-import { CommonService } from './../services/common.service';
+import { CommonService } from "./../services/common.service";
 import { ModalComponent } from "../helpers/modal/modal.component";
 import { AlertService } from "./../services/alert.service";
 import { StoreService } from "../store/store.service";
@@ -12,7 +12,7 @@ import * as _ from "lodash";
 import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { Observable, Subject, merge } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, map } from "rxjs/operators";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-task",
@@ -40,7 +40,7 @@ export class TaskComponent implements OnInit {
   public page: Number = 1;
   public filterBy: any = {
     employee: [],
-    status: ["New", "Progress", "Done", "Completed", "Removed"]
+    status: ["New", "In-Progress", "Postponed", "Closed-Success", "Closed-Rejected"]
   };
   public filterSelected = {
     Employee: "Employee",
@@ -355,7 +355,7 @@ export class TaskComponent implements OnInit {
       return false;
     }
     // } else if (this.clients.indexOf(this.model.client) === -1) {
-    //   this.alert.showAlert("Your client is not available, So click 'Add  Client' button to add one", "warning");
+    //   this.alert.showAlert("Your client is not available, So click "Add  Client" button to add one", "warning");
     //   return false;
     // } else if (this.model.contact.toString().length !== 10) {
     //   this.alert.showAlert("Phone number should be 10 digit number", "warning");

@@ -33,10 +33,12 @@ export class ProfileComponent implements OnInit {
   public title: string;
   public responses: any;
   public CLOUDINARY;
+  public details;
 
   constructor(public alert: AlertService, public store: StoreService, public http: Httpservice,
     public cloudinary: Cloudinary, public zone: NgZone, public common: CommonService) {
     this.profile = this.store.get("profile");
+    this.details = this.store.get("details");
     this.getProfile();
     this.employees = this.common.getAllEmpData();
     this.manager = _.find(this.employees, { id: this.profile.employee.reportingTo }) || this.employees[0];
@@ -100,12 +102,19 @@ export class ProfileComponent implements OnInit {
   getProfile() {
     this.alert.showLoader(true);
     this.http.GET(EMPLOYEE_PROFILE).subscribe((res) => {
-      this.profile = res;
+      this.profile = this.updateLog(res);
       this.photo = this.profile.employee.photo || this.photo;
       this.profile.employee.address = {};
       this.store.set("profile", res);
       this.alert.showLoader(false);
     });
+  }
+
+  updateLog(emp) {
+    emp.logs.forEach(element => {
+      element.type = this.details[element.type] ? this.details[element.type] : element.type;
+    });
+    return emp;
   }
 
   handleFileInput(files: FileList) {

@@ -164,7 +164,8 @@
                 <br>
                 <div class="logRow whiteBox" *ngFor="let item of profile.logs">
                   <div class="col-12" style="display: inline-flex">
-                    <p class="col-8 logHead" style="text-align: left;">{{item.type | titlecase}} Activity</p>
+                    <p class="col-8 logHead" style="text-align: left;">{{item.type | titlecase}}
+                      Activity</p>
                     <p class="col-4 logHead" style="text-align: right;">{{item.created | date: 'medium'}}</p>
                   </div>
                   <div class="col-12">

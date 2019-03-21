@@ -214,7 +214,8 @@
               </div>
               <div class="col-12">
                 <p *ngIf="item.description">{{item.description}}</p>
-                <p style="margin-bottom: 5px;"> {{item.by}} {{item.text}} the Client on {{item.created | date:
+                <p style="margin-bottom: 5px;"> {{item.by}} {{item.text}} the {{details[item.type] || item.type}} on
+                  {{item.created | date:
                   'medium'}}</p>
               </div>
             </div>

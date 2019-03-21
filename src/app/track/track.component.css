@@ -303,3 +303,16 @@ datepicker /deep/ ngb-datepicker {
   margin-top: 33px;
   margin-left: -123px;
 }
+
+.markers {
+  font-size: 12px;
+  text-align: right;
+}
+
+.markers p {
+  margin: 10px;
+}
+
+.markers p img {
+  width: 18px;
+}
