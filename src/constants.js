@@ -13,6 +13,7 @@ export const SEARCH_CLIENT = 'search/clients'
 export const CREATE_TASK = 'task';
 export const GET_ATTENDANCE = 'leave';
 export const GET_TRACKING = 'track';
+export const LIVE_TRACKING = 'live/track';
 export const CALENDAR = 'calendar';
 export const TEAM = 'team';
 export const TEAM_CHART = 'team/chart/';
