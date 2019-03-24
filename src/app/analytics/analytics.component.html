@@ -3,8 +3,10 @@
   <br>
   <app-status *ngIf="leadChart" [id]="leadChart.id" [title]="leadChart.title" [description]="leadChart.description"
     [xAxisName]="leadChart.xAxisName" [yAxisName]="leadChart.yAxisName" [type]="leadChart.type"></app-status>
-  <br>
-  <br>
+  <app-status *ngIf="salesChart" [id]="salesChart.id" [title]="salesChart.title" [description]="salesChart.description"
+    [xAxisName]="salesChart.xAxisName" [yAxisName]="salesChart.yAxisName" [type]="salesChart.type"></app-status>  
+  <app-status *ngIf="productChart" [id]="productChart.id" [title]="productChart.title" [description]="productChart.description"
+    [xAxisName]="productChart.xAxisName" [yAxisName]="productChart.yAxisName" [type]="productChart.type"></app-status>
   <!--
   <div class="container">
     <div class="row">

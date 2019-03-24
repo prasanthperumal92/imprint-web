@@ -199,7 +199,8 @@ export class StatusComponent implements OnInit {
     query = `${CHART_DOWNLOAD_DATA}/${start}/${end}/${this.selectedEmployee.id}`;
     this.http.GET(query).subscribe(res => {
       console.log(res);
-      this.router.navigate(["dashboard/search", { type: "lead", data: JSON.stringify(res) }]);
+      this.store.set("moreData", { type: "lead", data: res });
+      this.router.navigate(["dashboard/search"]);
       this.alert.showLoader(false);
     });
   }

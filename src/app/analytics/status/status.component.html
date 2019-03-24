@@ -7,7 +7,7 @@
             <p class="col-sm-6 textLeft kpiHead bold">{{title}} <i class="fa fa-question-circle-o" aria-hidden="true"
                 placement="bottom" triggers="mouseenter:mouseleave" ngbPopover="{{description}}"></i>
             </p>
-            <div class="col-sm-6 textRight" *ngIf="chartData">
+            <div class="col-sm-6 textRight" *ngIf="chartData && chartData.length > 0">
               <button class="noBtn">&nbsp; &nbsp;<i class="fa fa-ellipsis-v" aria-hidden="true" ngbDropdownToggle>&nbsp;&nbsp;&nbsp;&nbsp;</i>
               </button>
               <div ngbDropdownMenu>
