@@ -333,7 +333,7 @@
                     </div>
                   </button>
                   <div ngbDropdownMenu aria-labelledby="actions" class="empDropDown">
-                    <div *ngFor="let item of employees" style="display: inline-flex" (click)="selectEmp(item)">
+                    <div *ngFor="let item of employees" style="display: inline-flex;width: 100%;" (click)="selectEmp(item)">
                       <img src={{item.photo}} class="roundImg" />
                       <p class="imgText">{{item.name}}</p>
                     </div>

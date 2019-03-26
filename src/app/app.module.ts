@@ -40,6 +40,7 @@ import { MultibarstackedComponent } from './chart/multibarstacked/multibarstacke
 import { SearchComponent } from './search/search.component';
 import { CustomPipe } from './pipes/custom.pipe';
 import { StatusComponent } from './analytics/status/status.component';
+import { LoggerComponent } from './logger/logger.component';
 
 export const cloudinary = {
   Cloudinary: CloudinaryCore
@@ -76,7 +77,8 @@ export const config: CloudinaryConfiguration = {
     MultibarstackedComponent,
     SearchComponent,
     CustomPipe,
-    StatusComponent
+    StatusComponent,
+    LoggerComponent
   ],
   imports: [
     BrowserModule,
