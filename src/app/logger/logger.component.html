@@ -34,7 +34,7 @@
           </div>
           <div class="logRow whiteBox" *ngFor="let obj of item.value">
             <div class="col-12" style="display: inline-flex">
-              <p class="col-6 logHead" style="text-align: left;">{{obj.type | titlecase}}
+              <p class="col-6 logHead" style="text-align: left;">{{details[obj.type] || obj.type | titlecase}}
                 Activity</p>
               <p class="col-6 logHead" style="text-align: right;">{{obj.created | date: 'shortTime'}}</p>
             </div>

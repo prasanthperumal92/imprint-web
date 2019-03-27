@@ -17,6 +17,7 @@ export class LoggerComponent implements OnInit {
 	public selectedEmployee: any = {};
 	public data: any = [];
 	public dates = {};
+	public details = {};
 
 	constructor(
 		public store: StoreService,
@@ -24,6 +25,7 @@ export class LoggerComponent implements OnInit {
 		public alert: AlertService,
 		public common: CommonService
 	) {
+		this.details = this.store.get('details');
 		const pro = this.store.get('profile');
 		const tmp: any = this.common.getOnlyMyEmpData();
 		if (pro.employee.type === 'employee') {
