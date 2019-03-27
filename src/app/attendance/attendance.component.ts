@@ -221,7 +221,7 @@ export class AttendanceComponent implements OnInit {
 
   downloadFile(workbook, fileName) {
     workbook.xlsx.writeBuffer().then((data) => {
-      const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const blob = new Blob([data], { type: "application/vnd.ms-excel" }); // application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       let downloadLink = document.createElement("a");
       const url = URL.createObjectURL(blob);
       downloadLink.href = url;
