@@ -17,14 +17,14 @@
             </div>
           </div>
         </div>
-        <p class="pickerLabel">{{ start | date: 'mediumDate' }} - {{ end | date: 'mediumDate' }}</p>
-        <div style="width: 100%; display: inline-flex;">
-          <div class="col-9 col-9-grid noPadding">
+        <!-- <p class="pickerLabel">{{ start | date: 'mediumDate' }} - {{ end | date: 'mediumDate' }}</p> -->
+        <div style="width: 100%; display: inline-flex;margin: 15px 0px;">
+          <!-- <div class="col-9 col-9-grid noPadding">
             <div *ngFor="let item of filters; let i = index">
               <button class="btn btn-secondary btn-sm float-left filerItem" [class.active]="item.selected" (click)="selected(item.label)"
                 title={{item.label}}>{{item.label}}</button>
             </div>
-          </div>
+          </div> -->
           <div class="col-3 col-3-grid noPadding">
             <div ngbDropdown class="d-inline-block sameRow">
               <button type="button" class="empDropBtn" ngbDropdownToggle>

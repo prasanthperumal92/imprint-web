@@ -139,17 +139,17 @@ export class SearchComponent implements OnInit {
 		}
 
 		if (this.type === 'team') {
-			fileName = `${this.data.title}_${this.profile.employee.name}_${new Date().getTime()}.xlsx`;
+			fileName = `${this.data.title}_${this.profile.employee.name}_${new Date().getTime()}.csv`;
 		} else {
-			fileName = `${this.type}_${this.profile.employee.name}_${new Date().getTime()}.xlsx`;
+			fileName = `${this.type}_${this.profile.employee.name}_${new Date().getTime()}.csv`;
 		}
 		this.downloadFile(workbook, fileName);
 	}
 
 	downloadFile(workbook, fileName) {
-		workbook.xlsx.writeBuffer().then((data) => {
+		workbook.csv.writeBuffer().then((data) => {
 			const blob = new Blob([ data ], {
-				type: 'application/vnd.ms-excel' // 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				type: 'text/csv' // 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'
 			});
 			let downloadLink = document.createElement('a');
 			const url = URL.createObjectURL(blob);
@@ -179,10 +179,11 @@ export class SearchComponent implements OnInit {
 			const item = data[i];
 			for (const key in item) {
 				if (item.hasOwnProperty(key)) {
+					console.log(key, item[key]);
 					if (this.isDate(item[key])) {
 						obj[key] = moment(item[key]).format('lll');
 					} else {
-						obj[key] = item[key].toString();
+						obj[key] = item[key] ? item[key].toString() : item[key];
 					}
 				}
 			}

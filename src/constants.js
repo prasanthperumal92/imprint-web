@@ -27,6 +27,7 @@ export const CHART_TYPE_DATA = 'chart/general';
 export const CHART_TABLE_DATA = 'chart/table';
 export const CHART_DOWNLOAD_DATA = 'chart/download';
 export const EMPLOYEE_LOGS = 'logs/employee';
+export const FORGOT_PASSWORD = 'employee/forgot';
 
 export const COLORS = [ '#ff6283', '#36a1eb', '#5cc6c6', '#ffcd56', '#a071ff' ];
 

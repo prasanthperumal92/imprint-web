@@ -153,7 +153,7 @@ export class ClientComponent implements OnInit {
 			clientSheet.columns = this.prepareColumns(columns);
 			this.addRowData(clientSheet, tmp);
 		}
-		fileName = `${this.profile.employee.type}_${this.profile.employee.name}_${new Date().getTime()}.xlsx`;
+		fileName = `${this.profile.employee.type}_${this.profile.employee.name}_${new Date().getTime()}.csv`;
 		this.downloadFile(workbook, fileName);
 	}
 
@@ -187,8 +187,10 @@ export class ClientComponent implements OnInit {
 	}
 
 	downloadFile(workbook, fileName) {
-		workbook.xlsx.writeBuffer().then((data) => {
-			const blob = new Blob([ data ], { type: 'application/vnd.ms-excel' }); // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+		workbook.csv.writeBuffer().then((data) => {
+			const blob = new Blob([ data ], {
+				type: 'text/csv' // 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'
+			});
 			let downloadLink = document.createElement('a');
 			const url = URL.createObjectURL(blob);
 			downloadLink.href = url;
