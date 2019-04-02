@@ -30,6 +30,9 @@
             <input type="email" class="form-control form-control-sm" name="exampleInputEmail1" [(ngModel)]="model.email"
               placeholder="Enter Your Email-Address" required>
           </div>
+          <div class="forgot">
+            <p style="cursor: pointer; margin: 2px;" (click)="openLogin()">Remember Password? <strong>Login</strong> </p>
+          </div>
           <div class="alignLeft">
             <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!otpForm.form.valid">Send OTP to
               Mail</button>

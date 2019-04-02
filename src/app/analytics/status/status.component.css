@@ -214,6 +214,6 @@ table {
 	margin-bottom: 13px;
 }
 
-.modal-content {
-	padding: 15px;
+:host ::ng-deep .modal-content {
+	padding: 15px !important;
 }

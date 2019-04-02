@@ -30,7 +30,7 @@
       <div class="timeline col-12">
         <div class="col-8 timeContainer right" [ngClass]="{'right textleft': i%2 != 0, 'left textRight': i%2 == 0}" *ngFor="let item of data; let i = index;">
           <div class="content">
-            <h4>{{dates[item.key]}}</h4>
+            <h4>{{item.key | date: 'mediumDate'}}</h4>
           </div>
           <div class="logRow whiteBox" *ngFor="let obj of item.value">
             <div class="col-12" style="display: inline-flex">

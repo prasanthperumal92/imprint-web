@@ -43,6 +43,7 @@ export class LoggerComponent implements OnInit {
 
 	selected(employee) {
 		console.log(employee);
+		this.selectedEmployee = employee;
 		this.alert.showLoader(true);
 		this.http.GET(`${EMPLOYEE_LOGS}/${employee.id}`).subscribe((res) => {
 			console.log(res);
@@ -78,12 +79,17 @@ export class LoggerComponent implements OnInit {
 
 		for (let prop in dateGroups) {
 			if (dateGroups.hasOwnProperty(prop)) {
+				let c = alldates[prop].split('-');
 				tmp.push({
-					key: prop,
+					key: new Date(c[2], parseInt(c[1]) - 1, c[0]),
 					value: dateGroups[prop].reverse()
 				});
 			}
 		}
+
+		tmp.sort(function(a, b) {
+			return a.key.getTime() - b.key.getTime();
+		});
 
 		return { data: tmp.reverse(), dates: alldates };
 	}

@@ -90,6 +90,11 @@ export class LoginComponent implements OnInit {
 		this.isForgot = true;
 	}
 
+	openLogin() {
+		this.isForgot = false;
+		this.isOTP = false;
+	}
+
 	sendOTP() {
 		this.model.password = '';
 		if (!this.model.email || !this.validateEmail(this.model.email)) {
@@ -124,8 +129,7 @@ export class LoginComponent implements OnInit {
 			this.alert.showAlert('Password Updated Successfully', 'success');
 			this.alert.showLoader(false);
 			setTimeout(() => {
-				this.isOTP = false;
-				this.isForgot = false;
+				this.openLogin();
 			}, 1000);
 		});
 	}
