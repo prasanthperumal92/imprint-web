@@ -85,7 +85,7 @@ export class SearchComponent implements OnInit {
 		for (key in obj) {
 			if (obj.hasOwnProperty(key)) {
 				if (key !== '__v' && key !== '_id' && key !== 'logs' && key !== 'reference' && key !== 'employeeId') {
-					if (key === 'status' || key === 'activity' || key === 'product') {
+					if (key === 'lead' || key === 'sales' || key === 'product') {
 						const tmp = names[2];
 						if (tmp) {
 							names[2] = key;
@@ -105,14 +105,14 @@ export class SearchComponent implements OnInit {
 	getLabels(data) {
 		for (let j = 0; j < data.length; j++) {
 			for (let key in data[j]) {
-				if (key === 'status' || key === 'lead') {
-					data[j][key] = this.leads[data[j][key]];
-				} else if (key === 'activity' || key === 'sales') {
-					data[j][key] = this.sales[data[j][key]];
+				if (key === 'lead') {
+					data[j][key] = this.leads[data[j][key]] || data[j][key];
+				} else if (key === 'sales') {
+					data[j][key] = this.sales[data[j][key]] || data[j][key];
 				} else if (key === 'product') {
-					data[j][key] = this.products[data[j][key]];
+					data[j][key] = this.products[data[j][key]] || data[j][key];
 				} else if (key === 'assignedTo' || key === 'assignedBy' || key === 'createdBy') {
-					data[j][key] = this.employees[data[j][key]];
+					data[j][key] = this.employees[data[j][key]] || data[j][key];
 				}
 			}
 		}

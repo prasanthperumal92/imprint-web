@@ -245,7 +245,7 @@ export class StatusComponent implements OnInit {
 		for (key in obj) {
 			if (obj.hasOwnProperty(key)) {
 				if (key !== '__v' && key !== '_id' && key !== 'logs' && key !== 'reference' && key !== 'employeeId') {
-					if (key === 'status' || key === 'activity' || key === 'product') {
+					if (key === 'lead' || key === 'sales' || key === 'product') {
 						const tmp = names[1];
 						if (tmp) {
 							names[1] = key;
@@ -269,11 +269,11 @@ export class StatusComponent implements OnInit {
 					key === 'assignedTo' ||
 					key === 'assignedBy' ||
 					key === 'createdBy' ||
-					key === 'status' ||
-					key === 'activity' ||
+					key === 'lead' ||
+					key === 'sales' ||
 					key === 'product'
 				) {
-					if (key === 'status') {
+					if (key === 'lead') {
 						data[j][key] = this.currentLabel[data[j][key]];
 					} else {
 						data[j][key] = this.user[data[j][key]];

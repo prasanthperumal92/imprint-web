@@ -105,7 +105,7 @@
                   <span class="primary"><strong>Account Date</strong></span>
                   <span>{{client.created | date: 'mediumDate'}}</span>
                 </div>
-                <div *ngIf="client.status" class="col-6 col-6-grid">
+                <div *ngIf="client.lead" class="col-6 col-6-grid">
                   <span class="primary"><strong>Client Description</strong></span>
                   <span>{{client.description || 'Not Available'}}</span>
                 </div>
@@ -113,11 +113,11 @@
               <div>
                 <div class="col-6 col-6-grid">
                   <span class="primary"><strong>Sales Status</strong></span>
-                  <span>{{sales[client.activity] || 'Not Available'}}</span>
+                  <span>{{sales[client.sales] || 'Not Available'}}</span>
                 </div>
-                <div *ngIf="client.status" class="col-6 col-6-grid">
+                <div *ngIf="client.lead" class="col-6 col-6-grid">
                   <span class="primary"><strong>Client Status</strong></span>
-                  <span>{{leads[client.status] || 'Not Available'}}</span>
+                  <span>{{leads[client.lead] || 'Not Available'}}</span>
                 </div>
               </div>
               <div>

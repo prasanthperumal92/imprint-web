@@ -11,7 +11,7 @@
     </div>
     <br>
   </div>
-  <div class="container-fluid" style="overflow: scroll">
+  <div class="container-fluid">
     <div class="tableRow" *ngIf="type === 'team'">
       <h5>{{data.title}}</h5>
       <p style="margin-bottom: 5px;"><strong>Manager: </strong> <span>{{employees[data.leaderId]}}</span></p>
@@ -20,7 +20,7 @@
     <div class="tableRow" *ngIf="jobData.length > 0 && jobColumn.length > 0">
       <h5>{{details['Aterm']}} Details</h5>
       <div id="taskData">
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="overflow: scroll">
           <thead>
             <tr>
               <th class="thead" scope="col" *ngFor="let column of jobColumn" sortable="name">{{column | uppercase }}</th>
@@ -37,7 +37,7 @@
     <div class="tableRow" *ngIf="taskData.length > 0 && taskColumn.length > 0">
       <h5>{{details['Bterm']}} Details</h5>
       <div id="taskData">
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="overflow: scroll">
           <thead>
             <tr>
               <th class="thead" scope="col" *ngFor="let column of taskColumn" sortable="name">{{column | uppercase }}</th>

@@ -140,13 +140,13 @@ export class ClientComponent implements OnInit {
 			tmp.forEach((elem) => {
 				elem.assignedTo = elem.assignedTo.name;
 				elem.createdBy = elem.createdBy.name;
-				elem.activity = this.sales[elem.activity];
-				elem.status = this.leads[elem.status];
+				elem.sales = this.sales[elem.sales];
+				elem.lead = this.leads[elem.lead];
 				elem.product = this.products[elem.product];
-				elem['Sales status'] = elem.activity;
-				elem['Client status'] = elem.status;
-				delete elem.activity;
-				delete elem.status;
+				elem['Sales status'] = elem.sales;
+				elem['Client status'] = elem.lead;
+				delete elem.sales;
+				delete elem.lead;
 			});
 			let columns = this.getColumnNames(tmp[0]);
 			let clientSheet = workbook.addWorksheet(this.details['Cterm']);
@@ -215,7 +215,7 @@ export class ClientComponent implements OnInit {
 	}
 
 	searchClient() {
-		if (this.searchText && this.searchText.length > 3) {
+		if (this.searchText && this.searchText.length >= 3) {
 			this.alert.showLoader(true);
 			this.http.GET(`${SEARCH_CLIENT}/${this.searchText}`).subscribe((res) => {
 				this.alert.showLoader(false);
@@ -259,12 +259,12 @@ export class ClientComponent implements OnInit {
 	}
 
 	applyLead(item) {
-		this.model.status = this.selectedStatus = item.key;
+		this.model.lead = this.selectedStatus = item.key;
 		return false;
 	}
 
 	applySales(item) {
-		this.model.activity = this.selectedSales = item.key;
+		this.model.sales = this.selectedSales = item.key;
 		return false;
 	}
 
@@ -290,8 +290,8 @@ export class ClientComponent implements OnInit {
 				this.model.number2 = parseInt(model.contact.split('+91')[1]);
 			}
 			this.selectedEmployee = model.assignedTo;
-			this.selectedStatus = model.status;
-			this.selectedSales = model.activity;
+			this.selectedStatus = model.lead;
+			this.selectedSales = model.sales;
 			this.selectedProduct = model.product;
 		}
 		this.modalRef = this.modalService.open(elem, { centered: true, size: 'lg' });
