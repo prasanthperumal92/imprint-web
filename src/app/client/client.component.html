@@ -116,7 +116,7 @@
                   <span>{{sales[client.sales] || 'Not Available'}}</span>
                 </div>
                 <div *ngIf="client.lead" class="col-6 col-6-grid">
-                  <span class="primary"><strong>Client Status</strong></span>
+                  <span class="primary"><strong>Lead Status</strong></span>
                   <span>{{leads[client.lead] || 'Not Available'}}</span>
                 </div>
               </div>
@@ -178,6 +178,13 @@
                   <span class="primary"><strong>State</strong></span>
                   <br>
                   <span>{{client.state || 'Not Available'}}</span>
+                </div>
+              </div>
+              <div>
+                <div class="col-12 col-12-grid">
+                  <span class="primary"><strong>Remarks</strong></span>
+                  <br>
+                  <span>{{client.remarks || 'Not Available'}}</span>
                 </div>
               </div>
               <hr>
