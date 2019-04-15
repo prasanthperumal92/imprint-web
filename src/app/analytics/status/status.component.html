@@ -34,7 +34,7 @@
                 </div>
               </button>
               <div ngbDropdownMenu class="empDropDown">
-                <div *ngFor="let item of employees" style="display: inline-flex" (click)="selectEmp(item, $event)">
+                <div *ngFor="let item of employees" style="display: inline-flex;width: 100%;" (click)="selectEmp(item, $event)">
                   <img src={{item.photo}} class="roundImg" />
                   <p class="imgText">{{item.name | custom:25}}</p>
                 </div>

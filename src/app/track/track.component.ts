@@ -5,7 +5,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { StoreService } from '../store/store.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import {} from 'googlemaps';
+import { } from 'googlemaps';
 import { GET_TRACKING, LIVE_TRACKING } from '../../constants';
 import { ResourcesService } from '../config/resources.service';
 import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +13,7 @@ import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from '@ng-bootstr
 @Component({
 	selector: 'app-track',
 	templateUrl: './track.component.html',
-	styleUrls: [ './track.component.css' ]
+	styleUrls: ['./track.component.css']
 })
 export class TrackComponent implements OnInit {
 	@ViewChild('gmap') gmapElement: any;
@@ -28,7 +28,7 @@ export class TrackComponent implements OnInit {
 	public markerArray: any = [];
 	public data: any = [];
 	public done: Boolean = false;
-	public filters = _.filter(this.resources.filter, function(o) {
+	public filters = _.filter(this.resources.filter, function (o) {
 		return o.name === 'T' || o.name === 'Y' || o.name === 'Custom';
 	});
 	public show: Boolean = false;
@@ -64,7 +64,7 @@ export class TrackComponent implements OnInit {
 		const pro = (this.profile = this.store.get('profile'));
 		let tmp: any = this.common.getOnlyMyEmpData();
 		if (pro.employee.type === 'employee') {
-			this.employees = _.filter(this.common.getOnlyMyEmpData(), function(o) {
+			this.employees = _.filter(this.common.getOnlyMyEmpData(), function (o) {
 				return o.name === pro.employee.name;
 			});
 		} else {
@@ -76,7 +76,7 @@ export class TrackComponent implements OnInit {
 		this.maxDate = this.convert(tmp);
 	}
 
-	ngOnInit() {}
+	ngOnInit() { }
 
 	showLiveTracks() {
 		this.liveTracking = !this.liveTracking;
@@ -97,13 +97,13 @@ export class TrackComponent implements OnInit {
 			if (Object.keys(res).length > 0) {
 				this.liveData = res;
 				this.getPhotos();
-				setTimeout(function() {
+				setTimeout(function () {
 					self.initLiveMap();
 				}, 100);
 			} else {
 				this.liveData = [];
 				this.alert.showAlert('No Data available!!!', 'warning');
-				setTimeout(function() {
+				setTimeout(function () {
 					self.initLiveMap();
 				}, 100);
 			}
@@ -135,6 +135,17 @@ export class TrackComponent implements OnInit {
 		this.showLivemarks(this.liveMap, this.liveData);
 	}
 
+	parseLatLong(coords) {
+		let arr = [];
+		for (let i = 0; i < coords.length; i++) {
+			arr.push({
+				lat: coords[i].coordinates[0],
+				lng: coords[i].coordinates[1]
+			});
+		}
+		return arr;
+	}
+
 	initMap() {
 		const lat = this.coords.length > 0 ? this.coords[0].coordinates[0] : this.defaultPosition.lat;
 		const lng = this.coords.length > 0 ? this.coords[0].coordinates[1] : this.defaultPosition.lng;
@@ -146,6 +157,25 @@ export class TrackComponent implements OnInit {
 		};
 		this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
 
+		let tmp = _.sortBy(this.coords, function (obj) {
+			return new Date(obj.datetime);
+		});
+
+		this.coords = tmp;
+		// let latlng = this.parseLatLong(this.coords);
+
+		// if (latlng.length > 0) {
+		// 	let flightPath = new google.maps.Polyline({
+		// 		path: latlng,
+		// 		geodesic: true,
+		// 		strokeColor: '#FF0000',
+		// 		strokeOpacity: 1.0,
+		// 		strokeWeight: 2
+		// 	});
+
+		// 	flightPath.setMap(this.map);
+		// }
+
 		// Google Direction Service allows only 23 waypoints maximum per request so if we have more waypoints we have to make multiple calls
 		const slice = 23;
 		if (this.coords && this.coords.length > 0) {
@@ -156,14 +186,14 @@ export class TrackComponent implements OnInit {
 				const self = this;
 				this.asyncLoop(
 					counter,
-					function(loop) {
+					function (loop) {
 						const tmp = self.coords.splice(0, slice);
 						self.draw(tmp, loop.iteration() + 1);
 						setTimeout(() => {
 							loop.next();
 						}, 1000);
 					},
-					function(final) {
+					function (final) {
 						// do nothing
 						self.alert.showLoader(false);
 					}
@@ -180,7 +210,7 @@ export class TrackComponent implements OnInit {
 		let index = 0;
 		let done = false;
 		let loop = {
-			next: function() {
+			next: function () {
 				if (done) {
 					return;
 				}
@@ -194,11 +224,11 @@ export class TrackComponent implements OnInit {
 				}
 			},
 
-			iteration: function() {
+			iteration: function () {
 				return index - 1;
 			},
 
-			break: function() {
+			break: function () {
 				done = true;
 				callback();
 			}
@@ -211,7 +241,6 @@ export class TrackComponent implements OnInit {
 		const coords = [];
 
 		for (let i = 0; i < location.length; i++) {
-			console.log(location[i].coordinates[0], location[i].coordinates[1]);
 			coords.push({
 				location: new google.maps.LatLng(location[i].coordinates[0], location[i].coordinates[1]),
 				stopover: true
@@ -241,17 +270,17 @@ export class TrackComponent implements OnInit {
 				visible: true
 			});
 			const latlng = { lat: each.location.coordinates[0], lng: each.location.coordinates[1] };
-			marker.addListener('click', function(e) {
+			marker.addListener('click', function (e) {
 				let geocoder = new google.maps.Geocoder();
-				geocoder.geocode({ location: latlng }, function(results, status) {
+				geocoder.geocode({ location: latlng }, function (results, status) {
 					const address = results[0].formatted_address || 'Not Available';
 					const content = `<div>
 							<p style="display:inline-flex"><img style="width: 40px; height: 40px; border-radius: 50%;" src="${each.photo}" /><span style="padding:10px">${each.name}</span></p>
 							<p> <strong>Address: </strong> <span>${address}</span></p>
 							<p> <strong>Battery (%): </strong> <span>${each.location.battery || 'Not Available'}</span></p>
 							<p> <strong>Updated Time: </strong> <span>${each.location.datetime
-								? moment(each.location.datetime).format('lll')
-								: 'Not Available'}</span></p>
+							? moment(each.location.datetime).format('lll')
+							: 'Not Available'}</span></p>
 							</div>`;
 					let infowindow = new google.maps.InfoWindow({
 						content: content,
@@ -310,8 +339,8 @@ export class TrackComponent implements OnInit {
           <p> <strong>Battery (%): </strong> <span>${this.sortedData[this.position].battery ||
 				'Not Available'}</span></p>
           <p> <strong>Updated Time: </strong> <span>${this.sortedData[this.position].datetime
-				? moment(this.sortedData[this.position].datetime).format('lll')
-				: 'Not Available'}</span></p>
+					? moment(this.sortedData[this.position].datetime).format('lll')
+					: 'Not Available'}</span></p>
         </div>`;
 			this.position++;
 			let infowindow = new google.maps.InfoWindow({
@@ -325,7 +354,7 @@ export class TrackComponent implements OnInit {
 				map: map,
 				visible: true
 			});
-			marker.addListener('click', function(e) {
+			marker.addListener('click', function (e) {
 				infowindow.open(map, marker);
 				setTimeout(() => {
 					infowindow.close();
@@ -349,7 +378,7 @@ export class TrackComponent implements OnInit {
 				waypoints: waypoints,
 				travelMode: google.maps.TravelMode.WALKING
 			},
-			function(response, status) {
+			function (response, status) {
 				if (status === 'OK') {
 					const tmp = response.routes[0].legs;
 					let dis = 0;
@@ -389,13 +418,22 @@ export class TrackComponent implements OnInit {
 				this.distance = 0;
 				this.position = 0;
 				this.sortData(res);
-				setTimeout(function() {
+				setTimeout(function () {
 					self.initMap();
 				}, 0);
+				let location = _.sortBy(this.coords, function (obj) {
+					return new Date(obj.datetime);
+				});
+				for (let i = 0; i < location.length; i++) {
+					if (location[i + 1]) {
+						let a = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(location[i].coordinates[0], location[i].coordinates[1]), new google.maps.LatLng(location[i + 1].coordinates[0], location[i + 1].coordinates[1]));
+						console.log(location[i].coordinates[0], location[i].coordinates[1], " to ", location[i + 1].coordinates[0], location[i + 1].coordinates[1], "==", a, "i = ", i);
+					}
+				}
 			} else {
 				this.data = [];
 				this.alert.showAlert('No Data available!!!', 'warning');
-				setTimeout(function() {
+				setTimeout(function () {
 					self.initMap();
 				}, 0);
 			}

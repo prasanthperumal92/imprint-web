@@ -216,7 +216,7 @@ export class StatusComponent implements OnInit {
 		// const filter = this.resources.getFilter(this.filterType);
 		// const start = filter.from.format("YYYY-MM-DD");
 		// const end = filter.to.format("YYYY-MM-DD");
-		this.http.GET(`${CHART_TABLE_DATA}/${this.type}/${data.other}`).subscribe((res) => {
+		this.http.GET(`${CHART_TABLE_DATA}/${this.selectedEmployee.id}/${this.type}/${data.other}`).subscribe((res) => {
 			console.log(res);
 			this.alert.showLoader(false);
 			if (res && res[0]) {
