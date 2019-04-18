@@ -151,7 +151,7 @@ export class TrackComponent implements OnInit {
 		const lng = this.coords.length > 0 ? this.coords[0].coordinates[1] : this.defaultPosition.lng;
 		const mapProp: any = {
 			center: new google.maps.LatLng(lat, lng),
-			zoom: 15,
+			zoom: 9,
 			gestureHandling: 'cooperative',
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
@@ -162,8 +162,8 @@ export class TrackComponent implements OnInit {
 		});
 
 		this.coords = tmp;
-		// let latlng = this.parseLatLong(this.coords);
 
+		// let latlng = this.parseLatLong(this.coords);
 		// if (latlng.length > 0) {
 		// 	let flightPath = new google.maps.Polyline({
 		// 		path: latlng,
@@ -380,14 +380,14 @@ export class TrackComponent implements OnInit {
 			},
 			function (response, status) {
 				if (status === 'OK') {
-					const tmp = response.routes[0].legs;
-					let dis = 0;
-					for (let i = 0; i < tmp.length; i++) {
-						dis += tmp[i].distance.value;
-					}
-					dis = parseFloat((dis / 1000).toFixed(1));
-					self.distance += dis || 0;
-					self.data.distance = self.distance.toFixed(2);
+					// const tmp = response.routes[0].legs;
+					// let dis = 0;
+					// for (let i = 0; i < tmp.length; i++) {
+					// 	dis += tmp[i].distance.value;
+					// }
+					// dis = parseFloat((dis / 1000).toFixed(1));
+					// self.distance += dis || 0;
+					// self.data.distance = self.distance.toFixed(2);
 					directionsDisplay.setDirections(response);
 					self.showSteps(response, self.map, loop);
 				} else {
@@ -424,12 +424,17 @@ export class TrackComponent implements OnInit {
 				let location = _.sortBy(this.coords, function (obj) {
 					return new Date(obj.datetime);
 				});
+				let distance = 0;
 				for (let i = 0; i < location.length; i++) {
 					if (location[i + 1]) {
 						let a = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(location[i].coordinates[0], location[i].coordinates[1]), new google.maps.LatLng(location[i + 1].coordinates[0], location[i + 1].coordinates[1]));
-						console.log(location[i].coordinates[0], location[i].coordinates[1], " to ", location[i + 1].coordinates[0], location[i + 1].coordinates[1], "==", a, "i = ", i);
+						distance += a;
 					}
 				}
+				console.log("Final dis", distance);
+				distance = parseFloat((distance / 1000).toFixed(1));
+				this.distance += distance || 0;
+				this.data.distance = this.distance.toFixed(2);
 			} else {
 				this.data = [];
 				this.alert.showAlert('No Data available!!!', 'warning');
