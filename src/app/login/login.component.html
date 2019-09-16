@@ -5,19 +5,63 @@
       Im<strong>Print</strong>
     </h1>
     <br>
-    <form name="loginForm" (ngSubmit)="onSubmit()" #loginForm="ngForm">
-      <div class="form-group">
-        <input type="text" class="form-control form-control-sm" name="exampleInputEmail1" [(ngModel)]="model.phone"
-          placeholder="Phone Number" required>
+    <div [class.hide]="isForgot">
+      <form name="loginForm" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <div class="form-group">
+          <input type="text" class="form-control form-control-sm" name="exampleInputEmail1" [(ngModel)]="model.phone"
+            placeholder="Phone Number" required>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control form-control-sm" name="exampleInputPassword1"
+            [(ngModel)]="model.password" placeholder="Password" required>
+        </div>
+        <div class="alignLeft">
+          <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!loginForm.form.valid">Log In</button>
+        </div>
+        <div class="forgot">
+          <p (click)="openForgot()">Forgot password?</p>
+        </div>
+      </form>
+    </div>
+    <div [class.hide]="!isForgot">
+      <div [class.hide]="isOTP">
+        <form name="#otpForm" (ngSubmit)="sendOTP()" #otpForm="ngForm">
+          <div class="form-group">
+            <input type="email" class="form-control form-control-sm" name="exampleInputEmail1" [(ngModel)]="model.email"
+              placeholder="Enter Your Email-Address" required>
+          </div>
+          <div class="forgot">
+            <p style="cursor: pointer; margin: 2px;" (click)="openLogin()">Remember Password? <strong>Login</strong> </p>
+          </div>
+          <div class="alignLeft">
+            <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!otpForm.form.valid">Send OTP to
+              Mail</button>
+          </div>
+          <div class="forgot">
+            <p>An Email containing OTP will be sent to your email address. Make sure this is the same email address you registered with Imprint.</p>
+          </div>
+        </form>
       </div>
-      <div class="form-group">
-        <input type="password" class="form-control form-control-sm" name="exampleInputPassword1" [(ngModel)]="model.password"
-          placeholder="Password" required>
+      <div [class.hide]="!isOTP">
+        <form name="#forgotForm" (ngSubmit)="updatePassword()" #forgotForm="ngForm">
+          <div class="form-group">
+            <input type="number" class="form-control form-control-sm" name="otp" [(ngModel)]="model.otp"
+              placeholder="Enter OTP Received in Email" required>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control form-control-sm" name="exampleInputPassword2" [(ngModel)]="model.password"
+              placeholder="New Password" required>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control form-control-sm" name="exampleInputPassword3" [(ngModel)]="model.confirm"
+              placeholder="Confirm Password" required>
+          </div>
+          <div class="alignLeft">
+            <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!forgotForm.form.valid">Update Password</button>
+          </div>
+        </form>
       </div>
-      <div class="alignLeft">
-        <button type="submit" class="btn btn-primary btn-sm btn-block" [disabled]="!loginForm.form.valid">Log In</button>
-      </div>
-    </form>
+    </div>
   </div>
   <div class="LoginFooter">
     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;

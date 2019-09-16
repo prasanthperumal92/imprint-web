@@ -7,10 +7,11 @@ import * as moment from "moment";
 export class CustomPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
+    const limit = args ? args : 30;
     if (this.isDate(value)) {
       return moment(value).format("lll");
     } else if (typeof value === "string") {
-      return value.length > 30 ? value.substr(0, 30) + "..." : value;
+      return value.length > limit ? value.substr(0, limit) + "..." : value;
     } else {
       return value;
     }

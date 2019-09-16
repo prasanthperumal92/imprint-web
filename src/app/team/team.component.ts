@@ -34,8 +34,8 @@ export class TeamComponent implements OnInit {
 
   constructor(public http: Httpservice, public alert: AlertService, public store: StoreService, public modalService: NgbModal,
     public common: CommonService) {
-    this.employees = this.common.getAllEmpData();
-    this.plannedEmps = this.common.getAllEmpData();
+    this.employees = this.common.getOnlyMyEmpData();
+    this.plannedEmps = this.common.getOnlyMyEmpData();
     this.getTeams();
   }
 
@@ -43,7 +43,7 @@ export class TeamComponent implements OnInit {
   }
 
   openCreate(elem) {
-    this.plannedEmps = this.common.getAllEmpData();
+    this.plannedEmps = this.common.getOnlyMyEmpData();
     this.selected = {
       name: "",
       leader: [],
@@ -64,7 +64,7 @@ export class TeamComponent implements OnInit {
   }
 
   openEdit(elem, selectedTeam) {
-    let emps = this.common.getAllEmpData();
+    let emps = this.common.getOnlyMyEmpData();
     this.selected = {
       name: selectedTeam.name,
       leader: [],
@@ -75,7 +75,7 @@ export class TeamComponent implements OnInit {
     this.isEdit = true;
     this.selectEmp(_.remove(emps, function (e) { return e.id === selectedTeam.leaderId; })[0], "0");
     for (let i = 0; i < selectedTeam.members.length; i++) {
-      emps = this.common.getAllEmpData();
+      emps = this.common.getOnlyMyEmpData();
       const arr = _.remove(emps, function (e) { return e.id === selectedTeam.members[i].userId; });
       this.selectEmp(
         arr[0],
@@ -174,7 +174,7 @@ export class TeamComponent implements OnInit {
     }
     const itemRemoved = _.remove(this.selected[key], function (e) { return e.id !== emp.id; });
     this.selected[key] = itemRemoved;
-    const arr = this.common.getAllEmpData();
+    const arr = this.common.getOnlyMyEmpData();
     const item = _.remove(arr, function (e) { return e.id === emp.id; });
     this.plannedEmps.push(item[0]);
   }

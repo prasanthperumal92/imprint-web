@@ -1,0 +1,50 @@
+<div>
+  <header title="Task Management"></header>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-6 col-6-grid">
+        <h5>Select an Employee & Date to Track</h5>
+        <div ngbDropdown>
+          <button type="button" class="empDropBtn item" id="actions" ngbDropdownToggle>
+            <div style="display: inline-flex">
+              <img src={{selectedEmployee.photo}} class="roundImg" />
+              <p class="imgText">{{selectedEmployee.name}}</p>
+            </div>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="actions" class="empDropDown">
+            <div *ngFor="let item of employees" style="display: inline-flex;width: 100%;" (click)="selected(item)">
+              <img src={{item.photo}} class="roundImg" />
+              <p class="imgText">{{item.name}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>    
+    <div class="row">
+      <div style="width: 100%;font-size: 12px;" class="textRight">
+        <span>Last 7 days Logs can be viewed.</span>
+      </div>
+      <div class="timeline col-12">
+        <div class="col-8 timeContainer right" [ngClass]="{'right textleft': i%2 != 0, 'left textRight': i%2 == 0}" *ngFor="let item of data; let i = index;">
+          <div class="content">
+            <h4>{{item.key | date: 'mediumDate'}}</h4>
+          </div>
+          <div class="logRow whiteBox" *ngFor="let obj of item.value">
+            <div class="col-12" style="display: inline-flex">
+              <p class="col-6 logHead" style="text-align: left;">{{details[obj.type] || obj.type | titlecase}}
+                Activity</p>
+              <p class="col-6 logHead" style="text-align: right;">{{obj.created | date: 'shortTime'}}</p>
+            </div>
+            <div class="col-12 text-align">
+              <p style="margin-bottom: 5px;"> {{obj.text}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br><br><br>
+  </div>
+</div>

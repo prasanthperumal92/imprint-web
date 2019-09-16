@@ -8,7 +8,7 @@
         <button class="btn btn-secondary btn-sm float-left filerItem" [class.active]="item.selected" (click)="selected(item.label)"
           title={{item.label}}>{{item.label}}</button>
         <div *ngIf="item.name === 'Custom' && show" #datepicker id="datepicker" style="color: #000000">
-          <datepicker (change)="calendarData($event)"></datepicker>
+          <datepicker (change)="calendarData($event)" (closeIt)="toggle()"></datepicker>
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
           <button class="customBtn" id="dropdownBasic1" [class.selectedFilter]="filterSelected.Employee != 'Employee'"
             ngbDropdownToggle>{{filterSelected.Employee}}</button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item" (click)="applyFilters('Employee','assignedTo.name', item)" *ngFor="let item of filterBy.employee; let i = index">{{item}}</button>
+            <button class="dropdown-item" (click)="applyFilters('Employee','assignedTo', item.key, item.value)" *ngFor="let item of filterBy.employee; let i = index">{{item.key}}</button>
           </div>
         </div>
         <button class="customBtn" (click)="clearFilter()">Clear</button>
@@ -333,7 +333,7 @@
                     </div>
                   </button>
                   <div ngbDropdownMenu aria-labelledby="actions" class="empDropDown">
-                    <div *ngFor="let item of employees" style="display: inline-flex" (click)="selectEmp(item)">
+                    <div *ngFor="let item of employees" style="display: inline-flex;width: 100%;" (click)="selectEmp(item)">
                       <img src={{item.photo}} class="roundImg" />
                       <p class="imgText">{{item.name}}</p>
                     </div>

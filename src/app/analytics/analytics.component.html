@@ -1,6 +1,13 @@
 <div>
   <header title="Protocol Analytics"></header>
   <br>
+  <app-status *ngIf="leadChart" [id]="leadChart.id" [title]="leadChart.title" [description]="leadChart.description"
+    [xAxisName]="leadChart.xAxisName" [yAxisName]="leadChart.yAxisName" [type]="leadChart.type"></app-status>
+  <app-status *ngIf="salesChart" [id]="salesChart.id" [title]="salesChart.title" [description]="salesChart.description"
+    [xAxisName]="salesChart.xAxisName" [yAxisName]="salesChart.yAxisName" [type]="salesChart.type"></app-status>  
+  <app-status *ngIf="productChart" [id]="productChart.id" [title]="productChart.title" [description]="productChart.description"
+    [xAxisName]="productChart.xAxisName" [yAxisName]="productChart.yAxisName" [type]="productChart.type"></app-status>
+  <!--
   <div class="container">
     <div class="row">
       <div class="col-12 col-grid" id="monthlyLeadBox">
@@ -22,7 +29,8 @@
           </div>
           <div *ngIf="monthlyLeadData">
             <div id="montlyLead" class="d3-chart" #montlyLead></div>
-            <app-piechart [element]="montlyLead" [data]="monthlyLeadData" [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
+            <app-piechart (valueClicked)="openModal(modal, $event)" [element]="montlyLead" [data]="monthlyLeadData"
+              [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
           </div>
           <div *ngIf="!monthlyLeadData">
             <p class="notAvailable">Not Available</p>
@@ -52,7 +60,8 @@
           </div>
           <div *ngIf="dailyChartData">
             <div id="dailyChart" class="d3-chart" #dailyChart></div>
-            <app-piechart [element]="dailyChart" [data]="dailyChartData" [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
+            <app-piechart (valueClicked)="openModal(modal, $event)" [element]="dailyChart" [data]="dailyChartData"
+              [xAxisName]="'Count'" [yAxisName]="'Activity'"></app-piechart>
           </div>
           <div *ngIf="!dailyChartData">
             <p class="notAvailable">Not Available</p>
@@ -192,3 +201,23 @@
     </div>
   </div>
 </div>
+
+<ng-template #modal let-modal>
+  <div style="width:100%; display: inline-flex; padding: 5px;" (click)="closeModal()">
+    <h5>Details</h5>
+    <span class="closeBtn">X</span>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th class="thead" scope="col" *ngFor="let column of columnNames" sortable="name">{{column | uppercase }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of selectedData; index as i">
+        <td *ngFor="let column of columnNames">{{ item[column] | custom }}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template> -->

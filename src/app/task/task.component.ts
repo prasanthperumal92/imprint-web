@@ -1,4 +1,4 @@
-import { CommonService } from './../services/common.service';
+import { CommonService } from "./../services/common.service";
 import { ModalComponent } from "../helpers/modal/modal.component";
 import { AlertService } from "./../services/alert.service";
 import { StoreService } from "../store/store.service";
@@ -12,7 +12,7 @@ import * as _ from "lodash";
 import { NgbModalConfig, NgbModal, NgbModalRef, NgbTypeahead } from "@ng-bootstrap/ng-bootstrap";
 import { Observable, Subject, merge } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, map } from "rxjs/operators";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-task",
@@ -40,7 +40,7 @@ export class TaskComponent implements OnInit {
   public page: Number = 1;
   public filterBy: any = {
     employee: [],
-    status: ["New", "Progress", "Done", "Completed", "Removed"]
+    status: ["New", "In-Progress", "Postponed", "Closed-Success", "Closed-Rejected"]
   };
   public filterSelected = {
     Employee: "Employee",
@@ -89,7 +89,7 @@ export class TaskComponent implements OnInit {
     public common: CommonService
   ) {
     this.query = this.store.get("taskquery");
-    this.employees = this.common.getAllEmpData();
+    this.employees = this.common.getOnlyMyEmpData();
     this.clients = this.store.get("clients") ? _.map(this.store.get("clients"), "name") : [];
     this.profile = this.store.get("profile");
     if (this.query) {
@@ -100,7 +100,10 @@ export class TaskComponent implements OnInit {
       this.query = {};
       this.selected("Today", false); // By default choose Today
     }
-    this.getFilter();
+    const tmp = this.common.getOnlyMyEmpData();
+    for (let i = 0; i < tmp.length; i++) {
+      this.filterBy.employee.push({ key: tmp[i].name, value: tmp[i].id });
+    }
     this.getClients();
   }
 
@@ -138,13 +141,6 @@ export class TaskComponent implements OnInit {
     });
   }
 
-  getFilter() {
-    this.http.GET(DSR_FILTER).subscribe(res => {
-      console.log(res);
-      this.filterBy.employee = res.name.sort();
-    });
-  }
-
   selected(filter: string, open?: any) {
     this.selectButton(filter);
     if (filter === "Custom Date") {
@@ -158,9 +154,12 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  public applyFilters(type, key, value) {
+  public applyFilters(type, key, value, value2?) {
     this.clearFils();
     this.filterSelected[type] = value;
+    if (value2) {
+      value = value2;
+    }
     this.query.filter = this.filter = {};
     this.filter = { key: key, value: value };
     this.query.filter = this.filter;
@@ -356,7 +355,7 @@ export class TaskComponent implements OnInit {
       return false;
     }
     // } else if (this.clients.indexOf(this.model.client) === -1) {
-    //   this.alert.showAlert("Your client is not available, So click 'Add  Client' button to add one", "warning");
+    //   this.alert.showAlert("Your client is not available, So click "Add  Client" button to add one", "warning");
     //   return false;
     // } else if (this.model.contact.toString().length !== 10) {
     //   this.alert.showAlert("Phone number should be 10 digit number", "warning");

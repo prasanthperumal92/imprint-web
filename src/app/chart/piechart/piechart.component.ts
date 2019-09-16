@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, OnInit, Input, Output, Inject, EventEmitter } from "@angular/core";
 import { COLORS } from "../../../constants";
 import { DOCUMENT } from "@angular/common";
 
@@ -10,46 +10,55 @@ declare let d3: any;
   styleUrls: ["./piechart.component.css"]
 })
 export class PiechartComponent implements OnInit {
-  @Input() private data: Array<any>;
+  @Output() valueClicked: EventEmitter<any> = new EventEmitter<string>();
   @Input() private xAxisName?: String;
   @Input() private yAxisName?: String;
   @Input() private element: any;
   private margin: any = { top: 20, bottom: 40, left: 60, right: 20 };
   private chart: any;
+  public chartData = [];
+
+  private _data: string;
+
+  @Input() set data(value: any) {
+    this.chartData = value;
+    this.createChart();
+  }
+
+  get data(): any {
+    return this._data;
+  }
 
   constructor(@Inject(DOCUMENT) document) { }
 
   ngOnInit() {
-    const self = this;
-    if (this.data && this.data.length > 0) {
-      setTimeout(() => {
-        self.createChart();
-      });
-    }
+    // const self = this;
+    // if (this.chartData && this.chartData.length > 0) {
+    //   setTimeout(() => {
+    //     self.createChart();
+    //   });
+    // }
   }
 
   createChart() {
     let isEmpty = false;
-    const element: any = this.element;
+    let element: any = this.element;
+    element.innerHTML = "";
     // const element = chartContainer.nativeElement;
     let width = element.offsetWidth - this.margin.left - this.margin.right;
     let height = element.offsetHeight - this.margin.top - this.margin.bottom;
     let xAxisName = this.xAxisName || "X-Axis";
     let yAxisName = this.yAxisName || "Y-Axis";
-    let data = this.data || [];
+    let data = this.chartData || [];
     let lineData = [];  // To remove the no data text label and polylines
 
-    if (data.length > 0 && data[0].value === 0 && data[1].value === 0 && data[2].value === 0) {
-      isEmpty = true;
-      data[0].value = 1;
-      data[1].value = 1;
-      data[2].value = 1;
-    }
     for (let i = 0; i < data.length; i++) {
       if (data[i].value !== 0) {
         lineData.push(data[i]);
       }
     }
+
+    const that = this;
 
     let svg = d3.select(element)
       .append("svg")
@@ -122,6 +131,12 @@ export class PiechartComponent implements OnInit {
         div.transition()
           .duration(500)
           .style("opacity", 0);
+      })
+      .on("click", function (d) {
+        console.log(d);
+        if (d && d.data.value > 0) {
+          that.valueClicked.emit(d.data);
+        }
       })
       .transition().duration(1000)
       .attrTween("d", function (d) {

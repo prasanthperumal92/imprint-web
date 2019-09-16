@@ -1,12 +1,17 @@
 <div>
   <header title="Search Tool"></header>
   <br>
-  <div>
+  <div class="container">
     <div class="tableRow">
-      <button type="button" class="btn btn-secondary btn-sm float-left filerItem" (click)="download()">
+      <button class="btn btn-secondary btn-sm float-left filerItem" (click)="goBack()" style="margin-right:20px;"> <i
+          class="fa fa-chevron-left" aria-hidden="true"></i>
+        Back</button>
+      <button type="button" class="btn btn-secondary btn-sm float-right filerItem" (click)="download()">
         <i class="fa fa-download" aria-hidden="true"></i> Export to Excel</button>
     </div>
     <br>
+  </div>
+  <div class="container-fluid">
     <div class="tableRow" *ngIf="type === 'team'">
       <h5>{{data.title}}</h5>
       <p style="margin-bottom: 5px;"><strong>Manager: </strong> <span>{{employees[data.leaderId]}}</span></p>
@@ -15,7 +20,7 @@
     <div class="tableRow" *ngIf="jobData.length > 0 && jobColumn.length > 0">
       <h5>{{details['Aterm']}} Details</h5>
       <div id="taskData">
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="overflow: scroll">
           <thead>
             <tr>
               <th class="thead" scope="col" *ngFor="let column of jobColumn" sortable="name">{{column | uppercase }}</th>
@@ -23,7 +28,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of jobData; index as i">
-              <td *ngFor="let column of jobColumn">{{ item[column] | custom }}</td>
+              <td *ngFor="let column of jobColumn">{{ item[column] | custom:200 }}</td>
             </tr>
           </tbody>
         </table>
@@ -32,7 +37,7 @@
     <div class="tableRow" *ngIf="taskData.length > 0 && taskColumn.length > 0">
       <h5>{{details['Bterm']}} Details</h5>
       <div id="taskData">
-        <table class="table table-bordered">
+        <table class="table table-bordered" style="overflow: scroll">
           <thead>
             <tr>
               <th class="thead" scope="col" *ngFor="let column of taskColumn" sortable="name">{{column | uppercase }}</th>
@@ -40,7 +45,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of taskData; index as i">
-              <td *ngFor="let column of taskColumn">{{ item[column] | custom }}</td>
+              <td *ngFor="let column of taskColumn">{{ item[column] | custom:200 }}</td>
             </tr>
           </tbody>
         </table>
@@ -63,5 +68,6 @@
         </table>
       </div>
     </div>
+
   </div>
 </div>

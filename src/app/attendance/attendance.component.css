@@ -250,3 +250,11 @@ datepicker /deep/ ngb-datepicker {
   background-color: transparent;
   color: #000;
 }
+
+.tableRow {
+  right: 200px;
+  padding: 5px;
+  font-size: 13px;
+  margin-top: -5px;
+  position: absolute;
+}

@@ -1,37 +1,49 @@
 .center {
-  padding-top: 280px;
-  background-color: #1474a4;
-  background-image: linear-gradient(to bottom right, #09508d, #1488c0);
-  background-image: -webkit-linear-gradient(to bottom right, #09508d, #1488c0);
-  background-image: -moz-linear-gradient(to bottom right, #09508d, #1488c0);
-  background-image: -o-linear-gradient(to bottom right, #09508d, #1488c0);
-  height: 100% !important;
-  position: absolute;
-  width: 100%;
+	padding-top: 280px;
+	background-color: #1474a4;
+	background-image: linear-gradient(to bottom right, #09508d, #1488c0);
+	background-image: -webkit-linear-gradient(to bottom right, #09508d, #1488c0);
+	background-image: -moz-linear-gradient(to bottom right, #09508d, #1488c0);
+	background-image: -o-linear-gradient(to bottom right, #09508d, #1488c0);
+	height: 100% !important;
+	position: absolute;
+	width: 100%;
 }
 
 form .btn {
-  background-color: #1c2d66 !important;
-  border-color: #1c2d66 !important;
+	background-color: #1c2d66 !important;
+	border-color: #1c2d66 !important;
 }
 
 .login {
-  margin: auto;
-  width: 300px;
-  position: relative;
-  text-align: center;
-  color: #ffffff;
+	margin: auto;
+	width: 300px;
+	position: relative;
+	text-align: center;
+	color: #ffffff;
 }
 
 .alignLeft {
-  text-align: left;
+	text-align: left;
 }
 
 .LoginFooter {
-  color: #ffffff;
-  position: absolute;
-  bottom: 0 !important;
-  text-align: center;
-  width: 100%;
-  font-size: 12px;
+	color: #ffffff;
+	position: absolute;
+	bottom: 0 !important;
+	text-align: center;
+	width: 100%;
+	font-size: 12px;
+}
+
+.forgot {
+	margin-top: 10px;
+	font-size: 12px;
+	text-align: right;
+	font-style: italic;
+	cursor: pointer;
+}
+
+.hide {
+	display: none;
 }

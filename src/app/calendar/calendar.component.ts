@@ -45,29 +45,27 @@ export class MyCalendarComponent implements OnInit {
       header: {
         left: "",
         center: "title",
-        right: ""   // customLeft,customRight
+        right: "customLeft, customRight"   // customLeft,customRight
       },
-      // customButtons: {
-      //   customLeft: {
-      //     text: "Prev",
-      //     click: function () {
-      //       self.date = moment(self.date).subtract(1, "month").toDate();
-      //       self.ucCalendar.fullCalendar("prev");
-      //       self.getCalendar();
-      //     }
-      //   },
-      //   customRight: {
-      //     text: "Next",
-      //     click: function () {
-      //       self.date = moment(self.date).add(1, "month").toDate();
-      //       self.ucCalendar.fullCalendar("next");
-      //       self.getCalendar();
-      //     }
-      //   },
-      // },
+      customButtons: {
+        customLeft: {
+          text: "Prev",
+          click: function () {
+            self.date = moment(self.date).subtract(1, "month").toDate();
+            self.ucCalendar.fullCalendar("prev");
+          }
+        },
+        customRight: {
+          text: "Next",
+          click: function () {
+            self.date = moment(self.date).add(1, "month").toDate();
+            self.ucCalendar.fullCalendar("next");
+          }
+        },
+      },
       defaultView: "month",
       editable: true,
-      events: this.events,
+      events: events,
       eventBackgroundColor: "green",
       eventTextColor: "white",
       fixedWeekCount: false,
@@ -89,8 +87,9 @@ export class MyCalendarComponent implements OnInit {
     this.http.GET(`${CALENDAR}/${this.date.getFullYear()}/${this.date.getMonth() + 1}`).subscribe(res => {
       console.log(res);
       this.alert.showLoader(false);
+      // this.ucCalendar.fullCalendar("removeEventSource", this.events);
       if (res) {
-        this.data = [...res.dsr, ...res.task, ...res.leave];
+        this.data = [...this.data, ...res.dsr, ...res.task, ...res.leave];
         for (let i = 0; i < this.data.length; i++) {
           const item = this.data[i];
           let tmp: any = {};
@@ -98,25 +97,24 @@ export class MyCalendarComponent implements OnInit {
             tmp.id = item._id;
             tmp.allDay = true;
             tmp.title = `DSR: ${item.name}, ${item.effort.client}`;
-            tmp.start = moment(item.created, "YYYY-MM-DD");
-            tmp.end = moment(item.created, "YYYY-MM-DD").add(1, "days");
+            tmp.start = moment(item.effort.followup, "YYYY-MM-DD").toDate();
+            tmp.end = moment(item.effort.followup, "YYYY-MM-DD").add(1, "days").toDate();
             tmp.color = "green";
-            this.events.push(tmp);
           } else if (item.days) {
             if (item.status) {
               tmp.id = item._id;
               tmp.allDay = true;
               tmp.title = `Leave: ${this.photos[item.appliedBy].name}, ${item.type}`;
-              tmp.start = moment(item.start, "YYYY-MM-DD");
-              tmp.end = moment(item.end, "YYYY-MM-DD").add(1, "days");
+              tmp.start = moment(item.start, "YYYY-MM-DD").add(1, "days").toDate();
+              tmp.end = moment(item.end, "YYYY-MM-DD").add(item.days, "days").toDate();
               tmp.color = "purple";
             }
           } else {
             tmp.id = item._id;
             tmp.allDay = true;
             tmp.title = `Task: ${this.photos[item.assignedTo].name}, ${item.status}`;
-            tmp.start = moment(item.created, "YYYY-MM-DD");
-            tmp.end = moment(item.created, "YYYY-MM-DD").add(1, "days");
+            tmp.start = moment(item.created, "YYYY-MM-DD").toDate();
+            tmp.end = moment(item.created, "YYYY-MM-DD").add(1, "days").toDate();
             tmp.color = "blue";
           }
           this.events.push(tmp);

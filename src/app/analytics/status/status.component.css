@@ -1,0 +1,219 @@
+.whiteBox {
+	min-height: 300px;
+	background-color: #ffffff;
+	padding: 10px;
+	margin: 10px;
+	box-shadow: 0px 0px 5px #ccc;
+}
+
+.headRow {
+	width: 100%;
+	display: inline-flex;
+}
+
+.textRight {
+	text-align: right;
+}
+
+.textLeft {
+	text-align: left;
+}
+
+.bold {
+	font-weight: bolder;
+}
+
+.noBtn {
+	font-size: 14px;
+	font-weight: 600;
+	background: transparent;
+	border: none;
+	color: #58585c;
+	cursor: pointer;
+}
+
+.noBtn:focus {
+	outline: none !important;
+}
+
+.headRow .dropdown-toggle::after {
+	display: none !important;
+}
+
+.notAvailable {
+	text-align: center;
+	vertical-align: middle;
+	margin-top: 8%;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.d3-chart {
+	width: 100%;
+	height: 400px;
+}
+
+.d3-chart .axis path,
+.d3-chart .axis line {
+	stroke: #000000;
+}
+
+.d3-chart .axis text {
+	fill: #000000;
+}
+
+.bar {
+	fill: #ffcd56;
+}
+
+.tooltipBox {
+	position: absolute !important;
+	text-align: left !important;
+	padding: 6px !important;
+	font: 12px sans-serif !important;
+	background: #ffffff !important;
+	border: 0px !important;
+	border-radius: 8px !important;
+	pointer-events: none !important;
+}
+
+svg {
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.slice {
+	stroke-width: 2px;
+}
+
+.polyline {
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+}
+
+.filerItem {
+	cursor: pointer;
+	display: inline-block;
+	text-align: center;
+	color: #58585c;
+	list-style: none;
+	max-width: 125px;
+	border: 1px solid #ccc !important;
+	margin: 2px;
+	min-width: 50px;
+	height: 30px;
+	background-color: #ffffff !important;
+	padding: 2px 5px;
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.active {
+	background-color: #1474a4 !important;
+}
+
+table {
+	font-size: 12px;
+}
+
+.modal-content {
+	width: auto !important;
+}
+
+.table td,
+.table th {
+	padding: 5px;
+}
+
+.closeBtn {
+	float: right;
+	margin-top: -18px;
+	margin-left: 39px;
+	position: absolute;
+	margin-bottom: 0px;
+	cursor: pointer;
+	border: 1px solid #fff;
+	background-color: #fff;
+	border-radius: 50%;
+	width: 25px;
+	padding-left: 6px;
+}
+
+.pickerLabel {
+	margin: 0px;
+	padding: 5px;
+	color: #0077a6;
+	font-weight: 600;
+	font-size: 13px;
+}
+
+.pickerBox {
+	background-color: #ffffff;
+	padding: 10px;
+	margin: 10px;
+	box-shadow: 0px -2px 10px #ccc;
+}
+
+.kpiHead {
+	padding: 0px 0px 0px 5px;
+	margin-bottom: 5px;
+}
+
+.empDropBtn,
+.empDropBtn:focus {
+	cursor: pointer;
+	border: none;
+	background-color: transparent;
+	color: #000;
+}
+
+.roundImg {
+	border-radius: 50px;
+	width: 35px;
+	height: 35px;
+}
+
+.imgText {
+	margin-top: 10px;
+	margin-left: 8px;
+}
+
+.sameRow {
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.empDropBtn,
+.empDropBtn:focus {
+	border: 1px solid #ccc;
+	padding: 3px;
+	border-radius: 26px;
+	padding-top: 8px;
+	font-size: 12px;
+	position: absolute;
+	min-width: 166px;
+	top: -25px;
+	max-width: 300px;
+	outline: none;
+}
+
+.noPadding {
+	padding: 0px;
+}
+
+.empDropDown {
+	cursor: pointer;
+	padding: 5px 16px;
+	min-width: 190px;
+	font-size: 12px;
+}
+
+.dropdown-toggle::after {
+	margin-bottom: 13px;
+}
+
+:host ::ng-deep .modal-content {
+	padding: 15px !important;
+}

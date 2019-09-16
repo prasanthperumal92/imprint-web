@@ -1,46 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
 
 body {
-  height: 100%;
-  background-color: #edf0f5 !important;
+	height: 100%;
+	background-color: #edf0f5 !important;
 }
 
-
-
 .btn:focus {
-  box-shadow: none !important;
+	box-shadow: none !important;
 }
 
 input[type="checkbox"] {
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  border-radius: 1px;
-  box-sizing: border-box;
-  position: relative;
-  box-sizing: content-box;
-  width: 30px;
-  height: 30px;
-  border-width: 0;
+	cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+	background: transparent;
+	border-radius: 1px;
+	box-sizing: border-box;
+	position: relative;
+	box-sizing: content-box;
+	width: 30px;
+	height: 30px;
+	border-width: 0;
 }
 
 input[type="checkbox"]:checked {
-  background-color: #1474a4;
+	background-color: #1474a4;
 }
 
 input[type="checkbox"]:focus {
-  outline: 0 none;
-  box-shadow: none;
+	outline: 0 none;
+	box-shadow: none;
 }
 
 .tooltipBox {
-  position: absolute !important;
-  text-align: left !important;
-  padding: 6px !important;
-  font: 12px sans-serif !important;
-  background: #ffffff !important;
-  border: 0px !important;
-  border-radius: 8px !important;
-  pointer-events: none !important;
+	position: absolute !important;
+	text-align: left !important;
+	padding: 6px !important;
+	font: 12px sans-serif !important;
+	background: #ffffff !important;
+	border: 0px !important;
+	border-radius: 8px !important;
+	pointer-events: none !important;
 }
